@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiDomainMapper">
+
+    <select id="queryObject" resultType="com.platform.entity.DomainVo">
+        select * from symphony_domain where id = #{value}
+    </select>
+
+    <select id="queryList" resultType="com.platform.entity.DomainVo">
+        select * from symphony_domain a where 0=0
+        <if test="domainType != null">
+            and a.domainType = #{domainType}
+        </if>
+        order by a.domainSort desc
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from symphony_domain
+    </select>
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiFollowMapper">
+
+    <select id="queryList" resultType="com.platform.entity.FollowVo">
+        select * from symphony_follow where oId = #{oId}
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from symphony_follow
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.FollowVo" useGeneratedKeys="true" keyProperty="oId">
+        insert into symphony_follow(
+            `followerId`,
+            `followingId`,
+            `followingType`
+        )
+        values(
+            #{followerId},
+            #{followingId},
+            #{followingType}
+        )
+    </insert>
+
+    <delete id="deleteByArticleIdAndUserId">
+        delete from symphony_follow where followingId = #{articleId} and followerId = #{userId}
+    </delete>
+
+</mapper>
