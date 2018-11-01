@@ -1,7 +1,11 @@
 package com.platform.entity;
 
+import com.platform.utils.StringUtils;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ArticleVo implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -12,6 +16,8 @@ public class ArticleVo implements Serializable {
     private String articleTitle;
     //帖子表情，英文状态逗号分隔
     private String articleTags;
+    //帖子标签
+    private List<String> articleTagsList;
     //分类  id
     private Long articleDomainId;
     //帖子作者 id
@@ -100,6 +106,9 @@ public class ArticleVo implements Serializable {
     private Integer hasWatchedArticle;
     //是否被收藏
     private Integer hasCollect;
+    //帖子封面图
+    private List<String> articleImgs;
+
 
     public Long getoId() {
         return oId;
@@ -123,6 +132,17 @@ public class ArticleVo implements Serializable {
 
     public void setArticleTags(String articleTags) {
         this.articleTags = articleTags;
+    }
+
+    public List<String> getArticleTagsList() {
+        articleTagsList = new ArrayList<>();
+        if(StringUtils.isNotEmpty(this.getArticleTags())){
+            String[] at = this.getArticleTags().split(",");
+            for(String tag:at){
+                articleTagsList.add(tag);
+            }
+        }
+        return articleTagsList;
     }
 
     public Long getArticleDomainId() {
@@ -475,5 +495,23 @@ public class ArticleVo implements Serializable {
 
     public void setHasCollect(Integer hasCollect) {
         this.hasCollect = hasCollect;
+    }
+
+    public List<String> getArticleImgs() {
+        articleImgs = new ArrayList<>();
+        if(StringUtils.isNotEmpty(this.getArticleImg1URL())){
+            articleImgs.add(this.getArticleImg1URL());
+        } else if(StringUtils.isNotEmpty(this.getArticleImg2URL())){
+            articleImgs.add(this.getArticleImg2URL());
+        } else if(StringUtils.isNotEmpty(this.getArticleImg3URL())){
+            articleImgs.add(this.getArticleImg3URL());
+        } else if(StringUtils.isNotEmpty(this.getArticleImg4URL())){
+            articleImgs.add(this.getArticleImg4URL());
+        } else if(StringUtils.isNotEmpty(this.getArticleImg5URL())){
+            articleImgs.add(this.getArticleImg5URL());
+        } else if(StringUtils.isNotEmpty(this.getArticleImg6URL())){
+            articleImgs.add(this.getArticleImg6URL());
+        }
+        return articleImgs;
     }
 }

@@ -4,7 +4,10 @@
 <mapper namespace="com.platform.dao.ApiArticleMapper">
 
     <select id="queryObject" resultType="com.platform.entity.ArticleVo">
-        select * from symphony_article where oId = #{value}
+        select a.*, u.userNickName, u.userAvatarUrl
+        from symphony_article a
+        left join forum.symphony_user u on a.articleAuthorId=u.oId
+        where a.oId = #{value}
     </select>
 
     <select id="queryList" resultType="com.platform.entity.ArticleVo">

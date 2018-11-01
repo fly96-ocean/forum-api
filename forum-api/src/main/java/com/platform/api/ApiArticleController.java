@@ -66,6 +66,9 @@ public class ApiArticleController extends ApiBaseAction {
         Map<String, Object> map = new HashMap<>();
         map.put("articleType", articleType);
         map.put("domainId", domainId);
+        if(getUserId() != null){
+            map.put("currentUserId", getUserId());
+        }
         List<ArticleVo> articleVoList = articleService.queryList(map);
 
         return R.ok().put("msg", articleVoList);
@@ -126,7 +129,7 @@ public class ApiArticleController extends ApiBaseAction {
 //        return R.ok().put("msg", "帖子差评已更新");
 //    }
 
-    @RequestMapping(value = "/collect", method = RequestMethod.POST)
+    @RequestMapping(value = "/collect")
     public R collect(Long articleId) {
         Assert.isNull(articleId, "帖子ID不能为空");
         Long userId = getUserId();
@@ -135,7 +138,7 @@ public class ApiArticleController extends ApiBaseAction {
         return R.ok().put("msg", "帖子收藏已更新");
     }
 
-    @RequestMapping(value = "/cancelCollect", method = RequestMethod.POST)
+    @RequestMapping(value = "/cancelCollect")
     public R cancelCollect(Long articleId) {
         Assert.isNull(articleId, "帖子ID不能为空");
         Long userId = getUserId();
@@ -163,7 +166,7 @@ public class ApiArticleController extends ApiBaseAction {
     }
 
     @RequestMapping("/detail")
-    public R detail(Integer articleId) {
+    public R detail(Long articleId) {
         Assert.isNull(articleId, "帖子ID不能为空");
         ArticleVo articleVo = articleService.queryObject(articleId);
 
@@ -197,7 +200,7 @@ public class ApiArticleController extends ApiBaseAction {
 
             articleVo.setArticleCreateTime(articleCreateTime);
 
-            UserVo userVo = userService.queryObject(jsonObject.getInteger("userId"));
+            UserVo userVo = userService.queryObject(jsonObject.getLong("userId"));
             Integer userPoint = userVo.getUserPoint() + point;
             Integer userArticleCount = userVo.getUserArticleCount() + 1;
             userVo.setUserPoint(userPoint);

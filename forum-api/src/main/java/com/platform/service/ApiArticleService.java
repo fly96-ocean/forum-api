@@ -20,7 +20,7 @@ public class ApiArticleService {
     @Autowired
     private ApiFollowMapper followDao;
 
-    public ArticleVo queryObject(Integer id) {
+    public ArticleVo queryObject(Long id) {
         return articleDao.queryObject(id);
     }
 
@@ -45,12 +45,12 @@ public class ApiArticleService {
     }
 
 
-    public void delete(Integer id) {
+    public void delete(Long id) {
         articleDao.delete(id);
     }
 
 
-    public void deleteBatch(Integer[] ids) {
+    public void deleteBatch(Long[] ids) {
         articleDao.deleteBatch(ids);
     }
 

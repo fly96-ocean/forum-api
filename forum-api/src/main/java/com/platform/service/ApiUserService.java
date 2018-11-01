@@ -14,7 +14,7 @@ public class ApiUserService {
     @Autowired
     private ApiUserMapper userDao;
 
-    public UserVo queryObject(Integer userId) {
+    public UserVo queryObject(Long userId) {
         return userDao.queryObject(userId);
     }
 

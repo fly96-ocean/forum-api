@@ -26,7 +26,7 @@ import java.util.Map;
  * 时间: 2017-08-11 08:32<br>
  * 描述: ApiIndexController <br>
  */
-@Api(tags = "顶部广告")
+@Api(tags = "评论")
 @RestController
 @RequestMapping("/api/comment")
 public class ApiCommentController extends ApiBaseAction {
@@ -56,14 +56,16 @@ public class ApiCommentController extends ApiBaseAction {
     public R save() {
         JSONObject jsonObject = super.getJsonRequest();
         if(null != jsonObject) {
+            Long currentUserId = this.getUserId();
+
             CommentVo commentVo = new CommentVo();
             commentVo.setCommentContent(jsonObject.getString("commentContent"));
-            commentVo.setCommentCreateTime(jsonObject.getDate("commentCreateTime"));
-            commentVo.setCommentAuthorId(jsonObject.getLong("commentAuthorId"));
-            commentVo.setCommentOnArticleId(jsonObject.getLong("commentOnArticleId"));
+            commentVo.setCommentCreateTime(new Date());
+            commentVo.setCommentAuthorId(currentUserId);
+            commentVo.setCommentOnArticleId(jsonObject.getLong("articleId"));
             commentVo.setCommentSharpURL(jsonObject.getString("commentSharpURL"));
             commentVo.setCommentOriginalCommentId(jsonObject.getLong("commentOriginalCommentId"));
-            commentVo.setCommentStatus(jsonObject.getInteger("commentStatus"));
+            commentVo.setCommentStatus(1);
             commentVo.setCommentIP(jsonObject.getString("commentIP"));
             commentVo.setCommentUA(jsonObject.getString("commentUA"));
             commentVo.setCommentAnonymous(jsonObject.getInteger("commentAnonymous"));
@@ -75,13 +77,11 @@ public class ApiCommentController extends ApiBaseAction {
             commentVo.setCommentQnAOffered(jsonObject.getInteger("commentQnAOffered"));
             commentVo.setCommentVisible(jsonObject.getInteger("commentQnAOffered"));
 
-            UserVo userVo = userService.queryObject(jsonObject.getInteger("commentAuthorId"));
+            UserVo userVo = userService.queryObject(currentUserId);
             Integer userPoint = userVo.getUserPoint() + point;
             Integer userCommentCount = userVo.getUserCommentCount() + 1;
             userVo.setUserPoint(userPoint);
             userVo.setUserCommentCount(userCommentCount);
-            userVo.setUserLatestCmtTime(jsonObject.getDate("commentCreateTime"));
-            userVo.setUserUpdateTime(jsonObject.getDate("commentCreateTime"));
 
             userService.update(userVo);
             commentService.save(commentVo);
