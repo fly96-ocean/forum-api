@@ -11,7 +11,47 @@
     </select>
 
     <select id="queryTotal" resultType="int">
-        select count(*) from symphony_ad
+        select count(*) from symphony_comment
     </select>
+
+    <insert id="save" parameterType="com.platform.entity.CommentVo" useGeneratedKeys="true" keyProperty="oId">
+        insert into symphony_comment
+        (`commentContent`,
+        `commentCreateTime`,
+        `commentAuthorId`,
+        `commentOnArticleId`,
+        `commentSharpURL`,
+        `commentOriginalCommentId`,
+        `commentStatus`,
+        `commentIP`,
+        `commentUA`,
+        `commentAnonymous`,
+        `commentGoodCnt`,
+        `commentBadCnt`,
+        `commentScore`,
+        `commentReplyCnt`,
+        `commentAudioURL`,
+        `commentQnAOffered`,
+        `commentVisible`)
+        ) values (
+        #{commentContent}
+        ,#{commentCreateTime}
+        ,#{commentAuthorId}
+        ,#{commentOnArticleId}
+        ,#{commentSharpURL}
+        ,#{commentOriginalCommentId}
+        ,#{commentStatus}
+        ,#{commentIP}
+        ,#{commentUA}
+        ,#{commentAnonymous}
+        ,#{commentGoodCnt}
+        ,#{commentBadCnt}
+        ,#{commentScore}
+        ,#{commentReplyCnt}
+        ,#{commentAudioURL}
+        ,#{commentQnAOffered}
+        ,#{commentVisible}
+        )
+    </insert>
 
 </mapper>

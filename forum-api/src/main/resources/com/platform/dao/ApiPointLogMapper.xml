@@ -12,18 +12,19 @@
     </select>
 
     <insert id="save" parameterType="com.platform.entity.PointLogVo" >
-    insert into symphony_point_log(
-    `pointLogArticleId`,
+    insert into symphony_point_log
+    (`pointLogArticleId`,
     `pointLogArticleAuthorId`,
     `pointLogType`,
     `pointLogPoint`,
-    `pointLogCreateTime`)
-    values(
+    `pointLogCreateTime`
+    ) values (
     #{pointLogArticleId},
     #{pointLogArticleAuthorId},
     #{pointLogType},
     #{pointLogPoint},
     #{pointLogCreateTime}
+    )
     </insert>
 
 </mapper>

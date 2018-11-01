@@ -2,8 +2,12 @@ package com.platform.service;
 
 import com.platform.dao.ApiArticleMapper;
 import com.platform.dao.ApiFollowMapper;
+import com.platform.dao.ApiPointLogMapper;
+import com.platform.dao.ApiUserMapper;
 import com.platform.entity.ArticleVo;
 import com.platform.entity.FollowVo;
+import com.platform.entity.PointLogVo;
+import com.platform.entity.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,12 @@ public class ApiArticleService {
     private ApiArticleMapper articleDao;
     @Autowired
     private ApiFollowMapper followDao;
+    @Autowired
+    private ApiUserMapper userDao;
+    @Autowired
+    private ApiPointLogMapper pointLogDao;
+
+    private final static Integer point = 5;
 
     public ArticleVo queryObject(Long id) {
         return articleDao.queryObject(id);
@@ -136,6 +146,29 @@ public class ApiArticleService {
 
         articleDao.update(articleVo);
         followDao.deleteByArticleIdAndUserId(articleId, userId);
+    }
+
+    @Transient
+    public void saveAndUpdate(ArticleVo articleVo){
+
+        UserVo userVo = userDao.queryObject(articleVo.getArticleAuthorId());
+        Integer userPoint = userVo.getUserPoint() + point;
+        Integer userArticleCount = userVo.getUserArticleCount() + 1;
+        userVo.setUserPoint(userPoint);
+        userVo.setUserArticleCount(userArticleCount);
+        userVo.setUserLatestArticleTime(articleVo.getArticleCreateTime());
+        userVo.setUserUpdateTime(articleVo.getArticleCreateTime());
+
+        articleDao.save(articleVo);
+        userDao.update(userVo);
+
+        PointLogVo pointLogVo = new PointLogVo();
+        pointLogVo.setPointLogArticleAuthorId(articleVo.getArticleAuthorId());
+        pointLogVo.setPointLogArticleId(articleVo.getoId());
+        pointLogVo.setPointLogType(0);
+        pointLogVo.setPointLogPoint(point);
+        pointLogVo.setPointLogCreateTime(articleVo.getArticleCreateTime());
+        pointLogDao.save(pointLogVo);
     }
 
 }

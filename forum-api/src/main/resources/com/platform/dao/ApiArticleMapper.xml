@@ -54,7 +54,7 @@
         where oId = #{oId}
     </update>
     
-    <insert id="save" parameterType="com.platform.entity.ArticleVo">
+    <insert id="save" parameterType="com.platform.entity.ArticleVo" useGeneratedKeys="true" keyProperty="oId">
         insert into symphony_article
         (`articleTitle`,
           `articleTags`,
@@ -92,7 +92,7 @@
          ,#{articleImg4URL}
          ,#{articleImg5URL}
          ,#{articleImg6URL}
-         ,#{domainId}
+         ,#{articleDomainId}
         )
     </insert>
 </mapper>

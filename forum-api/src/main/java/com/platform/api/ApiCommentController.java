@@ -34,8 +34,10 @@ public class ApiCommentController extends ApiBaseAction {
     @Autowired
     private ApiCommentService commentService;
 
+    @Autowired
     private ApiUserService userService;
 
+    @Autowired
     private ApiPointLogService pointLogService;
 
     private final static Integer point = 5;
@@ -52,7 +54,6 @@ public class ApiCommentController extends ApiBaseAction {
     }
 
     @RequestMapping("/save")
-    @PostMapping("save")
     public R save() {
         JSONObject jsonObject = super.getJsonRequest();
         if(null != jsonObject) {
@@ -77,22 +78,7 @@ public class ApiCommentController extends ApiBaseAction {
             commentVo.setCommentQnAOffered(jsonObject.getInteger("commentQnAOffered"));
             commentVo.setCommentVisible(jsonObject.getInteger("commentQnAOffered"));
 
-            UserVo userVo = userService.queryObject(currentUserId);
-            Integer userPoint = userVo.getUserPoint() + point;
-            Integer userCommentCount = userVo.getUserCommentCount() + 1;
-            userVo.setUserPoint(userPoint);
-            userVo.setUserCommentCount(userCommentCount);
-
-            userService.update(userVo);
-            commentService.save(commentVo);
-
-            PointLogVo pointLogVo = new PointLogVo();
-            pointLogVo.setPointLogArticleAuthorId(jsonObject.getLong("userId"));
-            pointLogVo.setPointLogArticleId(commentVo.getCommentOnArticleId());
-            pointLogVo.setPointLogType(1);
-            pointLogVo.setPointLogPoint(point);
-            pointLogVo.setPointLogCreateTime(commentVo.getCommentCreateTime());
-            pointLogService.save(pointLogVo);
+            commentService.saveAndUpdate(commentVo);
 
             return R.ok().put("msg", "评论保存成功！");
         }

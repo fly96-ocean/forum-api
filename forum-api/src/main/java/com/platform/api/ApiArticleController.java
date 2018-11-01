@@ -173,7 +173,7 @@ public class ApiArticleController extends ApiBaseAction {
         return R.ok().put("msg", articleVo);
     }
 
-    @PostMapping("save")
+    @RequestMapping("/save")
     public R save() {
         JSONObject jsonObject = super.getJsonRequest();
         if(null != jsonObject) {
@@ -195,33 +195,12 @@ public class ApiArticleController extends ApiBaseAction {
             articleVo.setArticleImg6URL(jsonObject.getString("articleImg6URL"));
             articleVo.setArticleAuthorId(jsonObject.getLong("userId"));
             articleVo.setArticleDomainId(jsonObject.getLong("domainId"));
+            articleVo.setArticleCreateTime(new Date());
 
-            Date articleCreateTime = new Date();
-
-            articleVo.setArticleCreateTime(articleCreateTime);
-
-            UserVo userVo = userService.queryObject(jsonObject.getLong("userId"));
-            Integer userPoint = userVo.getUserPoint() + point;
-            Integer userArticleCount = userVo.getUserArticleCount() + 1;
-            userVo.setUserPoint(userPoint);
-            userVo.setUserArticleCount(userArticleCount);
-            userVo.setUserLatestArticleTime(articleCreateTime);
-            userVo.setUserUpdateTime(articleCreateTime);
-
-            articleService.save(articleVo);
-            userService.update(userVo);
-
-            PointLogVo pointLogVo = new PointLogVo();
-            pointLogVo.setPointLogArticleAuthorId(jsonObject.getLong("userId"));
-            pointLogVo.setPointLogArticleId(articleVo.getoId());
-            pointLogVo.setPointLogType(0);
-            pointLogVo.setPointLogPoint(point);
-            pointLogVo.setPointLogCreateTime(articleCreateTime);
-            pointLogService.save(pointLogVo);
+            articleService.saveAndUpdate(articleVo);
 
             return R.ok().put("msg", "帖子保存成功！");
         }
-
         return R.ok().put("msg", "帖子保存失败！");
     }
 
