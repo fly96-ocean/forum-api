@@ -3,6 +3,11 @@
 
 <mapper namespace="com.platform.dao.ApiFollowMapper">
 
+    <select id="queryObject" resultType="com.platform.entity.FollowVo">
+        select * from symphony_follow where oId = #{value}
+    </select>
+
+
     <select id="queryList" resultType="com.platform.entity.FollowVo">
         select * from symphony_follow where oId = #{oId}
     </select>

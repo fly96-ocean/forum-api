@@ -3,6 +3,11 @@
 
 <mapper namespace="com.platform.dao.ApiAdMapper">
 
+    <select id="queryObject" resultType="com.platform.entity.AdVo">
+        select * from symphony_ad where oId = #{value}
+    </select>
+
+
     <select id="queryList" resultType="com.platform.entity.AdVo">
         select * from symphony_ad
     </select>

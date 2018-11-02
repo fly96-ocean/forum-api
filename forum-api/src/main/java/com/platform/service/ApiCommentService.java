@@ -1,23 +1,18 @@
 package com.platform.service;
 
-import com.platform.dao.ApiArticleMapper;
-import com.platform.dao.ApiCommentMapper;
-import com.platform.dao.ApiPointLogMapper;
-import com.platform.dao.ApiUserMapper;
-import com.platform.entity.ArticleVo;
-import com.platform.entity.CommentVo;
-import com.platform.entity.PointLogVo;
-import com.platform.entity.UserVo;
+import com.platform.dao.*;
+import com.platform.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Transient;
 import java.util.List;
 import java.util.Map;
 
 
 @Service
 public class ApiCommentService {
+
     @Autowired
     private ApiCommentMapper commentDao;
     @Autowired
@@ -26,12 +21,12 @@ public class ApiCommentService {
     private ApiPointLogMapper pointLogDao;
     @Autowired
     private ApiArticleMapper articleDao;
-
-
+    @Autowired
+    private ApiReportMapper reportDao;
 
     private final static Integer point = 5;
 
-    public CommentVo queryObject(Integer id) {
+    public CommentVo queryObject(Long id) {
         return commentDao.queryObject(id);
     }
 
@@ -65,7 +60,26 @@ public class ApiCommentService {
         commentDao.deleteBatch(ids);
     }
 
-    @Transient
+    @Transactional
+    public void good(CommentVo commentVo) {
+        Integer commentGoodCnt = commentVo.getCommentGoodCnt() + 1;
+        commentVo.setCommentGoodCnt(commentGoodCnt);
+        commentDao.update(commentVo);
+    }
+
+    @Transactional
+    public void bad(CommentVo commentVo) {
+        Integer commentBadCnt = commentVo.getCommentBadCnt() + 1;
+        commentVo.setCommentBadCnt(commentBadCnt);
+        commentDao.update(commentVo);
+    }
+
+    @Transactional
+    public void saveReportComment(ReportVo reportVo) {
+        reportDao.save(reportVo);
+    }
+
+    @Transactional
     public void saveAndUpdate(CommentVo commentVo){
 
         UserVo userVo = userDao.queryObject(commentVo.getCommentAuthorId());

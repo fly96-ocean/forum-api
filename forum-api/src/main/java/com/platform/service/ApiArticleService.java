@@ -10,8 +10,8 @@ import com.platform.entity.PointLogVo;
 import com.platform.entity.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Transient;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +66,7 @@ public class ApiArticleService {
 
 
 
-    @Transient
+    @Transactional
     public void cancelZan(Long articleId, Long userId){
         ArticleVo articleVo = articleDao.queryObject(articleId);
         Integer articleGoodCnt = articleVo.getArticleGoodCnt() - 1 ;
@@ -77,7 +77,7 @@ public class ApiArticleService {
         followDao.deleteByArticleIdAndUserId(articleId, userId);
     }
 
-    @Transient
+    @Transactional
     public void zan(Long articleId, Long userId){
         ArticleVo articleVo = articleDao.queryObject(articleId);
         Integer articleGoodCnt = articleVo.getArticleGoodCnt() + 1 ;
@@ -94,7 +94,7 @@ public class ApiArticleService {
     }
 
 
-    @Transient
+    @Transactional
     public void cancelWatch(Long articleId, Long userId){
         ArticleVo articleVo = articleDao.queryObject(articleId);
         Integer articleGoodCnt = articleVo.getArticleWatchCnt() - 1 ;
@@ -105,7 +105,7 @@ public class ApiArticleService {
         followDao.deleteByArticleIdAndUserId(articleId, userId);
     }
 
-    @Transient
+    @Transactional
     public void watch(Long articleId, Long userId){
         ArticleVo articleVo = articleDao.queryObject(articleId);
         Integer articleGoodCnt = articleVo.getArticleWatchCnt() + 1 ;
@@ -121,7 +121,7 @@ public class ApiArticleService {
         followDao.save(followVo);
     }
 
-    @Transient
+    @Transactional
     public void collect(Long articleId, Long userId){
         ArticleVo articleVo = articleDao.queryObject(articleId);
         Integer articleCollectCnt = articleVo.getArticleCollectCnt() + 1;
@@ -137,7 +137,7 @@ public class ApiArticleService {
         followDao.save(followVo);
     }
 
-    @Transient
+    @Transactional
     public void cancelCollect(Long articleId, Long userId){
         ArticleVo articleVo = articleDao.queryObject(articleId);
         Integer articleCollectCnt = articleVo.getArticleCollectCnt() - 1 ;
@@ -148,7 +148,7 @@ public class ApiArticleService {
         followDao.deleteByArticleIdAndUserId(articleId, userId);
     }
 
-    @Transient
+    @Transactional
     public void saveAndUpdate(ArticleVo articleVo){
 
         UserVo userVo = userDao.queryObject(articleVo.getArticleAuthorId());
