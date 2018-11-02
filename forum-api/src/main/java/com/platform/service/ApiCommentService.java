@@ -1,8 +1,10 @@
 package com.platform.service;
 
+import com.platform.dao.ApiArticleMapper;
 import com.platform.dao.ApiCommentMapper;
 import com.platform.dao.ApiPointLogMapper;
 import com.platform.dao.ApiUserMapper;
+import com.platform.entity.ArticleVo;
 import com.platform.entity.CommentVo;
 import com.platform.entity.PointLogVo;
 import com.platform.entity.UserVo;
@@ -22,6 +24,10 @@ public class ApiCommentService {
     private ApiUserMapper userDao;
     @Autowired
     private ApiPointLogMapper pointLogDao;
+    @Autowired
+    private ApiArticleMapper articleDao;
+
+
 
     private final static Integer point = 5;
 
@@ -78,6 +84,10 @@ public class ApiCommentService {
         pointLogVo.setPointLogPoint(point);
         pointLogVo.setPointLogCreateTime(commentVo.getCommentCreateTime());
         pointLogDao.save(pointLogVo);
+
+        ArticleVo articleVo = articleDao.queryObject(commentVo.getCommentOnArticleId());
+        articleVo.setArticleCommentCount(articleVo.getArticleCommentCount()+1);
+        articleDao.update(articleVo);
     }
 
 }

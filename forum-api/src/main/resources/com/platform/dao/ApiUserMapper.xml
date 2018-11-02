@@ -4,7 +4,7 @@
 <mapper namespace="com.platform.dao.ApiUserMapper">
 
     <select id="queryObject" resultType="com.platform.entity.UserVo">
-        select * from symphony_user where oId = #{oId}
+        select * from symphony_user where oId = #{value}
     </select>
 
     <select id="queryByUsername" resultType="com.platform.entity.UserVo">

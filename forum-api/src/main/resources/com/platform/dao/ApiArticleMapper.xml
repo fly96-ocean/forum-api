@@ -49,6 +49,8 @@
             <if test="articleBadCnt != null">`articleBadCnt` = #{articleBadCnt},</if>
             <if test="articleCollectCnt != null">`articleCollectCnt` = #{articleCollectCnt},</if>
             <if test="articleWatchCnt != null">`articleWatchCnt` = #{articleWatchCnt},</if>
+            <if test="articleCommentCount != null">`articleCommentCount` = #{articleCommentCount},</if>
+            <if test="articleViewCount != null">`articleViewCount` = #{articleViewCount},</if>
             <if test="articleLatestCmtTime != null">`articleLatestCmtTime` = #{articleLatestCmtTime}</if>
         </set>
         where oId = #{oId}

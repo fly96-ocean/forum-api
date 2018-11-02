@@ -55,7 +55,7 @@ public class ApiAuthController extends ApiBaseAction {
 
 //        long userId = userService.login(appId, appKey);
 
-        Map<String, Object> map = tokenService.createToken(2);
+        Map<String, Object> map = tokenService.createToken(1);
 
         return R.ok(map);
     }

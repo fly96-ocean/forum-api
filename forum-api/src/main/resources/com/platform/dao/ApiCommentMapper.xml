@@ -32,7 +32,7 @@
         `commentReplyCnt`,
         `commentAudioURL`,
         `commentQnAOffered`,
-        `commentVisible`)
+        `commentVisible`
         ) values (
         #{commentContent}
         ,#{commentCreateTime}

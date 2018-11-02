@@ -34,12 +34,6 @@ public class ApiCommentController extends ApiBaseAction {
     @Autowired
     private ApiCommentService commentService;
 
-    @Autowired
-    private ApiUserService userService;
-
-    @Autowired
-    private ApiPointLogService pointLogService;
-
     private final static Integer point = 5;
 
     @RequestMapping("/list")
@@ -67,13 +61,36 @@ public class ApiCommentController extends ApiBaseAction {
             commentVo.setCommentSharpURL(jsonObject.getString("commentSharpURL"));
             commentVo.setCommentOriginalCommentId(jsonObject.getLong("commentOriginalCommentId"));
             commentVo.setCommentStatus(1);
-            commentVo.setCommentIP(jsonObject.getString("commentIP"));
-            commentVo.setCommentUA(jsonObject.getString("commentUA"));
-            commentVo.setCommentAnonymous(jsonObject.getInteger("commentAnonymous"));
-            commentVo.setCommentGoodCnt(jsonObject.getInteger("commentGoodCnt"));
-            commentVo.setCommentBadCnt(jsonObject.getInteger("commentBadCnt"));
-            commentVo.setCommentScore(jsonObject.getDouble("commentScore"));
-            commentVo.setCommentReplyCnt(jsonObject.getInteger("commentReplyCnt"));
+            commentVo.setCommentIP(this.getClientIp());
+            commentVo.setCommentUA(this.getClientUA());
+            if(jsonObject.getInteger("commentAnonymous") == null){
+                commentVo.setCommentAnonymous(1);
+            } else {
+                commentVo.setCommentAnonymous(jsonObject.getInteger("commentAnonymous"));
+            }
+
+            if(jsonObject.getInteger("commentGoodCnt") == null){
+                commentVo.setCommentGoodCnt(0);
+            } else {
+                commentVo.setCommentGoodCnt(jsonObject.getInteger("commentGoodCnt"));
+            }
+            if(jsonObject.getInteger("commentBadCnt") == null){
+                commentVo.setCommentBadCnt(0);
+            } else {
+                commentVo.setCommentBadCnt(jsonObject.getInteger("commentBadCnt"));
+            }
+            if(jsonObject.getDouble("commentScore") == null){
+                commentVo.setCommentScore(0.0);
+            } else {
+                commentVo.setCommentScore(jsonObject.getDouble("commentBadCnt"));
+            }
+
+            if(jsonObject.getInteger("commentReplyCnt") == null){
+                commentVo.setCommentReplyCnt(0);
+            } else {
+                commentVo.setCommentReplyCnt(jsonObject.getInteger("commentReplyCnt"));
+            }
+
             commentVo.setCommentAudioURL(jsonObject.getString("commentAudioURL"));
             commentVo.setCommentQnAOffered(jsonObject.getInteger("commentQnAOffered"));
             commentVo.setCommentVisible(jsonObject.getInteger("commentQnAOffered"));
