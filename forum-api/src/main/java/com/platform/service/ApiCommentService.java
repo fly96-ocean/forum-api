@@ -23,6 +23,9 @@ public class ApiCommentService {
     private ApiArticleMapper articleDao;
     @Autowired
     private ApiReportMapper reportDao;
+    @Autowired
+    private ApiFollowMapper followDao;
+
 
     private final static Integer point = 5;
 
@@ -61,17 +64,37 @@ public class ApiCommentService {
     }
 
     @Transactional
-    public void good(CommentVo commentVo) {
+    public void good(CommentVo commentVo, Long userId) {
         Integer commentGoodCnt = commentVo.getCommentGoodCnt() + 1;
         commentVo.setCommentGoodCnt(commentGoodCnt);
         commentDao.update(commentVo);
+
+        FollowVo followVo = new FollowVo();
+        followVo.setFollowerId(userId);
+        followVo.setFollowingId(commentVo.getoId());
+        followVo.setFollowingType(7);
+        followDao.save(followVo);
     }
 
     @Transactional
-    public void bad(CommentVo commentVo) {
+    public void cancelGood(CommentVo commentVo, Long userId) {
+        Integer commentGoodCnt = commentVo.getCommentGoodCnt() - 1;
+        commentVo.setCommentGoodCnt(commentGoodCnt);
+        commentDao.update(commentVo);
+        followDao.deleteByFollowerIdAndFollowingId(userId, commentVo.getoId());
+    }
+
+    @Transactional
+    public void bad(CommentVo commentVo, Long userId) {
         Integer commentBadCnt = commentVo.getCommentBadCnt() + 1;
         commentVo.setCommentBadCnt(commentBadCnt);
         commentDao.update(commentVo);
+
+        FollowVo followVo = new FollowVo();
+        followVo.setFollowerId(userId);
+        followVo.setFollowingId(commentVo.getoId());
+        followVo.setFollowingType(8);
+        followDao.save(followVo);
     }
 
     @Transactional

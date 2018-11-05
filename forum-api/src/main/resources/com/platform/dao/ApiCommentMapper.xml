@@ -4,16 +4,27 @@
 <mapper namespace="com.platform.dao.ApiCommentMapper">
 
     <select id="queryObject" resultType="com.platform.entity.CommentVo">
-        select * from symphony_comment where oId = #{value}
+        select c.*, u.userNickName, u.userAvatarUrl from symphony_comment c
+        left join symphony_user u on c.commentAuthorId=u.oId
+        where c.oId = #{value}
     </select>
 
     <select id="queryList" resultType="com.platform.entity.CommentVo">
-        select * from symphony_comment where 1=1
+        select c.*, u.userNickName, u.userAvatarUrl
+
+        <if test="currentUserId != null">
+            , exists(select oId from symphony_follow f where f.followerId = #{currentUserId} and f.followingId = c.oId and f.followingType = 7) as hasGood
+        </if>
+
+        from symphony_comment c
+        left join symphony_user u on c.commentAuthorId=u.oId
+
+        where 1=1
         <if test="commentOnArticleId != null">
-            and a.commentOnArticleId = #{commentOnArticleId}
+            and c.commentOnArticleId = #{commentOnArticleId}
         </if>
         <if test="commentOriginalCommentId != null">
-            and a.commentOriginalCommentId = #{commentOriginalCommentId}
+            and c.commentOriginalCommentId = #{commentOriginalCommentId}
         </if>
     </select>
 

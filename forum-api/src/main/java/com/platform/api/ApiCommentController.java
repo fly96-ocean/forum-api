@@ -1,5 +1,6 @@
 package com.platform.api;
 
+import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.platform.entity.CommentVo;
 import com.platform.entity.PointLogVo;
@@ -43,6 +44,9 @@ public class ApiCommentController extends ApiBaseAction {
         Assert.isNull(articleId, "帖子ID不能为空！");
         Map<String, Object> map = new HashMap<>();
         map.put("commentOnArticleId", articleId);
+        if(getUserId() != null){
+            map.put("currentUserId", getUserId());
+        }
         List<CommentVo> commentVoList = commentService.queryList(map);
 
         return R.ok().put("msg", commentVoList);
@@ -60,7 +64,10 @@ public class ApiCommentController extends ApiBaseAction {
             commentVo.setCommentAuthorId(currentUserId);
             commentVo.setCommentOnArticleId(jsonObject.getLong("articleId"));
             commentVo.setCommentSharpURL(jsonObject.getString("commentSharpURL"));
-            commentVo.setCommentOriginalCommentId(jsonObject.getLong("commentOriginalCommentId"));
+            if(jsonObject.getLong("commentOriginalCommentId") != null){
+                commentVo.setCommentOriginalCommentId(jsonObject.getLong("commentOriginalCommentId"));
+            }
+
             commentVo.setCommentStatus(1);
             commentVo.setCommentIP(this.getClientIp());
             commentVo.setCommentUA(this.getClientUA());
@@ -108,29 +115,57 @@ public class ApiCommentController extends ApiBaseAction {
     public R good(Long commentId) {
         Assert.isNull(commentId, "回帖ID不能为空");
         CommentVo commentVo = commentService.queryObject(commentId);
-        commentService.good(commentVo);
+        Long userId = this.getUserId();
+        commentService.good(commentVo, userId);
+        return R.ok().put("msg", "");
+    }
+
+    @RequestMapping("/cancelGood")
+    public R cancelGood(Long commentId) {
+        Assert.isNull(commentId, "回帖ID不能为空");
+        CommentVo commentVo = commentService.queryObject(commentId);
+        Long userId = this.getUserId();
+        commentService.cancelGood(commentVo, userId);
         return R.ok().put("msg", "");
     }
 
     @RequestMapping("/bad")
     public R bad(Long commentId) {
         Assert.isNull(commentId, "回帖ID不能为空");
+        Long userId = this.getUserId();
         CommentVo commentVo = commentService.queryObject(commentId);
-        commentService.bad(commentVo);
+        commentService.bad(commentVo, userId);
         return R.ok().put("msg", "");
     }
 
     @RequestMapping("/report")
-    public R report(Long commentId, Integer reportType, String reportMemo) {
+    public R report(Long commentId, String reportTypes) {
         Assert.isNull(commentId, "回帖ID不能为空");
-        Assert.isNull(reportType, "举报reportType不能为空");
-
+        Assert.isNull(reportTypes, "举报reportType不能为空");
+        String reportMemo = reportTypes;
         ReportVo reportVo = new ReportVo();
 
         reportVo.setReportUserId(getUserId());
         reportVo.setReportDataId(commentId);
-        reportVo.setReportDataType(1);
-        reportVo.setReportType(reportType);
+        if(StringUtils.equals(reportTypes, "垃圾广告")){
+            reportVo.setReportDataType(0);
+        } else if(StringUtils.equals(reportTypes, "色情低俗")){
+            reportVo.setReportDataType(1);
+        } else if(StringUtils.equals(reportTypes, "违法违规")){
+            reportVo.setReportDataType(2);
+        } else if(StringUtils.equals(reportTypes, "涉嫌侵权")){
+            reportVo.setReportDataType(3);
+        } else if(StringUtils.equals(reportTypes, "人身攻击")){
+            reportVo.setReportDataType(4);
+        } else if(StringUtils.equals(reportTypes, "冒充账号")){
+            reportVo.setReportDataType(5);
+        } else if(StringUtils.equals(reportTypes, "垃圾广告账号")){
+            reportVo.setReportDataType(6);
+        } else if(StringUtils.equals(reportTypes, "个人信息违规")){
+            reportVo.setReportDataType(7);
+        }
+
+        reportVo.setReportType(1);
         reportVo.setReportMemo(reportMemo);
         reportVo.setReportHandled(0);
 

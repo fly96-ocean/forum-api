@@ -42,6 +42,14 @@ public class CommentVo implements Serializable {
     private Integer commentQnAOffered;
     //0：所有人可见，1：仅楼主和自己可见
     private Integer commentVisible;
+    //当前用户id
+    private Long currentUserId;
+    //回帖人头像
+    private String userAvatarUrl;
+    //回帖人昵称
+    private String userNickName;
+    //是否点赞
+    private Integer hasGood;
 
     public Long getoId() {
         return oId;
@@ -185,5 +193,37 @@ public class CommentVo implements Serializable {
 
     public void setCommentVisible(Integer commentVisible) {
         this.commentVisible = commentVisible;
+    }
+
+    public String getUserAvatarUrl() {
+        return userAvatarUrl;
+    }
+
+    public void setUserAvatarUrl(String userAvatarUrl) {
+        this.userAvatarUrl = userAvatarUrl;
+    }
+
+    public String getUserNickName() {
+        return userNickName;
+    }
+
+    public void setUserNickName(String userNickName) {
+        this.userNickName = userNickName;
+    }
+
+    public Integer getHasGood() {
+        return hasGood;
+    }
+
+    public void setHasGood(Integer hasGood) {
+        this.hasGood = hasGood;
+    }
+
+    public Long getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public void setCurrentUserId(Long currentUserId) {
+        this.currentUserId = currentUserId;
     }
 }
