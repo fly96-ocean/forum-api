@@ -4,7 +4,9 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class DomainVo implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -37,6 +39,9 @@ public class DomainVo implements Serializable {
     private String domainSeoKeywords;
     //领域 SEO 描述    （可以暂时不考虑）
     private String domainSeoDesc;
+    //domain下的帖子
+    private List<ArticleVo> articles = new ArrayList<>();
+
 
     public Integer getoId() {
         return oId;
@@ -148,5 +153,13 @@ public class DomainVo implements Serializable {
 
     public void setDomainSeoDesc(String domainSeoDesc) {
         this.domainSeoDesc = domainSeoDesc;
+    }
+
+    public List<ArticleVo> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<ArticleVo> articles) {
+        this.articles = articles;
     }
 }

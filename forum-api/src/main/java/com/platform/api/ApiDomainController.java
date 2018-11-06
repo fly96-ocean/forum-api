@@ -31,8 +31,8 @@ public class ApiDomainController extends ApiBaseAction {
         Assert.isNull(domainType, "帖子分类不能为空");
         Map map = new HashMap();
         map.put("domainType", domainType);
-        List<DomainVo> userDeptVos = domainService.queryList(map);
+        List<DomainVo> domainVos = domainService.queryList(map);
 
-        return R.ok().put("msg", userDeptVos);
+        return R.ok().put("msg", domainVos);
     }
 }

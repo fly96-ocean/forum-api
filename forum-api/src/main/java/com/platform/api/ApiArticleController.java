@@ -1,14 +1,8 @@
 package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.platform.entity.ArticleVo;
-import com.platform.entity.FollowVo;
-import com.platform.entity.PointLogVo;
-import com.platform.entity.UserVo;
-import com.platform.service.ApiArticleService;
-import com.platform.service.ApiFollowService;
-import com.platform.service.ApiPointLogService;
-import com.platform.service.ApiUserService;
+import com.platform.entity.*;
+import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import com.platform.utils.R;
 import com.platform.validator.Assert;
@@ -43,6 +37,8 @@ public class ApiArticleController extends ApiBaseAction {
     private ApiUserService userService;
     @Autowired
     private ApiPointLogService pointLogService;
+    @Autowired
+    private ApiTagService tagService;
 
     private final static Integer point = 5;
 
@@ -180,7 +176,12 @@ public class ApiArticleController extends ApiBaseAction {
             ArticleVo articleVo = new ArticleVo();
             articleVo.setArticleTitle(jsonObject.getString("articleTitle"));
             articleVo.setArticleContent(jsonObject.getString("articleContent"));
-            articleVo.setArticleTags(jsonObject.getString("articleTags"));
+            if(jsonObject.getLong("tagId") != null){
+                Long tagId = jsonObject.getLong("tagId");
+                TagVo tag = tagService.queryObject(tagId);
+                articleVo.setArticleTags(tag.getTagTitle());
+            }
+
             articleVo.setArticleCommentable(jsonObject.getInteger("articleCommentable"));
             articleVo.setArticleEditorType(jsonObject.getInteger("articleEditorType"));
             articleVo.setArticleType(jsonObject.getInteger("articleType"));
@@ -193,11 +194,35 @@ public class ApiArticleController extends ApiBaseAction {
             articleVo.setArticleImg4URL(jsonObject.getString("articleImg4URL"));
             articleVo.setArticleImg5URL(jsonObject.getString("articleImg5URL"));
             articleVo.setArticleImg6URL(jsonObject.getString("articleImg6URL"));
-            articleVo.setArticleAuthorId(jsonObject.getLong("userId"));
-            articleVo.setArticleDomainId(jsonObject.getLong("domainId"));
+            articleVo.setArticleAuthorId(this.getUserId());
+//            articleVo.setArticleDomainId(jsonObject.getLong("domainId"));
             articleVo.setArticleCreateTime(new Date());
 
             articleService.saveAndUpdate(articleVo);
+
+            return R.ok().put("msg", articleVo);
+        }
+        return R.error().put("msg", "帖子保存失败！");
+    }
+
+    @RequestMapping("/update")
+    public R update() {
+        JSONObject jsonObject = super.getJsonRequest();
+        if(null != jsonObject) {
+            Long oId = jsonObject.getLong("articleId");
+            ArticleVo articleVo = articleService.queryObject(oId);
+            if(jsonObject.getLong("articleDomainId") != null){
+                articleVo.setArticleDomainId(jsonObject.getLong("articleDomainId"));
+            }
+            if(jsonObject.getInteger("articleAnonymous") != null){
+                articleVo.setArticleAnonymous(jsonObject.getInteger("articleAnonymous"));
+            }
+            if(jsonObject.getInteger("articleCommentable") != null){
+                articleVo.setArticleCommentable(jsonObject.getInteger("articleCommentable"));
+            }
+
+
+            articleService.update(articleVo);
 
             return R.ok().put("msg", "帖子保存成功！");
         }

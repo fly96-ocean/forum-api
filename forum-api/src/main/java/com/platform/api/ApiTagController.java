@@ -42,7 +42,7 @@ public class ApiTagController extends ApiBaseAction {
             return R.ok().put("msg", tags);
         } else {
 
-            List<TagVo> tags = tagService.queryByFirstLevelTags(oId);
+            List<TagVo> tags = tagService.queryBySecondLevelTags(oId);
             return R.ok().put("msg", tags);
         }
     }

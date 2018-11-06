@@ -44,7 +44,7 @@ public class ArticleVo implements Serializable {
     private String articleLatestCmterName;
     //帖子随机数，用于快速选择随机帖子    （可以暂时不考虑）
     private Double articleRandomDouble;
-    //帖子是否可回帖
+    //帖子是否可回帖 0 可以评论   1 不可以评论
     private Integer articleCommentable;
     //0：CodeMirror-Markdown      （默认都是0）
     private Integer articleEditorType;

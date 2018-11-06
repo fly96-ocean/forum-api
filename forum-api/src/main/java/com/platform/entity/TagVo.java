@@ -42,6 +42,8 @@ public class TagVo  implements Serializable {
     private String tagAd;
     //是否显示全站侧边栏广告
     private Integer tagShowSideAd;
+    //标签样式
+    private String tagStyle;
 
     public Integer getoId() {
         return oId;
@@ -193,5 +195,13 @@ public class TagVo  implements Serializable {
 
     public void setTagShowSideAd(Integer tagShowSideAd) {
         this.tagShowSideAd = tagShowSideAd;
+    }
+
+    public String getTagStyle() {
+        return tagStyle;
+    }
+
+    public void setTagStyle(String tagStyle) {
+        this.tagStyle = tagStyle;
     }
 }

@@ -13,7 +13,10 @@
     </select>
 
     <select id="queryByIds" resultType="com.platform.entity.TagVo">
-        select * from symphony_tag where oId in #{oIds}
+        select * from symphony_tag where oId in
+        <foreach collection="oIds" index="index" item="item" open="(" separator="," close=")">
+                            #{item}
+        </foreach>
     </select>
 
     <select id="queryTotal" resultType="int">

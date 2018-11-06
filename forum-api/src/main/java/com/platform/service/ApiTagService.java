@@ -22,7 +22,7 @@ public class ApiTagService {
     @Autowired
     private ApiTagTagMapper tagTagDao;
 
-    public TagVo queryObject(Integer id) {
+    public TagVo queryObject(Long id) {
         return tagDao.queryObject(id);
     }
 
@@ -55,11 +55,11 @@ public class ApiTagService {
         return tagDao.queryByIds(ids);
     }
 
-    public List<TagVo> queryByFirstLevelTags(Long oId){
+    public List<TagVo> queryBySecondLevelTags(Long oId){
         List<TagTagVo> tagTagVos = tagTagDao.queryOId2List(oId);
         List<Long> ids = new ArrayList<>();
         for(TagTagVo tagTagVo:tagTagVos){
-            ids.add(tagTagVo.getTag1Oid());
+            ids.add(tagTagVo.getTag2Oid());
         }
         return tagDao.queryByIds(ids);
     }

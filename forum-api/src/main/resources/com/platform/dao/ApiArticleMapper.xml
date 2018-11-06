@@ -51,7 +51,10 @@
             <if test="articleWatchCnt != null">`articleWatchCnt` = #{articleWatchCnt},</if>
             <if test="articleCommentCount != null">`articleCommentCount` = #{articleCommentCount},</if>
             <if test="articleViewCount != null">`articleViewCount` = #{articleViewCount},</if>
-            <if test="articleLatestCmtTime != null">`articleLatestCmtTime` = #{articleLatestCmtTime}</if>
+            <if test="articleLatestCmtTime != null">`articleLatestCmtTime` = #{articleLatestCmtTime},</if>
+            <if test="articleDomainId != null">`articleDomainId` = #{articleDomainId},</if>
+            <if test="articleAnonymous != null">`articleAnonymous` = #{articleAnonymous},</if>
+            <if test="articleCommentable != null">`articleCommentable` = #{articleCommentable},</if>
         </set>
         where oId = #{oId}
     </update>
@@ -59,9 +62,9 @@
     <insert id="save" parameterType="com.platform.entity.ArticleVo" useGeneratedKeys="true" keyProperty="oId">
         insert into symphony_article
         (`articleTitle`,
+          `articleContent`,
           `articleTags`,
           `articleAuthorId`,
-          `articleContent`,
           `articleCreateTime`,
           `articleCommentable`,
           `articleEditorType`,
