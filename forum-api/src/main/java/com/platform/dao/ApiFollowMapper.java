@@ -10,5 +10,5 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ApiFollowMapper extends BaseDao<FollowVo> {
     public void deleteByArticleIdAndUserId(@Param("articleId") Long articleId, @Param("userId")Long userId);
-    public void deleteByFollowerIdAndFollowingId(@Param("followerId") Long followerId, @Param("followingId")Long followingId);
+    public void deleteByFollowerIdAndFollowingIdAndFollowingType(@Param("followerId") Long followerId, @Param("followingId")Long followingId, @Param("followingType")Integer followingType);
 }

@@ -1,6 +1,7 @@
 package com.platform.dao;
 
 import com.platform.entity.UserVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ import java.util.List;
  */
 public interface ApiUserMapper extends BaseDao<UserVo> {
 
+    public List<UserVo> queryListByUserFriends(@Param("userId") Long userId);
+    public List<UserVo> queryListByUserFans(@Param("userId") Long userId);
 }

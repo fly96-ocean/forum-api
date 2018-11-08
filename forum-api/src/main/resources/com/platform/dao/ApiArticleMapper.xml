@@ -28,9 +28,9 @@
         <if test="domainId != null">
             and a.articleDomainId = #{domainId}
         </if>
-        <!--<if test="userId != null">-->
-        <!--and a.articleDomainId = #{userId}-->
-        <!--</if>-->
+        <if test="userId != null">
+        and a.articleAuthorId = #{userId}
+        </if>
         <if test="articleId != null">
             and a.oId = #{articleId}
         </if>

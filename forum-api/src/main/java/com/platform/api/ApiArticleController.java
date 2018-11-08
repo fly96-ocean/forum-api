@@ -32,15 +32,7 @@ public class ApiArticleController extends ApiBaseAction {
     @Autowired
     private ApiArticleService articleService;
     @Autowired
-    private ApiFollowService followService;
-    @Autowired
-    private ApiUserService userService;
-    @Autowired
-    private ApiPointLogService pointLogService;
-    @Autowired
     private ApiTagService tagService;
-
-    private final static Integer point = 5;
 
     @RequestMapping("/newList")
     public R newList(Long articleType) {
@@ -98,32 +90,6 @@ public class ApiArticleController extends ApiBaseAction {
         return R.ok().put("msg", "帖子好评取消");
     }
 
-    /**
-     * 差评
-     * 暂时用不到此接口
-     * @param articleId
-     * @return
-     */
-//    @RequestMapping("/bad")
-//    public R bad(Integer articleId) {
-//        Assert.isNull(articleId, "帖子ID不能为空");
-//        Long userId = getUserId();
-//
-//        ArticleVo articleVo = articleService.queryObject(articleId);
-//        Integer articleBadCnt = articleVo.getArticleBadCnt() + 1;
-//        articleVo.setArticleGoodCnt(articleBadCnt);
-//        articleVo.setArticleLatestCmtTime(new Date());
-//
-//        FollowVo followVo = new FollowVo();
-//        followVo.setFollowerId(userId);
-//        followVo.setFollowingId(articleVo.getoId());
-//        followVo.setFollowingType(5);
-//
-//        articleService.update(articleVo);
-//        followService.save(followVo);
-//
-//        return R.ok().put("msg", "帖子差评已更新");
-//    }
 
     @RequestMapping(value = "/collect")
     public R collect(Long articleId) {

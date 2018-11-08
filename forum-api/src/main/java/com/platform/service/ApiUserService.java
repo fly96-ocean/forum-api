@@ -1,9 +1,13 @@
 package com.platform.service;
 
+import com.platform.dao.ApiFollowMapper;
 import com.platform.dao.ApiUserMapper;
+import com.platform.entity.FollowVo;
 import com.platform.entity.UserVo;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +17,8 @@ import java.util.Map;
 public class ApiUserService {
     @Autowired
     private ApiUserMapper userDao;
+    @Autowired
+    private ApiFollowMapper followDao;
 
     public UserVo queryObject(Long userId) {
         return userDao.queryObject(userId);
@@ -30,4 +36,33 @@ public class ApiUserService {
         userDao.update(userVo);
     }
 
+    public List<UserVo> queryListByUserFriends(Long userId) {
+        return userDao.queryListByUserFriends(userId);
+    }
+
+    public List<UserVo> queryListByUserFans(Long userId) {
+        return userDao.queryListByUserFans(userId);
+    }
+
+    @Transactional
+    public void follow(FollowVo followVo){
+
+        UserVo userVo = userDao.queryObject(followVo.getFollowingId());
+        Integer userFansCount = userVo.getUserFansCount() + 1;
+        userVo.setUserFansCount(userFansCount);
+
+        followDao.save(followVo);
+        userDao.update(userVo);
+    }
+
+    @Transactional
+    public void cancelFollow(Long followerId, Long followingId){
+
+        UserVo userVo = userDao.queryObject(followingId);
+        Integer userFansCount = userVo.getUserFansCount() - 1;
+        userVo.setUserFansCount(userFansCount);
+
+        followDao.deleteByFollowerIdAndFollowingIdAndFollowingType(followerId,followingId,0);
+        userDao.update(userVo);
+    }
 }

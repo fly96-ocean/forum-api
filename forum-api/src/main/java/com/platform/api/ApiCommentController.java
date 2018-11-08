@@ -36,8 +36,6 @@ public class ApiCommentController extends ApiBaseAction {
     @Autowired
     private ApiCommentService commentService;
 
-    private final static Integer point = 5;
-
     @RequestMapping("/list")
     public R list(Long articleId) {
 

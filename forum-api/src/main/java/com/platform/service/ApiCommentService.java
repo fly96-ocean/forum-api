@@ -81,7 +81,7 @@ public class ApiCommentService {
         Integer commentGoodCnt = commentVo.getCommentGoodCnt() - 1;
         commentVo.setCommentGoodCnt(commentGoodCnt);
         commentDao.update(commentVo);
-        followDao.deleteByFollowerIdAndFollowingId(userId, commentVo.getoId());
+        followDao.deleteByFollowerIdAndFollowingIdAndFollowingType(userId, commentVo.getoId(),4);
     }
 
     @Transactional

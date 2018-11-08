@@ -25,6 +25,7 @@ public class UserVo implements Serializable {
     private Integer userArticleCount;
     private Integer userCommentCount;
     private Integer userTagCount;
+    private Integer userFansCount;
     private Integer userStatus;
     private Integer userPoint;
     private Integer userUsedPoint;
@@ -208,6 +209,14 @@ public class UserVo implements Serializable {
 
     public void setUserTagCount(Integer userTagCount) {
         this.userTagCount = userTagCount;
+    }
+
+    public Integer getUserFansCount() {
+        return userFansCount;
+    }
+
+    public void setUserFansCount(Integer userFansCount) {
+        this.userFansCount = userFansCount;
     }
 
     public Integer getUserStatus() {

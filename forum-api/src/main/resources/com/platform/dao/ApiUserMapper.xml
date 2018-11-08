@@ -7,6 +7,32 @@
         select * from symphony_user where oId = #{value}
     </select>
 
+    <select id="queryListByUserFriends" resultType="com.platform.entity.UserVo">
+        select user.*
+        from forum.symphony_user user
+        join forum.symphony_follow follow
+        on user.oId = follow.followerId
+        where exists(select t1.oId from forum.symphony_follow t1
+        where follow.followerId = t1.followingId
+        and follow.followingId = t1.followerId
+        and t1.followingType = 0)
+        and follow.followingId = #{userId}
+        and follow.followingType = 0
+    </select>
+
+    <select id="queryListByUserFans" resultType="com.platform.entity.UserVo">
+        select user.*
+        from forum.symphony_user user
+        join forum.symphony_follow follow
+        on user.oId = follow.followerId
+        where not exists(select t1.oId from forum.symphony_follow t1
+        where follow.followerId = t1.followingId
+        and follow.followingId = t1.followerId
+        and t1.followingType = 0)
+        and follow.followingId = #{userId}
+        and follow.followingType = 0
+    </select>
+
     <select id="queryByUsername" resultType="com.platform.entity.UserVo">
         select * from symphony_user where userName = #{userName}
     </select>

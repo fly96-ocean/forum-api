@@ -25,6 +25,11 @@ public class ApiPointLogService {
     }
 
 
+    public List<PointLogVo> queryList(Map<String, Object> map) {
+        return pointLogDao.queryList(map);
+    }
+
+
     public int queryTotal(Map<String, Object> map) {
         return pointLogDao.queryTotal(map);
     }
