@@ -11,7 +11,7 @@ public class FollowVo implements Serializable {
     private Long followerId;
     //关注实体 id
     private Long followingId;
-    //0：用户，1：标签，2：帖子收藏，3：帖子关注  4：点赞   5：差评  6：作者关注  7:帖子评论点赞  8:帖子差评
+    //0：用户，1：标签，2：帖子收藏，3：帖子关注  4：点赞   5：差评   7:帖子评论点赞  8:帖子差评
     private Integer followingType;
 
     public Long getoId() {

@@ -51,7 +51,7 @@ public class ApiUploadController extends ApiBaseAction {
 
 
         //上传文件
-        String url = articleUpload + File.separator + originalName;
+        String url = articleUpload + File.separator + fileName;
         return toResponsSuccess(url);
     }
 }

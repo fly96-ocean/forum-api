@@ -1,5 +1,6 @@
 package com.platform.api;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.platform.entity.*;
 import com.platform.service.*;
@@ -142,6 +143,33 @@ public class ApiArticleController extends ApiBaseAction {
             ArticleVo articleVo = new ArticleVo();
             articleVo.setArticleTitle(jsonObject.getString("articleTitle"));
             articleVo.setArticleContent(jsonObject.getString("articleContent"));
+            JSONArray articleImages = jsonObject.getJSONArray("articleImages");
+            if(articleImages != null){
+                for(int i = 0; i<articleImages.size(); i++){
+                    if(articleImages.get(i) != null){
+                        if(i==0){
+                            articleVo.setArticleImg1URL(articleImages.get(i).toString());
+                        }
+                        if(i==1){
+                            articleVo.setArticleImg2URL(articleImages.get(i).toString());
+                        }
+                        if(i==2){
+                            articleVo.setArticleImg3URL(articleImages.get(i).toString());
+                        }
+                        if(i==3){
+                            articleVo.setArticleImg4URL(articleImages.get(i).toString());
+                        }
+                        if(i==4){
+                            articleVo.setArticleImg5URL(articleImages.get(i).toString());
+                        }
+                        if(i==5){
+                            articleVo.setArticleImg6URL(articleImages.get(i).toString());
+                        }
+                    }
+
+                }
+            }
+
             if(jsonObject.getLong("tagId") != null){
                 Long tagId = jsonObject.getLong("tagId");
                 TagVo tag = tagService.queryObject(tagId);
@@ -154,12 +182,6 @@ public class ApiArticleController extends ApiBaseAction {
             articleVo.setArticleAnonymous(jsonObject.getInteger("articleAnonymous"));
             articleVo.setArticleAudioURL(jsonObject.getString("articleAudioURL"));
             articleVo.setArticlePushOrder(jsonObject.getInteger("articlePushOrder"));
-            articleVo.setArticleImg1URL(jsonObject.getString("articleImg1URL"));
-            articleVo.setArticleImg2URL(jsonObject.getString("articleImg2URL"));
-            articleVo.setArticleImg3URL(jsonObject.getString("articleImg3URL"));
-            articleVo.setArticleImg4URL(jsonObject.getString("articleImg4URL"));
-            articleVo.setArticleImg5URL(jsonObject.getString("articleImg5URL"));
-            articleVo.setArticleImg6URL(jsonObject.getString("articleImg6URL"));
             articleVo.setArticleAuthorId(this.getUserId());
 //            articleVo.setArticleDomainId(jsonObject.getLong("domainId"));
             articleVo.setArticleCreateTime(new Date());
@@ -195,4 +217,9 @@ public class ApiArticleController extends ApiBaseAction {
         return R.ok().put("msg", "帖子保存失败！");
     }
 
+    //To Do
+    @RequestMapping("/updateViewCount")
+    public R updateViewCount() {
+        return R.ok();
+    }
 }

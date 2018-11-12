@@ -104,6 +104,8 @@ public class ArticleVo implements Serializable {
     private Integer hasGood;
     //是否被关注
     private Integer hasWatchedArticle;
+    //是否关注帖子作者
+    private Integer hasWatchedAuthor;
     //是否被收藏
     private Integer hasCollect;
     //帖子封面图
@@ -489,6 +491,14 @@ public class ArticleVo implements Serializable {
         this.hasWatchedArticle = hasWatchedArticle;
     }
 
+    public Integer getHasWatchedAuthor() {
+        return hasWatchedAuthor;
+    }
+
+    public void setHasWatchedAuthor(Integer hasWatchedAuthor) {
+        this.hasWatchedAuthor = hasWatchedAuthor;
+    }
+
     public Integer getHasCollect() {
         return hasCollect;
     }
@@ -501,15 +511,20 @@ public class ArticleVo implements Serializable {
         articleImgs = new ArrayList<>();
         if(StringUtils.isNotEmpty(this.getArticleImg1URL())){
             articleImgs.add(this.getArticleImg1URL());
-        } else if(StringUtils.isNotEmpty(this.getArticleImg2URL())){
+        }
+        if(StringUtils.isNotEmpty(this.getArticleImg2URL())){
             articleImgs.add(this.getArticleImg2URL());
-        } else if(StringUtils.isNotEmpty(this.getArticleImg3URL())){
+        }
+        if(StringUtils.isNotEmpty(this.getArticleImg3URL())){
             articleImgs.add(this.getArticleImg3URL());
-        } else if(StringUtils.isNotEmpty(this.getArticleImg4URL())){
+        }
+        if(StringUtils.isNotEmpty(this.getArticleImg4URL())){
             articleImgs.add(this.getArticleImg4URL());
-        } else if(StringUtils.isNotEmpty(this.getArticleImg5URL())){
+        }
+        if(StringUtils.isNotEmpty(this.getArticleImg5URL())){
             articleImgs.add(this.getArticleImg5URL());
-        } else if(StringUtils.isNotEmpty(this.getArticleImg6URL())){
+        }
+        if(StringUtils.isNotEmpty(this.getArticleImg6URL())){
             articleImgs.add(this.getArticleImg6URL());
         }
         return articleImgs;

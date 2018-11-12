@@ -15,6 +15,7 @@
         <if test="currentUserId != null">
             , exists(select oId from symphony_follow f where f.followerId = #{currentUserId} and f.followingId = a.oId and f.followingType = 4) as hasGood
             , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 3) as hasWatchedArticle
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 0) as hasWatchedAuthor
             , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 2) as hasCollect
         </if>
 

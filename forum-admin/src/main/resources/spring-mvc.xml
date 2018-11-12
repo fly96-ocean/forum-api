@@ -47,6 +47,7 @@
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/statics/**"/>
+            <mvc:exclude-mapping path="/upload/**"/>
             <mvc:exclude-mapping path="/**/**.html"/>
             <mvc:exclude-mapping path="/**/**.js"/>
             <bean class="com.platform.interceptor.LogInterceptor"/>

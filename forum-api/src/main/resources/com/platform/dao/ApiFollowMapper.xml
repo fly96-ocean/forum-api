@@ -34,7 +34,7 @@
     </delete>
 
     <delete id="deleteByFollowerIdAndFollowingIdAndFollowingType">
-        delete from symphony_follow where followingId = #{followingId} and followerId = #{followerId} and followingType = # {followingType}
+        delete from symphony_follow where followingId = #{followingId} and followerId = #{followerId} and followingType = #{followingType}
     </delete>
 
 </mapper>
