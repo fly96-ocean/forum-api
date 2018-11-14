@@ -15,7 +15,7 @@
         <if test="currentUserId != null">
             , exists(select oId from symphony_follow f where f.followerId = #{currentUserId} and f.followingId = a.oId and f.followingType = 4) as hasGood
             , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 3) as hasWatchedArticle
-            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 0) as hasWatchedAuthor
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.articleAuthorId and ff.followingType = 0) as hasWatchedAuthor
             , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 2) as hasCollect
         </if>
 
@@ -56,6 +56,9 @@
             <if test="articleDomainId != null">`articleDomainId` = #{articleDomainId},</if>
             <if test="articleAnonymous != null">`articleAnonymous` = #{articleAnonymous},</if>
             <if test="articleCommentable != null">`articleCommentable` = #{articleCommentable},</if>
+            <if test="articleQnAOfferPoint != null">`articleQnAOfferPoint` = #{articleQnAOfferPoint},</if>
+            <if test="articleRewardPoint != null">`articleRewardPoint` = #{articleRewardPoint},</if>
+            <if test="articleRewardContent != null">`articleRewardContent` = #{articleRewardContent},</if>
         </set>
         where oId = #{oId}
     </update>
@@ -79,7 +82,10 @@
           `articleImg4URL`,
           `articleImg5URL`,
           `articleImg6URL`,
-          `articleDomainId`
+          `articleDomainId`,
+          `articleQnAOfferPoint`,
+          `articleRewardPoint`,
+          `articleRewardContent`
         ) values (
         #{articleTitle}
          ,#{articleContent}
@@ -99,6 +105,9 @@
          ,#{articleImg5URL}
          ,#{articleImg6URL}
          ,#{articleDomainId}
+         ,#{articleQnAOfferPoint}
+         ,#{articleRewardPoint}
+         ,#{articleRewardContent}
         )
     </insert>
 </mapper>

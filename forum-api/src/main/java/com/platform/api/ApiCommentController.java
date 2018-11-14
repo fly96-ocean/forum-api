@@ -181,4 +181,16 @@ public class ApiCommentController extends ApiBaseAction {
         return R.ok().put("msg", commentVoList);
     }
 
+    @RequestMapping("/offered")
+    public R offered(Long commentId) {
+        CommentVo commentVo = commentService.queryObject(commentId);
+        if(commentVo.getCommentQnAOffered() == 1) {
+            return R.ok().put("msg", "不能重复操作，回帖已经被采纳！");
+        } else {
+            commentVo.setCommentQnAOffered(1);
+            commentService.offeredAndUpdate(commentVo);
+            return R.ok().put("msg", "回帖已经被采纳！");
+        }
+    }
+
 }

@@ -127,4 +127,31 @@ public class ApiCommentService {
         articleDao.update(articleVo);
     }
 
+    @Transactional
+    public void offeredAndUpdate(CommentVo commentVo) {
+        UserVo commentUserVo = userDao.queryObject(commentVo.getCommentAuthorId());
+
+        ArticleVo articleVo = articleDao.queryObject(commentVo.getCommentOnArticleId());
+
+        UserVo articleUserVo = userDao.queryObject(articleVo.getArticleAuthorId());
+
+        Integer articleQnAOfferPoint = articleVo.getArticleQnAOfferPoint();
+
+        Integer articleUserPoint = articleUserVo.getUserPoint() - articleQnAOfferPoint;
+
+        Integer articleUserUsedPoint = articleUserVo.getUserUsedPoint() + articleQnAOfferPoint;
+
+        Integer commentUserPoint = commentUserVo.getUserPoint() + articleQnAOfferPoint;
+
+        commentUserVo.setUserPoint(commentUserPoint);
+
+        articleUserVo.setUserPoint(articleUserPoint);
+
+        articleUserVo.setUserUsedPoint(articleUserUsedPoint);
+
+        userDao.update(commentUserVo);
+        userDao.update(articleUserVo);
+        commentDao.update(commentVo);
+    }
+
 }

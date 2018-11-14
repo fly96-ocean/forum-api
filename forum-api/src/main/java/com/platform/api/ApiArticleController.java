@@ -34,6 +34,10 @@ public class ApiArticleController extends ApiBaseAction {
     private ApiArticleService articleService;
     @Autowired
     private ApiTagService tagService;
+    @Autowired
+    private ApiUserService userService;
+
+    private final static Integer point = 5;
 
     @RequestMapping("/newList")
     public R newList(Long articleType) {
@@ -176,6 +180,10 @@ public class ApiArticleController extends ApiBaseAction {
                 articleVo.setArticleTags(tag.getTagTitle());
             }
 
+            Integer articleQnAOfferPoint = jsonObject.getInteger("articleQnAOfferPoint");
+            Integer articleRewardPoint = jsonObject.getInteger("articleRewardPoint");
+            String articleRewardContent = jsonObject.getString("articleRewardContent");
+
             articleVo.setArticleCommentable(jsonObject.getInteger("articleCommentable"));
             articleVo.setArticleEditorType(jsonObject.getInteger("articleEditorType"));
             articleVo.setArticleType(jsonObject.getInteger("articleType"));
@@ -186,7 +194,37 @@ public class ApiArticleController extends ApiBaseAction {
 //            articleVo.setArticleDomainId(jsonObject.getLong("domainId"));
             articleVo.setArticleCreateTime(new Date());
 
-            articleService.saveAndUpdate(articleVo);
+            if(articleRewardPoint != null) {
+                articleVo.setArticleRewardPoint(articleRewardPoint);
+            } else {
+                articleVo.setArticleRewardPoint(0);
+            }
+
+            if(articleRewardContent != null) {
+                articleVo.setArticleRewardContent(articleRewardContent);
+            } else {
+                articleVo.setArticleRewardContent(null);
+            }
+
+            UserVo userVo = userService.queryObject(this.getUserId());
+            Integer userPoint = userVo.getUserPoint();
+            Integer userArticleCount = userVo.getUserArticleCount() + 1;
+            userVo.setUserPoint(userPoint+point);
+            userVo.setUserArticleCount(userArticleCount);
+            userVo.setUserLatestArticleTime(articleVo.getArticleCreateTime());
+            userVo.setUserUpdateTime(articleVo.getArticleCreateTime());
+
+            if(articleQnAOfferPoint != null) {
+                if(userPoint < articleQnAOfferPoint) {
+                    return R.error().put("msg", "用户积分不足，请重新选择悬赏积分！");
+                } else {
+                    articleVo.setArticleQnAOfferPoint(articleQnAOfferPoint);
+                }
+            } else {
+                articleVo.setArticleQnAOfferPoint(0);
+            }
+
+            articleService.saveAndUpdate(articleVo, userVo);
 
             return R.ok().put("msg", articleVo);
         }

@@ -1,13 +1,7 @@
 package com.platform.service;
 
-import com.platform.dao.ApiArticleMapper;
-import com.platform.dao.ApiFollowMapper;
-import com.platform.dao.ApiPointLogMapper;
-import com.platform.dao.ApiUserMapper;
-import com.platform.entity.ArticleVo;
-import com.platform.entity.FollowVo;
-import com.platform.entity.PointLogVo;
-import com.platform.entity.UserVo;
+import com.platform.dao.*;
+import com.platform.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +21,8 @@ public class ApiArticleService {
     private ApiUserMapper userDao;
     @Autowired
     private ApiPointLogMapper pointLogDao;
+    @Autowired
+    private ApiVisitMapper visitDao;
 
     private final static Integer point = 5;
 
@@ -69,95 +65,198 @@ public class ApiArticleService {
     @Transactional
     public void cancelZan(Long articleId, Long userId){
         ArticleVo articleVo = articleDao.queryObject(articleId);
+
+        Date currentDate = new Date();
+        Long articleViewCount = articleVo.getArticleViewCount() + 1;
+        articleVo.setArticleViewCount(articleViewCount);
+
         Integer articleGoodCnt = articleVo.getArticleGoodCnt() - 1 ;
         articleVo.setArticleGoodCnt(articleGoodCnt);
-        articleVo.setArticleUpdateTime(new Date());
+        articleVo.setArticleUpdateTime(currentDate);
+
+        VisitVo visitVo = new VisitVo();
+        visitVo.setVisitUserId(userId);
+        visitVo.setVisitType(1);
+        visitVo.setVisitedId(articleId);
+        visitVo.setVisitCreated(currentDate);
+        visitVo.setVisitExpired(currentDate);
+        visitVo.setVisitCity("");
+        visitVo.setVisitDeviceId("");
+        visitVo.setVisitIP("");
+        visitVo.setVisitUA("");
+        visitVo.setVisitURL("");
+        visitVo.setVisitRefererURL("");
 
         articleDao.update(articleVo);
         followDao.deleteByArticleIdAndUserId(articleId, userId);
+        visitDao.save(visitVo);
     }
 
     @Transactional
     public void zan(Long articleId, Long userId){
+        Date currentDate = new Date();
         ArticleVo articleVo = articleDao.queryObject(articleId);
         Integer articleGoodCnt = articleVo.getArticleGoodCnt() + 1 ;
+        Long articleViewCount = articleVo.getArticleViewCount() + 1;
         articleVo.setArticleGoodCnt(articleGoodCnt);
-        articleVo.setArticleLatestCmtTime(new Date());
+        articleVo.setArticleLatestCmtTime(currentDate);
+        articleVo.setArticleViewCount(articleViewCount);
 
         FollowVo followVo = new FollowVo();
         followVo.setFollowerId(userId);
         followVo.setFollowingId(articleVo.getoId());
         followVo.setFollowingType(4);
 
+        VisitVo visitVo = new VisitVo();
+        visitVo.setVisitUserId(userId);
+        visitVo.setVisitType(1);
+        visitVo.setVisitedId(articleId);
+        visitVo.setVisitCreated(currentDate);
+        visitVo.setVisitExpired(currentDate);
+        visitVo.setVisitCity("");
+        visitVo.setVisitDeviceId("");
+        visitVo.setVisitIP("");
+        visitVo.setVisitUA("");
+        visitVo.setVisitURL("");
+        visitVo.setVisitRefererURL("");
+
         articleDao.update(articleVo);
         followDao.save(followVo);
+        visitDao.save(visitVo);
     }
 
 
     @Transactional
     public void cancelWatch(Long articleId, Long userId){
+        Date currentDate = new Date();
         ArticleVo articleVo = articleDao.queryObject(articleId);
         Integer articleGoodCnt = articleVo.getArticleWatchCnt() - 1 ;
+        Long articleViewCount = articleVo.getArticleViewCount() + 1;
         articleVo.setArticleWatchCnt(articleGoodCnt);
-        articleVo.setArticleUpdateTime(new Date());
+        articleVo.setArticleUpdateTime(currentDate);
+        articleVo.setArticleViewCount(articleViewCount);
+
+        VisitVo visitVo = new VisitVo();
+        visitVo.setVisitUserId(userId);
+        visitVo.setVisitType(1);
+        visitVo.setVisitedId(articleId);
+        visitVo.setVisitCreated(currentDate);
+        visitVo.setVisitExpired(currentDate);
+        visitVo.setVisitCity("");
+        visitVo.setVisitDeviceId("");
+        visitVo.setVisitIP("");
+        visitVo.setVisitUA("");
+        visitVo.setVisitURL("");
+        visitVo.setVisitRefererURL("");
 
         articleDao.update(articleVo);
         followDao.deleteByArticleIdAndUserId(articleId, userId);
+        visitDao.save(visitVo);
     }
 
     @Transactional
     public void watch(Long articleId, Long userId){
         ArticleVo articleVo = articleDao.queryObject(articleId);
+
+        Date currentDate = new Date();
+        Long articleViewCount = articleVo.getArticleViewCount() + 1;
+        articleVo.setArticleViewCount(articleViewCount);
+
         Integer articleGoodCnt = articleVo.getArticleWatchCnt() + 1 ;
         articleVo.setArticleWatchCnt(articleGoodCnt);
-        articleVo.setArticleLatestCmtTime(new Date());
+        articleVo.setArticleLatestCmtTime(currentDate);
 
         FollowVo followVo = new FollowVo();
         followVo.setFollowerId(userId);
         followVo.setFollowingId(articleVo.getoId());
         followVo.setFollowingType(3);
 
+
+        VisitVo visitVo = new VisitVo();
+        visitVo.setVisitUserId(userId);
+        visitVo.setVisitType(1);
+        visitVo.setVisitedId(articleId);
+        visitVo.setVisitCreated(currentDate);
+        visitVo.setVisitExpired(currentDate);
+        visitVo.setVisitCity("");
+        visitVo.setVisitDeviceId("");
+        visitVo.setVisitIP("");
+        visitVo.setVisitUA("");
+        visitVo.setVisitURL("");
+        visitVo.setVisitRefererURL("");
+
         articleDao.update(articleVo);
         followDao.save(followVo);
+        visitDao.save(visitVo);
     }
 
     @Transactional
     public void collect(Long articleId, Long userId){
         ArticleVo articleVo = articleDao.queryObject(articleId);
+
+        Date currentDate = new Date();
+        Long articleViewCount = articleVo.getArticleViewCount() + 1;
+        articleVo.setArticleViewCount(articleViewCount);
+
         Integer articleCollectCnt = articleVo.getArticleCollectCnt() + 1;
         articleVo.setArticleCollectCnt(articleCollectCnt);
-        articleVo.setArticleLatestCmtTime(new Date());
+        articleVo.setArticleLatestCmtTime(currentDate);
 
         FollowVo followVo = new FollowVo();
         followVo.setFollowerId(userId);
         followVo.setFollowingId(articleVo.getoId());
         followVo.setFollowingType(2);
 
+        VisitVo visitVo = new VisitVo();
+        visitVo.setVisitUserId(userId);
+        visitVo.setVisitType(1);
+        visitVo.setVisitedId(articleId);
+        visitVo.setVisitCreated(currentDate);
+        visitVo.setVisitExpired(currentDate);
+        visitVo.setVisitCity("");
+        visitVo.setVisitDeviceId("");
+        visitVo.setVisitIP("");
+        visitVo.setVisitUA("");
+        visitVo.setVisitURL("");
+        visitVo.setVisitRefererURL("");
+
         articleDao.update(articleVo);
         followDao.save(followVo);
+        visitDao.save(visitVo);
     }
 
     @Transactional
     public void cancelCollect(Long articleId, Long userId){
         ArticleVo articleVo = articleDao.queryObject(articleId);
+
+        Date currentDate = new Date();
+        Long articleViewCount = articleVo.getArticleViewCount() + 1;
+        articleVo.setArticleViewCount(articleViewCount);
+
         Integer articleCollectCnt = articleVo.getArticleCollectCnt() - 1 ;
         articleVo.setArticleCollectCnt(articleCollectCnt);
-        articleVo.setArticleUpdateTime(new Date());
+        articleVo.setArticleUpdateTime(currentDate);
+
+        VisitVo visitVo = new VisitVo();
+        visitVo.setVisitUserId(userId);
+        visitVo.setVisitType(1);
+        visitVo.setVisitedId(articleId);
+        visitVo.setVisitCreated(currentDate);
+        visitVo.setVisitExpired(currentDate);
+        visitVo.setVisitCity("");
+        visitVo.setVisitDeviceId("");
+        visitVo.setVisitIP("");
+        visitVo.setVisitUA("");
+        visitVo.setVisitURL("");
+        visitVo.setVisitRefererURL("");
 
         articleDao.update(articleVo);
         followDao.deleteByArticleIdAndUserId(articleId, userId);
+        visitDao.save(visitVo);
     }
 
     @Transactional
-    public void saveAndUpdate(ArticleVo articleVo){
-
-        UserVo userVo = userDao.queryObject(articleVo.getArticleAuthorId());
-        Integer userPoint = userVo.getUserPoint() + point;
-        Integer userArticleCount = userVo.getUserArticleCount() + 1;
-        userVo.setUserPoint(userPoint);
-        userVo.setUserArticleCount(userArticleCount);
-        userVo.setUserLatestArticleTime(articleVo.getArticleCreateTime());
-        userVo.setUserUpdateTime(articleVo.getArticleCreateTime());
+    public void saveAndUpdate(ArticleVo articleVo, UserVo userVo){
 
         articleDao.save(articleVo);
         userDao.update(userVo);
