@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.platform.annotation.IgnoreAuth;
 //import com.platform.service.ApiUserService;
+import com.platform.entity.UserVo;
+import com.platform.service.ApiUserService;
 import com.platform.service.TokenService;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.ApiUserUtils;
@@ -16,6 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.MapUtils;
 import org.apache.log4j.Logger;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,22 +44,34 @@ public class ApiAuthController extends ApiBaseAction {
     @Autowired
     private TokenService tokenService;
     @Autowired
-//    private ApiUserService userService;
+    private ApiUserService userService;
 
     /**
-     * 登录
+     *  获取token
      */
     @IgnoreAuth
-    @PostMapping("token")
-    @ApiOperation(value = "登录接口")
-    public R login() {
-//        Assert.isBlank(appId, "应用码不能为空");
-//        Assert.isBlank(appKey, "密钥不能为空");
+    @RequestMapping("token")
+    @ApiOperation(value = "获取账号")
+    public R token(Long userId) {
 
-//        long userId = userService.login(appId, appKey);
-
-        Map<String, Object> map = tokenService.createToken(1);
+        Map<String, Object> map = tokenService.createToken(userId);
 
         return R.ok(map);
+    }
+
+    /**
+     *  获取token
+     */
+    @IgnoreAuth
+    @RequestMapping("login")
+    @ApiOperation(value = "登录接口")
+    public R login(String userName, String userPassword) {
+        Assert.isBlank(userName, "账户不能为空");
+        Assert.isBlank(userPassword, "密码不能为空");
+
+        userPassword = new Sha256Hash(userPassword).toHex();
+
+        UserVo userVo = userService.login(userName, userPassword);
+        return R.ok().put("msg", userVo);
     }
 }

@@ -110,9 +110,14 @@ public class ApiCommentService {
         Integer userCommentCount = userVo.getUserCommentCount() + 1;
         userVo.setUserPoint(userPoint);
         userVo.setUserCommentCount(userCommentCount);
-
-        commentDao.save(commentVo);
         userDao.update(userVo);
+        commentDao.save(commentVo);
+        Long originalCommentId = commentVo.getCommentOriginalCommentId();
+        if(originalCommentId != null && originalCommentId != 0){
+            CommentVo originalComment = commentDao.queryObject(originalCommentId);
+            originalComment.setCommentReplyCnt(originalComment.getCommentReplyCnt()+1);
+            commentDao.update(originalComment);
+        }
 
         PointLogVo pointLogVo = new PointLogVo();
         pointLogVo.setPointLogArticleAuthorId(commentVo.getCommentAuthorId());

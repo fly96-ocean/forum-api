@@ -37,6 +37,10 @@
         select * from symphony_user where userName = #{userName}
     </select>
 
+    <select id="queryByUserNameAndPass" resultType="com.platform.entity.UserVo">
+        select * from symphony_user where userName = #{userName} and userPassword = #{userPassword}
+    </select>
+
     <update id="update" parameterType="com.platform.entity.UserVo">
         update symphony_user
         <set>

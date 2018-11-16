@@ -13,8 +13,11 @@ public class PointLogVo implements Serializable {
     private Long pointLogArticleId;
     //建帖或者回帖用户 id
     private Long pointLogArticleAuthorId;
-    //0：建帖积分，1：回帖积分
+    //0：建帖积分，1：回帖积分   2: 问答消费
     private Integer pointLogType;
+
+    //积分类型描述
+    private String pointLogTypeDesc;
 
     //积分数记录
     private Integer pointLogPoint;
@@ -68,5 +71,23 @@ public class PointLogVo implements Serializable {
 
     public void setPointLogCreateTime(Date pointLogCreateTime) {
         this.pointLogCreateTime = pointLogCreateTime;
+    }
+
+    public String getPointLogTypeDesc() {
+        if(this.pointLogType == 0){
+            pointLogTypeDesc = "发帖";
+        }
+        if(this.pointLogType == 1){
+            pointLogTypeDesc = "回帖";
+        }
+        if(this.pointLogType == 2){
+            pointLogTypeDesc = "问题消费";
+        }
+
+        return pointLogTypeDesc;
+    }
+
+    public void setPointLogTypeDesc(String pointLogTypeDesc) {
+        this.pointLogTypeDesc = pointLogTypeDesc;
     }
 }

@@ -45,9 +45,31 @@ public class ApiCommentController extends ApiBaseAction {
         if(getUserId() != null){
             map.put("currentUserId", getUserId());
         }
+        map.put("commentOriginalCommentId", 0);
         List<CommentVo> commentVoList = commentService.queryList(map);
 
         return R.ok().put("msg", commentVoList);
+    }
+
+
+    @RequestMapping("/subCommentList")
+    public R subCommentList(Long commentId) {
+
+        Assert.isNull(commentId, "评论ID不能为空！");
+        Map<String, Object> map = new HashMap<>();
+        map.put("commentOriginalCommentId", commentId);
+
+        List<CommentVo> commentVoList = commentService.queryList(map);
+
+        return R.ok().put("msg", commentVoList);
+    }
+
+    @RequestMapping("/detail")
+    public R detail(Long commentId) {
+        Assert.isNull(commentId, "评论ID不能为空！");
+        CommentVo commentVo = commentService.queryObject(commentId);
+
+        return R.ok().put("msg", commentVo);
     }
 
     @RequestMapping("/save")
@@ -64,6 +86,8 @@ public class ApiCommentController extends ApiBaseAction {
             commentVo.setCommentSharpURL(jsonObject.getString("commentSharpURL"));
             if(jsonObject.getLong("commentOriginalCommentId") != null){
                 commentVo.setCommentOriginalCommentId(jsonObject.getLong("commentOriginalCommentId"));
+            }else{
+                commentVo.setCommentOriginalCommentId(0L);
             }
 
             commentVo.setCommentStatus(1);

@@ -26,6 +26,7 @@
         <if test="commentOriginalCommentId != null">
             and c.commentOriginalCommentId = #{commentOriginalCommentId}
         </if>
+
     </select>
 
     <select id="queryTotal" resultType="int">
@@ -78,6 +79,7 @@
             <if test="commentGoodCnt != null">`commentGoodCnt` = #{commentGoodCnt},</if>
             <if test="commentBadCnt != null">`commentBadCnt` = #{commentBadCnt},</if>
             <if test="commentBadCnt != null">`commentBadCnt` = #{commentBadCnt},</if>
+            <if test="commentBadCnt != null">`commentReplyCnt` = #{commentReplyCnt},</if>
         </set>
         where oId = #{oId}
     </update>

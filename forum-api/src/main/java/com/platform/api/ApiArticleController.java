@@ -52,6 +52,44 @@ public class ApiArticleController extends ApiBaseAction {
         return R.ok().put("msg", articleVoList);
     }
 
+    @RequestMapping("/myNewList")
+    public R myNewList(Long articleType) {
+        Assert.isNull(articleType, "帖子类型不能为空");
+        Map<String, Object> map = new HashMap<>();
+        map.put("articleType", articleType);
+        if(getUserId() != null){
+            map.put("articleAuthorId", getUserId());
+        }
+        List<ArticleVo> articleVoList = articleService.queryList(map);
+        return R.ok().put("msg", articleVoList);
+    }
+
+    @RequestMapping("/myCommentArticleList")
+    public R myCommentArticleList(Long articleType) {
+        Assert.isNull(articleType, "帖子类型不能为空");
+        Map<String, Object> map = new HashMap<>();
+        map.put("articleType", articleType);
+        if(getUserId() != null){
+            map.put("commentAuthorId", getUserId());
+        }
+        List<ArticleVo> articleVoList = articleService.queryMyCommentArticle(map);
+        return R.ok().put("msg", articleVoList);
+    }
+
+    @RequestMapping("/myCollectArticleList")
+    public R myCollectArticleList(Long articleType) {
+        Assert.isNull(articleType, "帖子类型不能为空");
+        Map<String, Object> map = new HashMap<>();
+        map.put("articleType", articleType);
+        if(getUserId() != null){
+            map.put("followerId", getUserId());
+        }
+        List<ArticleVo> articleVoList = articleService.queryMyCollectArticle(map);
+        return R.ok().put("msg", articleVoList);
+    }
+
+
+
     @RequestMapping("/domainArticleList")
     public R domainArticleList(Long articleType, Long domainId) {
         Assert.isNull(articleType, "帖子类型不能为空");
@@ -135,7 +173,8 @@ public class ApiArticleController extends ApiBaseAction {
     @RequestMapping("/detail")
     public R detail(Long articleId) {
         Assert.isNull(articleId, "帖子ID不能为空");
-        ArticleVo articleVo = articleService.queryObject(articleId);
+        Long userId = getUserId();
+        ArticleVo articleVo = articleService.queryDetail(articleId, userId);
 
         return R.ok().put("msg", articleVo);
     }

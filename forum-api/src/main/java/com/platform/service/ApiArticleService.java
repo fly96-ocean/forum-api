@@ -35,6 +35,13 @@ public class ApiArticleService {
         return articleDao.queryList(map);
     }
 
+    public List<ArticleVo> queryMyCommentArticle(Map<String, Object> map){
+        return articleDao.queryMyCommentArticle(map);
+    }
+
+    public List<ArticleVo> queryMyCollectArticle(Map<String, Object> map){
+        return articleDao.queryMyCollectArticle(map);
+    }
 
     public int queryTotal(Map<String, Object> map) {
         return articleDao.queryTotal(map);
@@ -60,6 +67,33 @@ public class ApiArticleService {
         articleDao.deleteBatch(ids);
     }
 
+
+    @Transactional
+    public ArticleVo queryDetail(Long articleId, Long userId){
+
+        ArticleVo articleVo = articleDao.queryObject(articleId);
+
+        articleVo.setArticleViewCount(articleVo.getArticleViewCount()+1);
+
+        articleDao.update(articleVo);
+
+        Date currentDate = new Date();
+        VisitVo visitVo = new VisitVo();
+        visitVo.setVisitUserId(userId);
+        visitVo.setVisitType(1);
+        visitVo.setVisitedId(articleVo.getoId());
+        visitVo.setVisitCreated(currentDate);
+        visitVo.setVisitExpired(currentDate);
+        visitVo.setVisitCity("");
+        visitVo.setVisitDeviceId("");
+        visitVo.setVisitIP("");
+        visitVo.setVisitUA("");
+        visitVo.setVisitURL("");
+        visitVo.setVisitRefererURL("");
+        visitDao.save(visitVo);
+
+        return articleVo;
+    }
 
 
     @Transactional

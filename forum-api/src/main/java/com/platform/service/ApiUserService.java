@@ -65,4 +65,13 @@ public class ApiUserService {
         followDao.deleteByFollowerIdAndFollowingIdAndFollowingType(followerId,followingId,0);
         userDao.update(userVo);
     }
+
+    public UserVo login(String userName, String userPassword){
+        List<UserVo> users = userDao.queryByUserNameAndPass(userName, userPassword);
+        if(users!=null && users.size()>0){
+            return users.get(0);
+        }else{
+            return null;
+        }
+    }
 }
