@@ -1,9 +1,12 @@
 package com.platform.util;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.platform.entity.TokenEntity;
 import com.platform.interceptor.AuthorizationInterceptor;
 import com.platform.service.TokenService;
+import com.platform.validator.Assert;
+import io.swagger.models.auth.In;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.beans.TypeMismatchException;
@@ -21,8 +24,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -47,6 +54,10 @@ public class ApiBaseAction {
     @Autowired
     protected TokenService tokenService;
 
+    private static final String userInfoURL = "http://manage.dadel.cn/MtServer/external/getUserInfo.do";
+    private static final String userScoreURL = "http://manage.dadel.cn/MtServer/external/updateUserScore.do";
+    private static final String privatekey = "123456";
+    private static final String account = "DC001";
     /**
      * 参数绑定异常
      */
@@ -207,4 +218,119 @@ public class ApiBaseAction {
         }
         return tokenEntity.getUserId();
     }
+
+    /*
+    * 获得用户信息
+    *
+    * */
+    public JSONObject getUserInfo(String userId) {
+        Assert.isNull(userId, "用户Id不能为空");
+        JSONObject result = null;
+
+        String nonce = UUID.randomUUID().toString();
+
+        String signature = md5(nonce + privatekey);
+
+        String param = "{\"nonce\":\""+ nonce +"\",\"privatekey\":\"" + privatekey
+                + "\",\"account\":\""+ account + "\",\"signature\":\""+ signature
+                +"\",\"user_id\":\"" + userId + "\"}";
+
+        String userInfo = sendPost(userInfoURL, param);
+
+        result = JSON.parseObject(userInfo);
+
+        return  result;
+    }
+
+
+    // 更新用户积分
+    public JSONObject updateUserScore(String userId, Integer score) {
+        Assert.isNull(score, "积分不能为空");
+
+        JSONObject result = null;
+
+        String nonce = UUID.randomUUID().toString();
+
+        String signature = md5(nonce + privatekey);
+
+        String param = "{\"nonce\":\""+ nonce +"\",\"privatekey\":\"" + privatekey
+                + "\",\"account\":\""+ account + "\",\"signature\":\""+ signature
+                +"\",\"user_id\":\"" + userId + "\",\"score\":"+ score +"}";
+
+        String userScore = sendPost(userScoreURL, param);
+
+        result = JSON.parseObject(userScore);
+
+        return  result;
+    }
+
+    // sendPost Method
+    public static String sendPost(String url, String parameters) {
+        String result = "";
+        BufferedReader in = null;
+        PrintWriter out = null;
+        try {
+            java.net.URL connURL = new java.net.URL(url);
+            java.net.HttpURLConnection httpConn = (java.net.HttpURLConnection) connURL
+                    .openConnection();
+            httpConn.setRequestProperty("Content-Type", "application/json");
+            httpConn.setRequestProperty("Content-Length", String.valueOf(parameters.getBytes("UTF-8").length));
+            httpConn.setRequestProperty("User-Agent",
+                    "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)");
+            httpConn.setDoInput(true);
+            httpConn.setDoOutput(true);
+            out = new PrintWriter(httpConn.getOutputStream());
+            out.write(parameters);
+            out.flush();
+            in = new BufferedReader(new InputStreamReader(httpConn
+                    .getInputStream(), "UTF-8"));
+            String line;
+            // ????????????
+            while ((line = in.readLine()) != null) {
+                result += line;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public static String md5(String str) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(str.getBytes());
+            byte b[] = md.digest();
+
+            int i;
+
+            StringBuffer buf = new StringBuffer("");
+            for (int offset = 0; offset < b.length; offset++) {
+                i = b[offset];
+                if (i < 0)
+                    i += 256;
+                if (i < 16)
+                    buf.append("0");
+                buf.append(Integer.toHexString(i));
+            }
+            str = buf.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return str;
+    }
+
+
+
 }

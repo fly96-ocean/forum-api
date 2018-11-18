@@ -1,5 +1,6 @@
 package com.platform.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.platform.dao.ApiFollowMapper;
 import com.platform.dao.ApiUserMapper;
 import com.platform.entity.FollowVo;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -73,5 +75,50 @@ public class ApiUserService {
         }else{
             return null;
         }
+    }
+
+    @Transactional
+    public UserVo login(String userId, JSONObject userInfo, String loginIP){
+        UserVo userVo = userDao.queryByUserLoginId(userId);
+        Date currentDate = new Date();
+
+        if(userVo!=null){
+            return userVo;
+//            userVo.setUserName(userInfo.getString("username"));
+//            userVo.setUserNickname(userInfo.getString("name"));
+//            userVo.setUserLoginId(userInfo.getString("userId"));
+//            userVo.setUserPoint(userInfo.getInteger("score"));
+//            userVo.setUserShopId(userInfo.getString("shop_id"));
+//            userVo.setUserShopName(userInfo.getString("shop_name"));
+//            userVo.setUserDistributorId(userInfo.getString("distributor_id"));
+//            userVo.setUserDistributorId(userInfo.getString("distributor_name"));
+//            userVo.setUserUpdateTime(currentDate);
+//            userVo.setUserLatestLoginTime(currentDate);
+//            userVo.setUserLatestLoginIP(loginIP);
+//
+//            userDao.update(userVo);
+
+        } else {
+            UserVo userVo1 = new UserVo();
+            userVo1.setUserName(userInfo.getString("username"));
+            userVo1.setUserNickname(userInfo.getString("name"));
+            userVo1.setUserEmail("123@qq.com");
+            userVo1.setUserAvatarType(1);
+            userVo1.setUserAvatarURL("/afafd/afafa");
+            userVo1.setUserLoginId(userInfo.getString("user_id"));
+            userVo1.setUserPoint(userInfo.getInteger("score"));
+            userVo1.setUserShopId(userInfo.getString("shop_id"));
+            userVo1.setUserShopName(userInfo.getString("shop_name"));
+            userVo1.setUserDistributorId(userInfo.getString("distributor_id"));
+            userVo1.setUserDistributorId(userInfo.getString("distributor_name"));
+            userVo1.setUserUpdateTime(currentDate);
+            userVo1.setUserLatestLoginTime(currentDate);
+            userVo1.setUserLatestLoginIP(loginIP);
+
+            userDao.save(userVo1);
+
+            return userVo1;
+        }
+
     }
 }

@@ -41,6 +41,10 @@
         select * from symphony_user where userName = #{userName} and userPassword = #{userPassword}
     </select>
 
+    <select id="queryByUserLoginId" resultType="com.platform.entity.UserVo">
+        select * from symphony_user where userLoginId = #{userId}
+    </select>
+
     <update id="update" parameterType="com.platform.entity.UserVo">
         update symphony_user
         <set>
@@ -49,8 +53,51 @@
             <if test="userPoint != null">`userPoint` = #{userPoint},</if>
             <if test="userLatestArticleTime != null">`userLatestArticleTime` = #{userLatestArticleTime},</if>
             <if test="userLatestCmtTime != null">`userLatestCmtTime` = #{userLatestCmtTime},</if>
+            <if test="userName != null">`userName` = #{userName},</if>
+            <if test="userEmail != null">`userEmail` = #{userEmail},</if>
+            <if test="userNickname != null">`userNickname` = #{userNickname},</if>
+            <if test="userPoint != null">`userPoint` = #{userPoint},</if>
+            <if test="userShopId != null">`userShopId` = #{userShopId},</if>
+            <if test="userShopName != null">`userShopName` = #{userShopName},</if>
+            <if test="userDistributorId != null">`userDistributorId` = #{userDistributorId},</if>
+            <if test="userDistributorName != null">`userDistributorName` = #{userDistributorName},</if>
+            <if test="userLoginId != null">`userLoginId` = #{userLoginId},</if>
+            <if test="userLatestLoginTime != null">`userLatestLoginTime` = #{userLatestLoginTime},</if>
+            <if test="userLatestLoginIP != null">`userLatestLoginIP` = #{userLatestLoginIP},</if>
             <if test="userUpdateTime != null">`userUpdateTime` = #{userUpdateTime}</if>
         </set>
         where oId = #{oId}
     </update>
+
+    <insert id="save" parameterType="com.platform.entity.UserVo" useGeneratedKeys="true" keyProperty="oId">
+        INSERT INTO `symphony_user`
+                   (`userName`,
+                   `userEmail`,
+                   `userNickname`,
+                   `userAvatarType`,
+                   `userAvatarURL`,
+                   `userLatestLoginTime`,
+                   `userLatestLoginIP`,
+                   `userPoint`,
+                   `userShopId`,
+                   `userShopName`,
+                   `userDistributorId`,
+                   `userDistributorName`,
+                   `userLoginId`) VALUES (
+                   #{userName},
+                   #{userEmail},
+                   #{userNickname},
+                   #{userAvatarType},
+                   #{userAvatarURL},
+                   #{userLatestLoginTime},
+                   #{userLatestLoginIP},
+                   #{userPoint},
+                   #{userShopId},
+                   #{userShopName},
+                   #{userDistributorId},
+                   #{userDistributorName},
+                   #{userLoginId}
+                   )
+
+    </insert>
 </mapper>

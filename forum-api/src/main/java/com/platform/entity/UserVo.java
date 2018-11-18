@@ -45,7 +45,7 @@ public class UserVo implements Serializable {
     //用户粉丝计数
     private Integer userFansCount;
     //用户被赞计数（我发表的帖子被赞，我的评论被赞，均统计在此）
-    private Integer userZanCount;
+    private Integer userGoodCount;
     //我收藏帖子数
     private Integer userCollectCount;
 
@@ -149,6 +149,19 @@ public class UserVo implements Serializable {
     private Integer level;
     //等级描述
     private String levelIntro;
+
+    //用于更新用户积分
+    private Integer userScore;
+    //用户所在门店ID
+    private String userShopId;
+    //用户所在门店Name
+    private String userShopName;
+    //用户所在经销商ID
+    private String userDistributorId;
+    //用户所在经销商Name
+    private String userDistributorName;
+    //用户登陆ID
+    private String userLoginId;
 
     public Integer getoId() {
         return oId;
@@ -701,12 +714,12 @@ public class UserVo implements Serializable {
         this.levelIntro = levelIntro;
     }
 
-    public Integer getUserZanCount() {
-        return userZanCount;
+    public Integer getUserGoodCount() {
+        return userGoodCount;
     }
 
-    public void setUserZanCount(Integer userZanCount) {
-        this.userZanCount = userZanCount;
+    public void setUserGoodCount(Integer userGoodCount) {
+        this.userGoodCount = userGoodCount;
     }
 
     public Integer getUserCollectCount() {
@@ -715,5 +728,53 @@ public class UserVo implements Serializable {
 
     public void setUserCollectCount(Integer userCollectCount) {
         this.userCollectCount = userCollectCount;
+    }
+
+    public Integer getUserScore() {
+        return userScore;
+    }
+
+    public void setUserScore(Integer userScore) {
+        this.userScore = userScore;
+    }
+
+    public String getUserShopId() {
+        return userShopId;
+    }
+
+    public void setUserShopId(String userShopId) {
+        this.userShopId = userShopId;
+    }
+
+    public String getUserShopName() {
+        return userShopName;
+    }
+
+    public void setUserShopName(String userShopName) {
+        this.userShopName = userShopName;
+    }
+
+    public String getUserDistributorId() {
+        return userDistributorId;
+    }
+
+    public void setUserDistributorId(String userDistributorId) {
+        this.userDistributorId = userDistributorId;
+    }
+
+    public String getUserDistributorName() {
+        return userDistributorName;
+    }
+
+    public void setUserDistributorName(String userDistributorName) {
+        this.userDistributorName = userDistributorName;
+    }
+
+    public String getUserLoginId() {
+        return userLoginId;
+    }
+
+    public void setUserLoginId(String userLoginId) {
+        this.userLoginId = userLoginId;
     }
 }
