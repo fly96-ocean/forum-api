@@ -110,14 +110,16 @@ public class ApiUserService {
             userVo1.setUserShopId(userInfo.getString("shop_id"));
             userVo1.setUserShopName(userInfo.getString("shop_name"));
             userVo1.setUserDistributorId(userInfo.getString("distributor_id"));
-            userVo1.setUserDistributorId(userInfo.getString("distributor_name"));
+            userVo1.setUserDistributorName(userInfo.getString("distributor_name"));
             userVo1.setUserUpdateTime(currentDate);
             userVo1.setUserLatestLoginTime(currentDate);
             userVo1.setUserLatestLoginIP(loginIP);
 
             userDao.save(userVo1);
 
-            return userVo1;
+            UserVo userVo2 = userDao.queryObject(userVo1.getoId());
+
+            return userVo2;
         }
 
     }
