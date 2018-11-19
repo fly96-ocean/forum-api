@@ -130,9 +130,13 @@ public class ApiArticleService {
         visitVo.setVisitURL("");
         visitVo.setVisitRefererURL("");
 
+        UserVo userVo = userDao.queryObject(userId);
+        userVo.setUserGoodCount(userVo.getUserGoodCount()-1);
+
         articleDao.update(articleVo);
         followDao.deleteByArticleIdAndUserId(articleId, userId);
         visitDao.save(visitVo);
+        userDao.update(userVo);
     }
 
     @Transactional
@@ -163,9 +167,13 @@ public class ApiArticleService {
         visitVo.setVisitURL("");
         visitVo.setVisitRefererURL("");
 
+        UserVo userVo = userDao.queryObject(userId);
+        userVo.setUserGoodCount(userVo.getUserGoodCount()+1);
+
         articleDao.update(articleVo);
         followDao.save(followVo);
         visitDao.save(visitVo);
+        userDao.update(userVo);
     }
 
 
@@ -263,9 +271,13 @@ public class ApiArticleService {
         visitVo.setVisitURL("");
         visitVo.setVisitRefererURL("");
 
+        UserVo userVo = userDao.queryObject(userId);
+        userVo.setUserCollectCount(userVo.getUserCollectCount()+1);
+
         articleDao.update(articleVo);
         followDao.save(followVo);
         visitDao.save(visitVo);
+        userDao.update(userVo);
     }
 
     @Transactional
@@ -293,9 +305,13 @@ public class ApiArticleService {
         visitVo.setVisitURL("");
         visitVo.setVisitRefererURL("");
 
+        UserVo userVo = userDao.queryObject(userId);
+        userVo.setUserCollectCount(userVo.getUserCollectCount()-1);
+
         articleDao.update(articleVo);
         followDao.deleteByArticleIdAndUserId(articleId, userId);
         visitDao.save(visitVo);
+        userDao.update(userVo);
     }
 
     @Transactional

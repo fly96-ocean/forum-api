@@ -81,8 +81,12 @@ public class ApiAuthController extends ApiBaseAction {
         JSONObject userInfo = this.getUserInfo(userId).getJSONObject("userInfo");
 
         String loginIP = this.getClientIp();
+        if(userInfo != null){
+            UserVo userVo = userService.login(userId,userInfo,loginIP);
+            return R.ok().put("msg", userVo);
+        }else{
+            return R.error().put("msg", "未知异常，请联系管理员");
+        }
 
-        UserVo userVo = userService.login(userId,userInfo,loginIP);
-        return R.ok().put("msg", userVo);
     }
 }

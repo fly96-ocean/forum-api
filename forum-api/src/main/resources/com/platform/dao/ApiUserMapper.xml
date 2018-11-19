@@ -50,6 +50,10 @@
         <set>
             <if test="userArticleCount != null">`userArticleCount` = #{userArticleCount},</if>
             <if test="userCommentCount != null">`userCommentCount` = #{userCommentCount},</if>
+            <if test="userFansCount != null">`userFansCount` = #{userFansCount},</if>
+            <if test="userCollectCount != null">`userCollectCount` = #{userCollectCount},</if>
+            <if test="userGoodCount != null">`userGoodCount` = #{userGoodCount},</if>
+
             <if test="userPoint != null">`userPoint` = #{userPoint},</if>
             <if test="userLatestArticleTime != null">`userLatestArticleTime` = #{userLatestArticleTime},</if>
             <if test="userLatestCmtTime != null">`userLatestCmtTime` = #{userLatestCmtTime},</if>
@@ -65,6 +69,7 @@
             <if test="userLatestLoginTime != null">`userLatestLoginTime` = #{userLatestLoginTime},</if>
             <if test="userLatestLoginIP != null">`userLatestLoginIP` = #{userLatestLoginIP},</if>
             <if test="userUpdateTime != null">`userUpdateTime` = #{userUpdateTime}</if>
+
         </set>
         where oId = #{oId}
     </update>
