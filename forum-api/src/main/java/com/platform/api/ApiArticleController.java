@@ -6,6 +6,7 @@ import com.platform.entity.*;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import com.platform.utils.R;
+import com.platform.utils.ResourceUtil;
 import com.platform.validator.Assert;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang.StringUtils;
@@ -37,7 +38,7 @@ public class ApiArticleController extends ApiBaseAction {
     @Autowired
     private ApiUserService userService;
 
-    private final static Integer point = 5;
+    String point = ResourceUtil.getConfigByName("publish.article.point");
 
     @RequestMapping("/newList")
     public R newList(Long articleType) {
@@ -248,7 +249,7 @@ public class ApiArticleController extends ApiBaseAction {
             UserVo userVo = userService.queryObject(this.getUserId());
             Integer userPoint = userVo.getUserPoint();
             Integer userArticleCount = userVo.getUserArticleCount() + 1;
-            userVo.setUserPoint(userPoint+point);
+            userVo.setUserPoint(userPoint+Integer.parseInt(point));
             userVo.setUserArticleCount(userArticleCount);
             userVo.setUserLatestArticleTime(articleVo.getArticleCreateTime());
             userVo.setUserUpdateTime(articleVo.getArticleCreateTime());

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class ApiCommentService {
     private ApiFollowMapper followDao;
 
 
-    private final static Integer point = 5;
+    private final static Integer point = 0;
 
     public CommentVo queryObject(Long id) {
         return commentDao.queryObject(id);
@@ -119,13 +120,15 @@ public class ApiCommentService {
             commentDao.update(originalComment);
         }
 
-        PointLogVo pointLogVo = new PointLogVo();
-        pointLogVo.setPointLogArticleAuthorId(commentVo.getCommentAuthorId());
-        pointLogVo.setPointLogArticleId(commentVo.getCommentOnArticleId());
-        pointLogVo.setPointLogType(1);
-        pointLogVo.setPointLogPoint(point);
-        pointLogVo.setPointLogCreateTime(commentVo.getCommentCreateTime());
-        pointLogDao.save(pointLogVo);
+        if(point > 0){
+            PointLogVo pointLogVo = new PointLogVo();
+            pointLogVo.setPointLogArticleAuthorId(commentVo.getCommentAuthorId());
+            pointLogVo.setPointLogArticleId(commentVo.getCommentOnArticleId());
+            pointLogVo.setPointLogType(1);
+            pointLogVo.setPointLogPoint(point);
+            pointLogVo.setPointLogCreateTime(new Date());
+            pointLogDao.save(pointLogVo);
+        }
 
         ArticleVo articleVo = articleDao.queryObject(commentVo.getCommentOnArticleId());
         articleVo.setArticleCommentCount(articleVo.getArticleCommentCount()+1);

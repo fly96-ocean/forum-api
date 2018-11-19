@@ -2,6 +2,7 @@ package com.platform.service;
 
 import com.platform.dao.*;
 import com.platform.entity.*;
+import com.platform.utils.ResourceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,7 @@ public class ApiArticleService {
     @Autowired
     private ApiVisitMapper visitDao;
 
-    private final static Integer point = 5;
+    String point = ResourceUtil.getConfigByName("publish.article.point");
 
     public ArticleVo queryObject(Long id) {
         return articleDao.queryObject(id);
@@ -49,6 +50,14 @@ public class ApiArticleService {
 
 
     public void save(ArticleVo articleVo) {
+        /***
+         * 1、保存帖子
+         * 2、update积分
+         * 3、保存积分记录
+         * 4、如果是打赏，需要扣除积分
+         */
+
+
         articleDao.save(articleVo);
     }
 
@@ -299,8 +308,8 @@ public class ApiArticleService {
         pointLogVo.setPointLogArticleAuthorId(articleVo.getArticleAuthorId());
         pointLogVo.setPointLogArticleId(articleVo.getoId());
         pointLogVo.setPointLogType(0);
-        pointLogVo.setPointLogPoint(point);
-        pointLogVo.setPointLogCreateTime(articleVo.getArticleCreateTime());
+        pointLogVo.setPointLogPoint(Integer.parseInt(point));
+        pointLogVo.setPointLogCreateTime(new Date());
         pointLogDao.save(pointLogVo);
     }
 

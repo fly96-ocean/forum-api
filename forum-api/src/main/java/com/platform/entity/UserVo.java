@@ -162,6 +162,8 @@ public class UserVo implements Serializable {
     private String userDistributorName;
     //用户登陆ID
     private String userLoginId;
+    //用户积分平台积分
+    private Integer userPlatformScore;
 
     public Integer getoId() {
         return oId;
@@ -776,5 +778,13 @@ public class UserVo implements Serializable {
 
     public void setUserLoginId(String userLoginId) {
         this.userLoginId = userLoginId;
+    }
+
+    public Integer getUserPlatformScore() {
+        return userPlatformScore;
+    }
+
+    public void setUserPlatformScore(Integer userPlatformScore) {
+        this.userPlatformScore = userPlatformScore;
     }
 }

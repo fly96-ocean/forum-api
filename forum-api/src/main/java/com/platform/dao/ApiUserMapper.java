@@ -15,5 +15,5 @@ public interface ApiUserMapper extends BaseDao<UserVo> {
     public List<UserVo> queryListByUserFriends(@Param("userId") Long userId);
     public List<UserVo> queryListByUserFans(@Param("userId") Long userId);
     public List<UserVo> queryByUserNameAndPass(@Param("userName") String userName, @Param("userPassword") String userPassword);
-    public UserVo queryByUserLoginId(@Param("userId") String userId);
+    public UserVo queryByUserLoginId(@Param("userLoginId") String userLoginId);
 }

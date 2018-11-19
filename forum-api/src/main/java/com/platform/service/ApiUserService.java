@@ -106,7 +106,8 @@ public class ApiUserService {
             userVo1.setUserAvatarType(1);
             userVo1.setUserAvatarURL("/afafd/afafa");
             userVo1.setUserLoginId(userInfo.getString("user_id"));
-            userVo1.setUserPoint(userInfo.getInteger("score"));
+            userVo1.setUserPoint(0);
+            userVo1.setUserPlatformScore(userInfo.getInteger("score"));
             userVo1.setUserShopId(userInfo.getString("shop_id"));
             userVo1.setUserShopName(userInfo.getString("shop_name"));
             userVo1.setUserDistributorId(userInfo.getString("distributor_id"));
@@ -114,12 +115,15 @@ public class ApiUserService {
             userVo1.setUserUpdateTime(currentDate);
             userVo1.setUserLatestLoginTime(currentDate);
             userVo1.setUserLatestLoginIP(loginIP);
+            userVo1.setLevel(0);
+            userVo1.setUserOnlineFlag(0);
+            userVo1.setUserRole("defaultRole");
 
             userDao.save(userVo1);
 
-            UserVo userVo2 = userDao.queryObject(userVo1.getoId());
+//            UserVo userVo2 = userDao.queryObject(userVo1.getoId());
 
-            return userVo2;
+            return userVo1;
         }
 
     }

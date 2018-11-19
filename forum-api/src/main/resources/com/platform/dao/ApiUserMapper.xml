@@ -42,7 +42,7 @@
     </select>
 
     <select id="queryByUserLoginId" resultType="com.platform.entity.UserVo">
-        select * from symphony_user where userLoginId = #{userId}
+        select * from symphony_user where userLoginId = #{userLoginId}
     </select>
 
     <update id="update" parameterType="com.platform.entity.UserVo">
