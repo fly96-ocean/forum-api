@@ -13,4 +13,6 @@ import java.util.Map;
 public interface ApiArticleMapper extends BaseDao<ArticleVo> {
     List<ArticleVo> queryMyCommentArticle(Map<String, Object> map);
     List<ArticleVo> queryMyCollectArticle(Map<String, Object> map);
+    List<ArticleVo> queryMyZanArticle(Map<String, Object> map);
+    List<ArticleVo> queryMyVisitArticle(Map<String, Object> map);
 }

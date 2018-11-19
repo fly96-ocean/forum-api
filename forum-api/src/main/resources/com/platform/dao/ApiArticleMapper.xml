@@ -92,6 +92,54 @@
         order by a.articleCreateTime desc
     </select>
 
+    <select id="queryMyZanArticle" resultType="com.platform.entity.ArticleVo">
+        select a.*, u.userNickName, u.userAvatarUrl
+        <if test="currentUserId != null">
+            , exists(select oId from symphony_follow f where f.followerId = #{currentUserId} and f.followingId = a.oId and f.followingType = 4) as hasGood
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 3) as hasWatchedArticle
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.articleAuthorId and ff.followingType = 0) as hasWatchedAuthor
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 2) as hasCollect
+        </if>
+
+        from forum.symphony_article a
+        left join forum.symphony_follow as follow on a.oId = follow.followingId
+        left join forum.symphony_user u on a.articleAuthorId=u.oId
+        where 1=1
+        <if test="articleType != null">
+            and a.articleType = #{articleType}
+        </if>
+        <if test="commentAuthorId != null">
+            and follow.followerId = #{followerId}
+        </if>
+        and follow.followingType = 4
+        group by a.oId
+        order by a.articleCreateTime desc
+    </select>
+
+    <select id="queryMyVisitArticle" resultType="com.platform.entity.ArticleVo">
+        select a.*, u.userNickName, u.userAvatarUrl
+        <if test="currentUserId != null">
+            , exists(select oId from symphony_follow f where f.followerId = #{currentUserId} and f.followingId = a.oId and f.followingType = 4) as hasGood
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 3) as hasWatchedArticle
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.articleAuthorId and ff.followingType = 0) as hasWatchedAuthor
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 2) as hasCollect
+        </if>
+
+        from forum.symphony_article a
+        left join forum.symphony_visit as visit on a.oId = visit.visitUserId
+        left join forum.symphony_user u on a.articleAuthorId=u.oId
+        where 1=1
+        <if test="articleType != null">
+            and a.articleType = #{articleType}
+        </if>
+        <if test="visitUserId != null">
+            and visit.visitUserId = #{visitUserId}
+        </if>
+
+        group by a.oId
+        order by a.articleCreateTime desc
+    </select>
+
     <select id="queryTotal" resultType="int">
         select count(*) from symphony_article
     </select>

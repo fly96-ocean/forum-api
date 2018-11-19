@@ -12,7 +12,7 @@ public class VisitVo implements Serializable {
     private Long visitUserId;
     //被浏览实体 id
     private Long visitedId;
-    //0：用户，1：帖子，2，回帖
+    //0：用户，1：浏览帖子，2，评论  11：赞帖子   12：收藏帖子  13：评论帖子  14：关注帖子
     private Integer visitType;
     //浏览链接
     private String visitURL;

@@ -64,6 +64,14 @@ public class ApiUserController extends ApiBaseAction {
         return R.ok().put("msg", userVoList);
     }
 
+    @RequestMapping("/userFollow")
+    public R userFollow(){
+        Long userId = getUserId();
+        List<UserVo> userVoList = userService.queryListUserFollow(userId);
+
+        return R.ok().put("msg", userVoList);
+    }
+
     @RequestMapping("/userPublish")
     public R userPublish() {
         Long userId = getUserId();

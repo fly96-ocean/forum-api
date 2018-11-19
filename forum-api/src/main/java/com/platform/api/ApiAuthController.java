@@ -63,18 +63,21 @@ public class ApiAuthController extends ApiBaseAction {
      *  获取token
      */
     @IgnoreAuth
+    @RequestMapping("loginByPassword")
+    @ApiOperation(value = "登录接口")
+    public R loginByPassword(String userName, String userPassword) {
+        Assert.isBlank(userName, "账户不能为空");
+        Assert.isBlank(userPassword, "密码不能为空");
+
+        userPassword = new Sha256Hash(userPassword).toHex();
+
+        UserVo userVo = userService.login(userName, userPassword);
+        return R.ok().put("msg", userVo);
+    }
+
+    @IgnoreAuth
     @RequestMapping("login")
     @ApiOperation(value = "登录接口")
-//    public R login(String userName, String userPassword) {
-//        Assert.isBlank(userName, "账户不能为空");
-//        Assert.isBlank(userPassword, "密码不能为空");
-//
-//        userPassword = new Sha256Hash(userPassword).toHex();
-//
-//        UserVo userVo = userService.login(userName, userPassword);
-//        return R.ok().put("msg", userVo);
-//    }
-
     public R login(String userId) {
         Assert.isBlank(userId, "用户ID不能为空");
 

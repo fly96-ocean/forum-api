@@ -25,11 +25,16 @@
         from forum.symphony_user user
         join forum.symphony_follow follow
         on user.oId = follow.followerId
-        where not exists(select t1.oId from forum.symphony_follow t1
-        where follow.followerId = t1.followingId
-        and follow.followingId = t1.followerId
-        and t1.followingType = 0)
-        and follow.followingId = #{userId}
+        where follow.followingId = #{userId}
+        and follow.followingType = 0
+    </select>
+
+    <select id="queryListUserFollow" resultType="com.platform.entity.UserVo">
+        select user.*
+        from forum.symphony_user user
+        join forum.symphony_follow follow
+        on user.oId = follow.followingId
+        where follow.followerId = #{userId}
         and follow.followingType = 0
     </select>
 

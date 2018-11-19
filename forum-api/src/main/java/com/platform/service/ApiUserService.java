@@ -46,6 +46,10 @@ public class ApiUserService {
         return userDao.queryListByUserFans(userId);
     }
 
+    public List<UserVo> queryListUserFollow(Long userId){
+        return userDao.queryListUserFollow(userId);
+    }
+
     @Transactional
     public void follow(FollowVo followVo){
 

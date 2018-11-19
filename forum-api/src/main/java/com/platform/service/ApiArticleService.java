@@ -43,6 +43,13 @@ public class ApiArticleService {
     public List<ArticleVo> queryMyCollectArticle(Map<String, Object> map){
         return articleDao.queryMyCollectArticle(map);
     }
+    public List<ArticleVo> queryMyZanArticle(Map<String, Object> map){
+        return articleDao.queryMyZanArticle(map);
+    }
+    public List<ArticleVo> queryMyVisitArticle(Map<String, Object> map){
+        return articleDao.queryMyVisitArticle(map);
+    }
+
 
     public int queryTotal(Map<String, Object> map) {
         return articleDao.queryTotal(map);
@@ -117,25 +124,25 @@ public class ApiArticleService {
         articleVo.setArticleGoodCnt(articleGoodCnt);
         articleVo.setArticleUpdateTime(currentDate);
 
-        VisitVo visitVo = new VisitVo();
-        visitVo.setVisitUserId(userId);
-        visitVo.setVisitType(1);
-        visitVo.setVisitedId(articleId);
-        visitVo.setVisitCreated(currentDate);
-        visitVo.setVisitExpired(currentDate);
-        visitVo.setVisitCity("");
-        visitVo.setVisitDeviceId("");
-        visitVo.setVisitIP("");
-        visitVo.setVisitUA("");
-        visitVo.setVisitURL("");
-        visitVo.setVisitRefererURL("");
+//        VisitVo visitVo = new VisitVo();
+//        visitVo.setVisitUserId(userId);
+//        visitVo.setVisitType(1);
+//        visitVo.setVisitedId(articleId);
+//        visitVo.setVisitCreated(currentDate);
+//        visitVo.setVisitExpired(currentDate);
+//        visitVo.setVisitCity("");
+//        visitVo.setVisitDeviceId("");
+//        visitVo.setVisitIP("");
+//        visitVo.setVisitUA("");
+//        visitVo.setVisitURL("");
+//        visitVo.setVisitRefererURL("");
 
         UserVo userVo = userDao.queryObject(userId);
         userVo.setUserGoodCount(userVo.getUserGoodCount()-1);
 
         articleDao.update(articleVo);
         followDao.deleteByArticleIdAndUserId(articleId, userId);
-        visitDao.save(visitVo);
+//        visitDao.save(visitVo);
         userDao.update(userVo);
     }
 
@@ -156,7 +163,7 @@ public class ApiArticleService {
 
         VisitVo visitVo = new VisitVo();
         visitVo.setVisitUserId(userId);
-        visitVo.setVisitType(1);
+        visitVo.setVisitType(11);
         visitVo.setVisitedId(articleId);
         visitVo.setVisitCreated(currentDate);
         visitVo.setVisitExpired(currentDate);
@@ -187,22 +194,22 @@ public class ApiArticleService {
         articleVo.setArticleUpdateTime(currentDate);
         articleVo.setArticleViewCount(articleViewCount);
 
-        VisitVo visitVo = new VisitVo();
-        visitVo.setVisitUserId(userId);
-        visitVo.setVisitType(1);
-        visitVo.setVisitedId(articleId);
-        visitVo.setVisitCreated(currentDate);
-        visitVo.setVisitExpired(currentDate);
-        visitVo.setVisitCity("");
-        visitVo.setVisitDeviceId("");
-        visitVo.setVisitIP("");
-        visitVo.setVisitUA("");
-        visitVo.setVisitURL("");
-        visitVo.setVisitRefererURL("");
+//        VisitVo visitVo = new VisitVo();
+//        visitVo.setVisitUserId(userId);
+//        visitVo.setVisitType(1);
+//        visitVo.setVisitedId(articleId);
+//        visitVo.setVisitCreated(currentDate);
+//        visitVo.setVisitExpired(currentDate);
+//        visitVo.setVisitCity("");
+//        visitVo.setVisitDeviceId("");
+//        visitVo.setVisitIP("");
+//        visitVo.setVisitUA("");
+//        visitVo.setVisitURL("");
+//        visitVo.setVisitRefererURL("");
 
         articleDao.update(articleVo);
         followDao.deleteByArticleIdAndUserId(articleId, userId);
-        visitDao.save(visitVo);
+//        visitDao.save(visitVo);
     }
 
     @Transactional
@@ -225,7 +232,7 @@ public class ApiArticleService {
 
         VisitVo visitVo = new VisitVo();
         visitVo.setVisitUserId(userId);
-        visitVo.setVisitType(1);
+        visitVo.setVisitType(14);
         visitVo.setVisitedId(articleId);
         visitVo.setVisitCreated(currentDate);
         visitVo.setVisitExpired(currentDate);
@@ -260,7 +267,7 @@ public class ApiArticleService {
 
         VisitVo visitVo = new VisitVo();
         visitVo.setVisitUserId(userId);
-        visitVo.setVisitType(1);
+        visitVo.setVisitType(12);
         visitVo.setVisitedId(articleId);
         visitVo.setVisitCreated(currentDate);
         visitVo.setVisitExpired(currentDate);
@@ -292,25 +299,25 @@ public class ApiArticleService {
         articleVo.setArticleCollectCnt(articleCollectCnt);
         articleVo.setArticleUpdateTime(currentDate);
 
-        VisitVo visitVo = new VisitVo();
-        visitVo.setVisitUserId(userId);
-        visitVo.setVisitType(1);
-        visitVo.setVisitedId(articleId);
-        visitVo.setVisitCreated(currentDate);
-        visitVo.setVisitExpired(currentDate);
-        visitVo.setVisitCity("");
-        visitVo.setVisitDeviceId("");
-        visitVo.setVisitIP("");
-        visitVo.setVisitUA("");
-        visitVo.setVisitURL("");
-        visitVo.setVisitRefererURL("");
+//        VisitVo visitVo = new VisitVo();
+//        visitVo.setVisitUserId(userId);
+//        visitVo.setVisitType(1);
+//        visitVo.setVisitedId(articleId);
+//        visitVo.setVisitCreated(currentDate);
+//        visitVo.setVisitExpired(currentDate);
+//        visitVo.setVisitCity("");
+//        visitVo.setVisitDeviceId("");
+//        visitVo.setVisitIP("");
+//        visitVo.setVisitUA("");
+//        visitVo.setVisitURL("");
+//        visitVo.setVisitRefererURL("");
 
         UserVo userVo = userDao.queryObject(userId);
         userVo.setUserCollectCount(userVo.getUserCollectCount()-1);
 
         articleDao.update(articleVo);
         followDao.deleteByArticleIdAndUserId(articleId, userId);
-        visitDao.save(visitVo);
+//        visitDao.save(visitVo);
         userDao.update(userVo);
     }
 

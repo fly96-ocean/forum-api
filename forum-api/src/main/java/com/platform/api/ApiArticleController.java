@@ -39,6 +39,7 @@ public class ApiArticleController extends ApiBaseAction {
     private ApiUserService userService;
 
     String point = ResourceUtil.getConfigByName("publish.article.point");
+    String pointSwitch = ResourceUtil.getConfigByName("point.switch");
 
     @RequestMapping("/newList")
     public R newList(Long articleType) {
@@ -89,6 +90,29 @@ public class ApiArticleController extends ApiBaseAction {
         return R.ok().put("msg", articleVoList);
     }
 
+    @RequestMapping("/myZanArticleList")
+    public R myZanArticleList(Long articleType) {
+        Assert.isNull(articleType, "帖子类型不能为空");
+        Map<String, Object> map = new HashMap<>();
+        map.put("articleType", articleType);
+        if(getUserId() != null){
+            map.put("followerId", getUserId());
+        }
+        List<ArticleVo> articleVoList = articleService.queryMyZanArticle(map);
+        return R.ok().put("msg", articleVoList);
+    }
+
+    @RequestMapping("/myVisitArticleList")
+    public R myVisitArticleList(Long articleType) {
+        Assert.isNull(articleType, "帖子类型不能为空");
+        Map<String, Object> map = new HashMap<>();
+        map.put("articleType", articleType);
+        if(getUserId() != null){
+            map.put("followerId", getUserId());
+        }
+        List<ArticleVo> articleVoList = articleService.queryMyVisitArticle(map);
+        return R.ok().put("msg", articleVoList);
+    }
 
 
     @RequestMapping("/domainArticleList")
@@ -265,6 +289,11 @@ public class ApiArticleController extends ApiBaseAction {
             }
 
             articleService.saveAndUpdate(articleVo, userVo);
+
+            if("1".equals(pointSwitch)){
+                this.updateUserScore(userVo.getUserLoginId()+"", Integer.parseInt(point));
+            }
+
 
             return R.ok().put("msg", articleVo);
         }
