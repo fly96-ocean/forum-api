@@ -73,6 +73,7 @@
             <if test="userLoginId != null">`userLoginId` = #{userLoginId},</if>
             <if test="userLatestLoginTime != null">`userLatestLoginTime` = #{userLatestLoginTime},</if>
             <if test="userLatestLoginIP != null">`userLatestLoginIP` = #{userLatestLoginIP},</if>
+            <if test="userPlatformScore != null">`userPlatformScore` = #{userPlatformScore},</if>
             <if test="userUpdateTime != null">`userUpdateTime` = #{userUpdateTime}</if>
 
         </set>

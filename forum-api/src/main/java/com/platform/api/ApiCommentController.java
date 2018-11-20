@@ -2,10 +2,8 @@ package com.platform.api;
 
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSONObject;
-import com.platform.entity.CommentVo;
-import com.platform.entity.PointLogVo;
-import com.platform.entity.ReportVo;
-import com.platform.entity.UserVo;
+import com.platform.entity.*;
+import com.platform.service.ApiArticleService;
 import com.platform.service.ApiCommentService;
 import com.platform.service.ApiPointLogService;
 import com.platform.service.ApiUserService;
@@ -35,6 +33,10 @@ public class ApiCommentController extends ApiBaseAction {
 
     @Autowired
     private ApiCommentService commentService;
+    @Autowired
+    private ApiUserService userService;
+    @Autowired
+    private ApiArticleService articleService;
 
     @RequestMapping("/list")
     public R list(Long articleId) {
@@ -213,6 +215,19 @@ public class ApiCommentController extends ApiBaseAction {
         } else {
             commentVo.setCommentQnAOffered(1);
             commentService.offeredAndUpdate(commentVo);
+
+            UserVo commentUser = userService.queryObject(commentVo.getCommentAuthorId());
+
+            ArticleVo articleVo = articleService.queryObject(commentVo.getCommentOnArticleId());
+
+            UserVo articleUser = userService.queryObject(articleVo.getArticleAuthorId());
+
+            String commentLoginUser = commentUser.getUserLoginId();
+
+            this.updateUserScore(commentLoginUser, articleVo.getArticleQnAOfferPoint());
+
+            this.updateUserScore(articleUser.getUserLoginId(), -articleVo.getArticleQnAOfferPoint());
+
             return R.ok().put("msg", "回帖已经被采纳！");
         }
     }

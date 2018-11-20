@@ -147,15 +147,25 @@ public class ApiCommentService {
 
         Integer articleUserPoint = articleUserVo.getUserPoint() - articleQnAOfferPoint;
 
+        Integer articleUserPlatformScore = articleUserVo.getUserPlatformScore() - articleQnAOfferPoint;
+
         Integer articleUserUsedPoint = articleUserVo.getUserUsedPoint() + articleQnAOfferPoint;
 
         Integer commentUserPoint = commentUserVo.getUserPoint() + articleQnAOfferPoint;
 
+        Integer commentUserPlatformScore = articleUserVo.getUserPlatformScore() - articleQnAOfferPoint;
+
+
+
         commentUserVo.setUserPoint(commentUserPoint);
+        commentUserVo.setUserPlatformScore(commentUserPlatformScore);
 
         articleUserVo.setUserPoint(articleUserPoint);
 
         articleUserVo.setUserUsedPoint(articleUserUsedPoint);
+
+        articleUserVo.setUserPlatformScore(articleUserPlatformScore);
+
 
         userDao.update(commentUserVo);
         userDao.update(articleUserVo);
