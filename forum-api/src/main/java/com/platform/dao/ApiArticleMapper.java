@@ -15,4 +15,5 @@ public interface ApiArticleMapper extends BaseDao<ArticleVo> {
     List<ArticleVo> queryMyCollectArticle(Map<String, Object> map);
     List<ArticleVo> queryMyZanArticle(Map<String, Object> map);
     List<ArticleVo> queryMyVisitArticle(Map<String, Object> map);
+    List<ArticleVo> queryPerfectArticle();
 }

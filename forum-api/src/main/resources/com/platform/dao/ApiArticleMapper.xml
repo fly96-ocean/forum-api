@@ -140,6 +140,15 @@
         order by a.articleCreateTime desc
     </select>
 
+    <select id="queryPerfectArticle" resultType="com.platform.entity.ArticleVo">
+        select a.*, u.userNickName, u.userAvatarUrl
+        from forum.symphony_article a
+        left join forum.symphony_user u on a.articleAuthorId=u.oId
+        where 1=1 and a.articlePerfect = 1
+        order by a.articleUpdateTime desc
+        limit 2;
+    </select>
+
     <select id="queryTotal" resultType="int">
         select count(*) from symphony_article
     </select>

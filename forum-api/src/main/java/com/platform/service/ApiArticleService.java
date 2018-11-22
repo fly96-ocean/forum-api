@@ -50,6 +50,10 @@ public class ApiArticleService {
         return articleDao.queryMyVisitArticle(map);
     }
 
+    public List<ArticleVo> queryPerfectArticle(){
+        return articleDao.queryPerfectArticle();
+    }
+
 
     public int queryTotal(Map<String, Object> map) {
         return articleDao.queryTotal(map);

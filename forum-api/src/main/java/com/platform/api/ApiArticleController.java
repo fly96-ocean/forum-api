@@ -1,7 +1,9 @@
 package com.platform.api;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.*;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
@@ -16,10 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 作者: @author Harmon <br>
@@ -52,6 +51,31 @@ public class ApiArticleController extends ApiBaseAction {
         List<ArticleVo> articleVoList = articleService.queryList(map);
 
         return R.ok().put("msg", articleVoList);
+    }
+
+    @IgnoreAuth
+    @RequestMapping("/perfectList")
+    public R perfectList() {
+        List<ArticleVo> articleVoList = articleService.queryPerfectArticle();
+
+        List<Object> list = new ArrayList<>();
+
+        for (ArticleVo articleVo : articleVoList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("articleId", articleVo.getoId());
+            jsonObject.put("articleTitle", articleVo.getArticleTitle());
+            jsonObject.put("articleAuthorId", articleVo.getArticleAuthorId());
+            jsonObject.put("userAvatarURL", articleVo.getUserAvatarURL());
+            jsonObject.put("articleTags", articleVo.getArticleTagsList());
+            jsonObject.put("articleCreateTime", articleVo.getArticleCreateTime());
+            jsonObject.put("articleContent", articleVo.getArticleContent());
+            jsonObject.put("articleImg1URL", articleVo.getArticleImg1URL());
+            jsonObject.put("articleImg2URL", articleVo.getArticleImg2URL());
+            jsonObject.put("articleImg3URL", articleVo.getArticleImg3URL());
+            list.add(jsonObject);
+        }
+
+        return R.ok().put("msg", list);
     }
 
     @RequestMapping("/myNewList")
