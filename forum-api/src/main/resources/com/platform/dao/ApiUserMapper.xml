@@ -60,12 +60,12 @@
             <if test="userGoodCount != null">`userGoodCount` = #{userGoodCount},</if>
 
             <if test="userPoint != null">`userPoint` = #{userPoint},</if>
+            <if test="userUsedPoint != null">`userUsedPoint` = #{userUsedPoint},</if>
             <if test="userLatestArticleTime != null">`userLatestArticleTime` = #{userLatestArticleTime},</if>
             <if test="userLatestCmtTime != null">`userLatestCmtTime` = #{userLatestCmtTime},</if>
             <if test="userName != null">`userName` = #{userName},</if>
             <if test="userEmail != null">`userEmail` = #{userEmail},</if>
             <if test="userNickname != null">`userNickname` = #{userNickname},</if>
-            <if test="userPoint != null">`userPoint` = #{userPoint},</if>
             <if test="userShopId != null">`userShopId` = #{userShopId},</if>
             <if test="userShopName != null">`userShopName` = #{userShopName},</if>
             <if test="userDistributorId != null">`userDistributorId` = #{userDistributorId},</if>

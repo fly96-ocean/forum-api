@@ -151,9 +151,11 @@ public class ApiCommentService {
 
         Integer articleUserUsedPoint = articleUserVo.getUserUsedPoint() + articleQnAOfferPoint;
 
+
+
         Integer commentUserPoint = commentUserVo.getUserPoint() + articleQnAOfferPoint;
 
-        Integer commentUserPlatformScore = articleUserVo.getUserPlatformScore() - articleQnAOfferPoint;
+        Integer commentUserPlatformScore = articleUserVo.getUserPlatformScore() + articleQnAOfferPoint;
 
 
 

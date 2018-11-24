@@ -80,6 +80,7 @@
             <if test="commentBadCnt != null">`commentBadCnt` = #{commentBadCnt},</if>
             <if test="commentBadCnt != null">`commentBadCnt` = #{commentBadCnt},</if>
             <if test="commentBadCnt != null">`commentReplyCnt` = #{commentReplyCnt},</if>
+            <if test="commentQnAOffered != null">`commentQnAOffered` = #{commentQnAOffered},</if>
         </set>
         where oId = #{oId}
     </update>

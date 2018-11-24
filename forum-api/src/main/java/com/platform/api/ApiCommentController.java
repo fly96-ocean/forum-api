@@ -210,7 +210,7 @@ public class ApiCommentController extends ApiBaseAction {
     @RequestMapping("/offered")
     public R offered(Long commentId) {
         CommentVo commentVo = commentService.queryObject(commentId);
-        if(commentVo.getCommentQnAOffered() == 1) {
+        if(commentVo.getCommentQnAOffered() != null && commentVo.getCommentQnAOffered() == 1) {
             return R.ok().put("msg", "不能重复操作，回帖已经被采纳！");
         } else {
             commentVo.setCommentQnAOffered(1);
