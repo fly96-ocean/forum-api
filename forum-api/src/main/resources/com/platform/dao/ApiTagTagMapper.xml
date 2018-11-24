@@ -13,7 +13,7 @@
     </select>
 
     <select id="queryOId1List" resultType="com.platform.entity.TagTagVo">
-        SELECT * FROM symphony_tag_tag group by tag1_oId;
+        SELECT * FROM symphony_tag_tag t group by tag1_oId;
     </select>
 
     <select id="queryOId2List" resultType="com.platform.entity.TagTagVo">

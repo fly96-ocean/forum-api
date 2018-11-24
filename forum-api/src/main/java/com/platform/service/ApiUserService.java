@@ -106,9 +106,9 @@ public class ApiUserService {
             UserVo userVo1 = new UserVo();
             userVo1.setUserName(userInfo.getString("username"));
             userVo1.setUserNickname(userInfo.getString("name"));
-            userVo1.setUserEmail("123@qq.com");
+            userVo1.setUserEmail(userInfo.getString("email"));
             userVo1.setUserAvatarType(1);
-            userVo1.setUserAvatarURL("/afafd/afafa");
+            userVo1.setUserAvatarURL(userInfo.getString("imageUrl"));
             userVo1.setUserLoginId(userInfo.getString("user_id"));
             userVo1.setUserPoint(0);
             userVo1.setUserPlatformScore(userInfo.getInteger("score"));

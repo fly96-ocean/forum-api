@@ -7,6 +7,7 @@ import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.*;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
+import com.platform.utils.Html2Text;
 import com.platform.utils.R;
 import com.platform.utils.ResourceUtil;
 import com.platform.validator.Assert;
@@ -18,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.swing.text.html.parser.ParserDelegator;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 作者: @author Harmon <br>
@@ -39,6 +43,12 @@ public class ApiArticleController extends ApiBaseAction {
 
     String point = ResourceUtil.getConfigByName("publish.article.point");
     String pointSwitch = ResourceUtil.getConfigByName("point.switch");
+    String resourceUrl = ResourceUtil.getConfigByName("resource.url");
+    String articleDetailUrl = ResourceUtil.getConfigByName("article.detail.url");
+    private static final Pattern p_html = Pattern.compile("<[a-zA-z]{1,9}((?!>).)*>", Pattern.CASE_INSENSITIVE);
+
+    private static final Pattern t_html = Pattern.compile("</[a-zA-z]{1,9}>", Pattern.CASE_INSENSITIVE);
+
 
     @RequestMapping("/newList")
     public R newList(Long articleType) {
@@ -68,10 +78,34 @@ public class ApiArticleController extends ApiBaseAction {
             jsonObject.put("userAvatarURL", articleVo.getUserAvatarURL());
             jsonObject.put("articleTags", articleVo.getArticleTagsList());
             jsonObject.put("articleCreateTime", articleVo.getArticleCreateTime());
-            jsonObject.put("articleContent", articleVo.getArticleContent());
-            jsonObject.put("articleImg1URL", articleVo.getArticleImg1URL());
-            jsonObject.put("articleImg2URL", articleVo.getArticleImg2URL());
-            jsonObject.put("articleImg3URL", articleVo.getArticleImg3URL());
+            String articleContent = articleVo.getArticleContent();
+
+            if(articleContent!=null){
+                articleContent = Html2Text.htmlToText(articleContent);
+                if(articleContent.length()>67){
+                    articleContent = articleContent.substring(0, 67) + "...";
+                }
+            }
+
+            jsonObject.put("articleContent", articleContent);
+            if(articleVo.getArticleImg1URL()!=null){
+                jsonObject.put("articleImg1URL", resourceUrl+articleVo.getArticleImg1URL());
+            }else{
+                jsonObject.put("articleImg1URL", null);
+            }
+            if(articleVo.getArticleImg2URL()!=null){
+                jsonObject.put("articleImg2URL", resourceUrl+articleVo.getArticleImg2URL());
+            }else{
+                jsonObject.put("articleImg2URL", null);
+            }
+
+            if(articleVo.getArticleImg3URL() != null){
+                jsonObject.put("articleImg3URL", resourceUrl+articleVo.getArticleImg3URL());
+            }else{
+                jsonObject.put("articleImg3URL", null);
+            }
+
+            jsonObject.put("jumpUrl", articleDetailUrl+articleVo.getoId());
             list.add(jsonObject);
         }
 
