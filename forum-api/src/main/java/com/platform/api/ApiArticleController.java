@@ -349,7 +349,7 @@ public class ApiArticleController extends ApiBaseAction {
             articleService.saveAndUpdate(articleVo, userVo);
 
             if("1".equals(pointSwitch)){
-                this.updateUserScore(userVo.getUserLoginId()+"", Integer.parseInt(point));
+                this.updateUserScore(userVo.getUserLoginId()+"", Integer.parseInt(point), "发帖");
             }
 
 

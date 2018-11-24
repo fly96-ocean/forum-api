@@ -224,9 +224,9 @@ public class ApiCommentController extends ApiBaseAction {
 
             String commentLoginUser = commentUser.getUserLoginId();
 
-            this.updateUserScore(commentLoginUser, articleVo.getArticleQnAOfferPoint());
+            this.updateUserScore(commentLoginUser, articleVo.getArticleQnAOfferPoint(), "回帖采纳时，回帖人增加积分");
 
-            this.updateUserScore(articleUser.getUserLoginId(), -articleVo.getArticleQnAOfferPoint());
+            this.updateUserScore(articleUser.getUserLoginId(), -articleVo.getArticleQnAOfferPoint(), "回帖采纳时，发帖人减少积分");
 
             return R.ok().put("msg", "回帖已经被采纳！");
         }

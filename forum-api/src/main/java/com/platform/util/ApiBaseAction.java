@@ -244,7 +244,7 @@ public class ApiBaseAction {
 
 
     // 更新用户积分
-    public JSONObject updateUserScore(String userId, Integer score) {
+    public JSONObject updateUserScore(String userId, Integer score, String remark) {
         Assert.isNull(score, "积分不能为空");
 
         JSONObject result = null;
@@ -255,7 +255,7 @@ public class ApiBaseAction {
 
         String param = "{\"nonce\":\""+ nonce +"\",\"privatekey\":\"" + privatekey
                 + "\",\"account\":\""+ account + "\",\"signature\":\""+ signature
-                +"\",\"user_id\":\"" + userId + "\",\"score\":"+ score +"}";
+                +"\",\"user_id\":\"" + userId + "\",\"score\":"+ score + ",\"remark\":\"" + remark +"\"}" ;
 
         String userScore = sendPost(userScoreURL, param);
 
