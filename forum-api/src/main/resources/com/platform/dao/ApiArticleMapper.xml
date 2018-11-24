@@ -7,7 +7,7 @@
         select a.*, u.userNickName, u.userAvatarUrl
         from symphony_article a
         left join forum.symphony_user u on a.articleAuthorId=u.oId
-        where a.oId = #{value}
+        where a.oId = #{value} and <![CDATA[ articleStatus <> 1 ]]>
     </select>
 
     <select id="queryList" resultType="com.platform.entity.ArticleVo">
@@ -38,7 +38,7 @@
         <if test="articleAuthorId != null">
             and a.articleAuthorId = #{articleAuthorId}
         </if>
-
+        and <![CDATA[ a.articleStatus <> 1 ]]>
 
         order by a.articleCreateTime desc
     </select>
@@ -62,6 +62,7 @@
         <if test="commentAuthorId != null">
             and comment.commentAuthorId = #{commentAuthorId}
         </if>
+        and <![CDATA[ a.articleStatus <> 1 ]]>
 
         group by a.oId
         order by a.articleCreateTime desc
@@ -88,6 +89,7 @@
             and follow.followerId = #{followerId}
         </if>
             and follow.followingType = 2
+        and <![CDATA[ a.articleStatus <> 1 ]]>
         group by a.oId
         order by a.articleCreateTime desc
     </select>
@@ -112,6 +114,7 @@
             and follow.followerId = #{followerId}
         </if>
         and follow.followingType = 4
+        and <![CDATA[ a.articleStatus <> 1 ]]>
         group by a.oId
         order by a.articleCreateTime desc
     </select>
@@ -135,6 +138,7 @@
         <if test="visitUserId != null">
             and visit.visitUserId = #{visitUserId}
         </if>
+        and <![CDATA[ a.articleStatus <> 1 ]]>
 
         group by a.oId
         order by a.articleCreateTime desc
@@ -145,12 +149,13 @@
         from forum.symphony_article a
         left join forum.symphony_user u on a.articleAuthorId=u.oId
         where 1=1 and a.articlePerfect = 1
+        and <![CDATA[ a.articleStatus <> 1 ]]>
         order by a.articleUpdateTime desc
         limit 2;
     </select>
 
     <select id="queryTotal" resultType="int">
-        select count(*) from symphony_article
+        select count(*) from symphony_article where <![CDATA[ articleStatus <> 1 ]]>
     </select>
     
     <update id="update" parameterType="com.platform.entity.ArticleVo">
@@ -169,6 +174,8 @@
             <if test="articleQnAOfferPoint != null">`articleQnAOfferPoint` = #{articleQnAOfferPoint},</if>
             <if test="articleRewardPoint != null">`articleRewardPoint` = #{articleRewardPoint},</if>
             <if test="articleRewardContent != null">`articleRewardContent` = #{articleRewardContent},</if>
+            <if test="articleStatus != null">`articleStatus` = #{articleStatus},</if>
+
         </set>
         where oId = #{oId}
     </update>

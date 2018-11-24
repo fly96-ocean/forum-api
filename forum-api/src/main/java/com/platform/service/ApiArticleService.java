@@ -79,7 +79,9 @@ public class ApiArticleService {
 
 
     public void delete(Long id) {
-        articleDao.delete(id);
+        ArticleVo articleVo = articleDao.queryObject(id);
+        articleVo.setArticleStatus(1);
+        articleDao.update(articleVo);
     }
 
 

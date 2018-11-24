@@ -382,6 +382,18 @@ public class ApiArticleController extends ApiBaseAction {
         return R.ok().put("msg", "帖子保存失败！");
     }
 
+    @RequestMapping("/delete")
+    public R delete() {
+        JSONObject jsonObject = super.getJsonRequest();
+        if(null != jsonObject) {
+            Long oId = jsonObject.getLong("articleId");
+            articleService.delete(oId);
+
+            return R.ok().put("msg", "帖子删除成功！");
+        }
+        return R.error().put("msg", "帖子删除失败！");
+    }
+
     //To Do
     @RequestMapping("/updateViewCount")
     public R updateViewCount() {
