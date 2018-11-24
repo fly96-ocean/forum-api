@@ -44,6 +44,8 @@ public class ApiPointLogService {
         pointLogDao.update(pointLogVo);
     }
 
-
+    public int querySum(Map<String, Object> map)  {
+        return pointLogDao.querySum(map);
+    }
 
 }

@@ -328,17 +328,12 @@ public class ApiArticleService {
     }
 
     @Transactional
-    public void saveAndUpdate(ArticleVo articleVo, UserVo userVo){
+    public void saveAndUpdate(ArticleVo articleVo, UserVo userVo, PointLogVo pointLogVo){
 
         articleDao.save(articleVo);
         userDao.update(userVo);
 
-        PointLogVo pointLogVo = new PointLogVo();
-        pointLogVo.setPointLogArticleAuthorId(articleVo.getArticleAuthorId());
         pointLogVo.setPointLogArticleId(articleVo.getoId());
-        pointLogVo.setPointLogType(0);
-        pointLogVo.setPointLogPoint(Integer.parseInt(point));
-        pointLogVo.setPointLogCreateTime(new Date());
         pointLogDao.save(pointLogVo);
     }
 

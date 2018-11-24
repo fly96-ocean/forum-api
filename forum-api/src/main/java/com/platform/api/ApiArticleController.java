@@ -40,8 +40,12 @@ public class ApiArticleController extends ApiBaseAction {
     private ApiTagService tagService;
     @Autowired
     private ApiUserService userService;
+    @Autowired
+    private ApiPointLogService pointLogService;
+
 
     String point = ResourceUtil.getConfigByName("publish.article.point");
+    String maxPoint = ResourceUtil.getConfigByName("publish.article.daily.max.point");
     String pointSwitch = ResourceUtil.getConfigByName("point.switch");
     String resourceUrl = ResourceUtil.getConfigByName("resource.url");
     String articleDetailUrl = ResourceUtil.getConfigByName("article.detail.url");
@@ -265,6 +269,7 @@ public class ApiArticleController extends ApiBaseAction {
     @RequestMapping("/save")
     public R save() {
         JSONObject jsonObject = super.getJsonRequest();
+        Date currentDate = new Date();
         if(null != jsonObject) {
             ArticleVo articleVo = new ArticleVo();
             articleVo.setArticleTitle(jsonObject.getString("articleTitle"));
@@ -331,7 +336,7 @@ public class ApiArticleController extends ApiBaseAction {
             UserVo userVo = userService.queryObject(this.getUserId());
             Integer userPoint = userVo.getUserPoint();
             Integer userArticleCount = userVo.getUserArticleCount() + 1;
-            userVo.setUserPoint(userPoint+Integer.parseInt(point));
+
             userVo.setUserArticleCount(userArticleCount);
             userVo.setUserLatestArticleTime(articleVo.getArticleCreateTime());
             userVo.setUserUpdateTime(articleVo.getArticleCreateTime());
@@ -346,12 +351,41 @@ public class ApiArticleController extends ApiBaseAction {
                 articleVo.setArticleQnAOfferPoint(0);
             }
 
-            articleService.saveAndUpdate(articleVo, userVo);
+            /*
+            * 积分日志
+            * */
 
-            if("1".equals(pointSwitch)){
-                this.updateUserScore(userVo.getUserLoginId()+"", Integer.parseInt(point), "发帖");
+            //当天用户的发帖积分
+            Map<String, Object> map = new HashMap<>();
+            map.put("pointLogArticleAuthorId",this.getUserId());
+            map.put("pointLogType", 0);
+            map.put("pointLogCreateTime", articleVo.getArticleCreateTime());
+            Integer publishArticlePoints = pointLogService.querySum(map);
+
+            PointLogVo pointLogVo = new PointLogVo();
+            pointLogVo.setPointLogArticleAuthorId(this.getUserId());
+            pointLogVo.setPointLogType(0);
+
+            /*
+            * 如果当天用户的发帖总积分大于每日发帖的最大积分限定时：
+            * 1. 用户的积分不再更新;
+            * 2. 积分日志的积分字段的值将为0;
+            * 3. 不会更新平台的积分，即不会调用updateUserScore平台接口.
+            * */
+            if(publishArticlePoints < Integer.parseInt(maxPoint)) {
+                pointLogVo.setPointLogPoint(Integer.parseInt(point));
+                userVo.setUserPoint(userPoint+Integer.parseInt(point));
+            } else {
+                pointLogVo.setPointLogPoint(0);
             }
 
+            pointLogVo.setPointLogCreateTime(articleVo.getArticleCreateTime());
+
+            articleService.saveAndUpdate(articleVo, userVo, pointLogVo);
+
+            if("1".equals(pointSwitch) && (publishArticlePoints < Integer.parseInt(maxPoint))){
+                this.updateUserScore(userVo.getUserLoginId()+"", Integer.parseInt(point), "发帖");
+            }
 
             return R.ok().put("msg", articleVo);
         }
