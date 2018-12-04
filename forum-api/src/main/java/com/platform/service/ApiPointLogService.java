@@ -45,7 +45,12 @@ public class ApiPointLogService {
     }
 
     public int querySum(Map<String, Object> map)  {
-        return pointLogDao.querySum(map);
+        Integer sum = pointLogDao.querySum(map);
+        if(sum == null){
+            return 0;
+        }else{
+            return sum;
+        }
     }
 
 }

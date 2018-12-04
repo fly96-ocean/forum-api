@@ -1,11 +1,9 @@
 package com.platform.entity;
 
-import org.omg.PortableInterceptor.INACTIVE;
-
 import java.io.Serializable;
 import java.util.Date;
 
-public class UserVo implements Serializable {
+public class BizUserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //主键

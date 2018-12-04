@@ -10,5 +10,5 @@ import java.util.Map;
  * @date 2017-08-11 09:14:25
  */
 public interface ApiPointLogMapper extends BaseDao<PointLogVo> {
-    int querySum(Map<String, Object> map);
+    Integer querySum(Map<String, Object> map);
 }

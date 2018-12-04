@@ -3,6 +3,7 @@ package com.platform.service;
 import com.platform.dao.ApiFollowMapper;
 import com.platform.dao.ApiTagMapper;
 import com.platform.dao.ApiTagTagMapper;
+import com.platform.entity.DomainVo;
 import com.platform.entity.FollowVo;
 import com.platform.entity.TagTagVo;
 import com.platform.entity.TagVo;
@@ -27,8 +28,8 @@ public class ApiTagService {
     }
 
 
-    public List<TagVo> queryList() {
-        return tagDao.queryList();
+    public List<TagVo> queryList(Map<String, Object> map) {
+        return tagDao.queryList(map);
     }
 
 
@@ -62,5 +63,24 @@ public class ApiTagService {
             ids.add(tagTagVo.getTag2Oid());
         }
         return tagDao.queryByIds(ids);
+    }
+
+    public int serverQueryTotal(Map<String, Object> map){
+        return tagDao.serverQueryTotal(map);
+    }
+
+    public List<TagVo> serverQueryList(Map<String, Object> map){
+        return tagDao.serverQueryList(map);
+    }
+
+    public void deleteOrNot(Long[] ids, Integer status) {
+        for(int i = 0; i<ids.length; i++){
+            if(ids[i]!=null){
+                TagVo tag = tagDao.queryObject(ids[i]);
+                tag.setTagStatus(status);
+                tagDao.update(tag);
+            }
+
+        }
     }
 }

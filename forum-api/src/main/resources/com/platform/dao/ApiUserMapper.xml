@@ -50,6 +50,10 @@
         select * from symphony_user where userLoginId = #{userLoginId}
     </select>
 
+    <select id="queryByUserNo" resultType="com.platform.entity.UserVo">
+        select * from symphony_user where userNo = #{userNo}
+    </select>
+
     <update id="update" parameterType="com.platform.entity.UserVo">
         update symphony_user
         <set>

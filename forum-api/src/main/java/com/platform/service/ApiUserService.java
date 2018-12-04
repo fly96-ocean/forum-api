@@ -5,6 +5,7 @@ import com.platform.dao.ApiFollowMapper;
 import com.platform.dao.ApiUserMapper;
 import com.platform.entity.FollowVo;
 import com.platform.entity.UserVo;
+import com.platform.utils.StringUtils;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,10 @@ public class ApiUserService {
 
     public UserVo queryObject(Long userId) {
         return userDao.queryObject(userId);
+    }
+
+    public UserVo queryByUserNo(String userNo) {
+        return userDao.queryByUserNo(userNo);
     }
 
     public List<UserVo> queryList(Map<String, Object> map) {
@@ -105,7 +110,13 @@ public class ApiUserService {
         } else {
             UserVo userVo1 = new UserVo();
             userVo1.setUserName(userInfo.getString("username"));
-            userVo1.setUserNickname(userInfo.getString("name"));
+            String name = userInfo.getString("name");
+            if(StringUtils.isNotEmpty(name)){
+                userVo1.setUserNickname(userInfo.getString("name"));
+            }else{
+                userVo1.setUserNickname(userInfo.getString("username"));
+            }
+
             userVo1.setUserEmail(userInfo.getString("email"));
             userVo1.setUserAvatarType(1);
             userVo1.setUserAvatarURL(userInfo.getString("imageUrl"));

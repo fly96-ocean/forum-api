@@ -1,6 +1,7 @@
 package com.platform.service;
 
 import com.platform.dao.ApiDomainMapper;
+import com.platform.entity.ArticleVo;
 import com.platform.entity.DomainVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class ApiDomainService {
     private ApiDomainMapper domainDao;
 
 
-    public DomainVo queryObject(Integer id) {
+    public DomainVo queryObject(Long id) {
         return  domainDao.queryObject(id);
     }
 
@@ -40,13 +41,24 @@ public class ApiDomainService {
     }
 
 
-    public void delete(Integer id) {
-        domainDao.delete(id);
+    public void deleteOrNot(Long[] ids, Integer status) {
+        for(int i = 0; i<ids.length; i++){
+            if(ids[i]!=null){
+                DomainVo domain = domainDao.queryObject(ids[i]);
+                domain.setDomainStatus(status);
+                domainDao.update(domain);
+            }
+
+        }
     }
 
-
-    public void deleteBatch(Integer[] ids) {
-        domainDao.deleteBatch(ids);
+    public int serverQueryTotal(Map<String, Object> map){
+        return domainDao.serverQueryTotal(map);
     }
+
+    public List<DomainVo> serverQueryList(Map<String, Object> map){
+        return domainDao.serverQueryList(map);
+    }
+
 
 }

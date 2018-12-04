@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.BizReportDao">
+
+	<select id="queryObject" resultType="com.platform.entity.BizReportEntity">
+		select * from symphony_report where oId = #{value}
+	</select>
+
+	<select id="queryReportArticleObject" resultMap="reportArticleEntity">
+		 select symphony_report.*, symphony_article.*, symphony_user.*  from symphony_report
+		 left join symphony_article  on symphony_article.oId = symphony_report.reportDataId
+		 left join symphony_user on symphony_user.oId = symphony_report.reportUserId
+		 where report.oId = #{value}
+	</select>
+
+
+	<resultMap id="reportArticleEntity" type="com.platform.entity.BizReportEntity">
+
+		<id column="oId" property="oId"/>
+		<result column="reportUserId" property="reportUserId"/>
+		<result column="reportDataId" property="reportDataId"/>
+		<result column="reportDataType" property="reportDataType"/>
+		<result column="reportType" property="reportType"/>
+		<result column="reportMemo" property="reportMemo"/>
+		<result column="reportHandled" property="reportHandled"/>
+		<result column="reportCreateTime" property="reportCreateTime"/>
+		<result column="reportHandleTime" property="reportHandleTime"/>
+
+		<association property="reportedArticle" javaType="com.platform.entity.BizArticleEntity">
+			<id column="oId" property="oId"/>
+			<result column="articleTitle" property="articleTitle"/>
+			<result column="articleAuthorId" property="articleAuthorId"/>
+		</association>
+		<association property="reportUser" javaType="com.platform.entity.BizUserEntity">
+			<id column="oId" property="oId"/>
+			<result column="userEmail" property="userEmail"/>
+			<result column="userName" property="userName"/>
+			<result column="userNickname" property="userNickname"/>
+		</association>
+	</resultMap>
+
+	<select id="queryReportCommentObject" resultType="com.platform.entity.BizReportEntity">
+		select report.*, comment.*, reportUser.* from symphony_report as report
+		left join symphony_comment as comment on comment.oId = report.reportDataId
+		left join symphony_user as reportUser on reportUser.oId = report.reportUserId
+		where report.oId = #{value}
+	</select>
+
+	<select id="queryReportUserObject" resultType="com.platform.entity.BizReportEntity">
+		select report.*, reportedUser.*, reportUser.* from symphony_report as report
+		left join symphony_user as reportedUser on reportedUser.oId = report.reportDataId
+		left join symphony_user as reportUser on reportUser.oId = report.reportUserId
+		where report.oId = #{value}
+	</select>
+
+
+
+	<select id="queryList" resultType="com.platform.entity.BizReportEntity">
+		select * from symphony_report order by id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryReportArticleList" resultMap="reportArticleEntity">
+		select report.*, article.*, reportUser.* from symphony_report as report
+		left join symphony_article as article on article.oId = report.reportDataId
+		left join symphony_user as reportUser on reportUser.oId = report.reportUserId
+		order by reportCreateTime desc, reportHandleTime desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryReportCommentList" resultType="com.platform.entity.BizReportEntity">
+		select report.*, comment.*, reportUser.* from symphony_report as report
+		left join symphony_comment as comment on comment.oId = report.reportDataId
+		left join symphony_user as reportUser on reportUser.oId = report.reportUserId
+		order by reportCreateTime desc, reportHandleTime desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryReportUserList" resultType="com.platform.entity.BizReportEntity">
+		select report.*, reportedUser.*, reportUser.* from symphony_report as report
+		left join symphony_user as reportedUser on reportedUser.oId = report.reportDataId
+		left join symphony_user as reportUser on reportUser.oId = report.reportUserId
+		order by reportCreateTime desc, reportHandleTime desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from symphony_report
+	</select>
+	 
+	<update id="update" parameterType="com.platform.entity.BizReportEntity">
+		update symphony_report
+		<set>
+			<if test="reportHandled != reportHandled">`reportHandled` = #{reportHandled}, </if>
+			<if test="reportHandleTime != null">`reportHandleTime` = #{reportHandleTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+</mapper>

@@ -9,7 +9,14 @@
 
 
     <select id="queryList" resultType="com.platform.entity.TagVo">
-        select * from symphony_tag where oId = #{oId}
+        select * from symphony_tag where where 0=0
+        <if test="tagTitle != null">
+            and tagTitle = #{tagTitle}
+        </if>
+        and <![CDATA[ tagStatus <> 1 ]]>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
     </select>
 
     <select id="queryByIds" resultType="com.platform.entity.TagVo">
@@ -17,23 +24,101 @@
         <foreach collection="oIds" index="index" item="item" open="(" separator="," close=")">
                             #{item}
         </foreach>
+        and <![CDATA[ tagStatus <> 1 ]]>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
     </select>
 
     <select id="queryTotal" resultType="int">
-        select count(*) from symphony_tag
+        select count(*) from symphony_tag where <![CDATA[ tagStatus <> 1 ]]>
+        <if test="tagTitle != null">
+          and tagTitle = #{tagTitle}
+        </if>
     </select>
 
     <insert id="save" parameterType="com.platform.entity.TagVo" useGeneratedKeys="true" keyProperty="oId">
-        insert into symphony_tag(
-            `followerId`,
-            `followingId`,
-            `followingType`
-        )
-        values(
-            #{followerId},
-            #{followingId},
-            #{followingType}
+        insert into symphony_tag
+        (`tagReferenceCount`,
+        `tagCommentCount`,
+        `tagFollowerCount`,
+        `tagLinkCount`,
+        `tagTitle`,
+        `tagURI`,
+        `tagDescription`,
+        `tagIconPath`,
+        `tagCSS`,
+        `tagStatus`,
+        `tagGoodCnt`,
+        `tagBadCnt`,
+        `tagSeoTitle`,
+        `tagSeoKeywords`,
+        `tagSeoDesc`,
+        `tagRandomDouble`,
+        `tagAd`,
+        `tagShowSideAd`,
+        `tagStyle`
+        ) values (
+        #{tagReferenceCount}
+        ,#{tagCommentCount}
+        ,#{tagFollowerCount}
+        ,#{tagLinkCount}
+        ,#{tagTitle}
+        ,#{tagURI}
+        ,#{tagDescription}
+        ,#{tagIconPath}
+        ,#{tagCSS}
+        ,#{tagStatus}
+        ,#{tagGoodCnt}
+        ,#{tagBadCnt}
+        ,#{tagSeoTitle}
+        ,#{tagSeoKeywords}
+        ,#{tagSeoDesc}
+        ,#{tagRandomDouble}
+        ,#{tagAd}
+        ,#{tagShowSideAd}
+        ,#{tagStyle}
         )
     </insert>
+
+    <update id="update" parameterType="com.platform.entity.TagVo">
+        update symphony_tag
+        <set>
+            <if test="tagReferenceCount != null">`tagReferenceCount` = #{tagReferenceCount},</if>
+            <if test="tagCommentCount != null">`tagCommentCount` = #{tagCommentCount},</if>
+            <if test="tagFollowerCount != null">`tagFollowerCount` = #{tagFollowerCount},</if>
+            <if test="tagLinkCount != null">`tagLinkCount` = #{tagLinkCount},</if>
+            <if test="tagTitle != null">`tagTitle` = #{tagTitle},</if>
+            <if test="tagURI != null">`tagURI` = #{tagURI},</if>
+            <if test="tagDescription != null">`tagDescription` = #{tagDescription},</if>
+            <if test="tagStatus != null">`tagStatus` = #{tagStatus},</if>
+            <if test="tagGoodCnt != null">`tagGoodCnt` = #{tagGoodCnt},</if>
+            <if test="tagBadCnt != null">`tagBadCnt` = #{tagBadCnt},</if>
+            <if test="tagSeoTitle != null">`tagSeoTitle` = #{tagSeoTitle},</if>
+            <if test="tagSeoDesc != null">`tagSeoDesc` = #{tagSeoDesc},</if>
+        </set>
+        where oId = #{oId}
+    </update>
+
+    <select id="serverQueryList" resultType="com.platform.entity.TagVo">
+        select * from symphony_tag where 0=0
+
+        <if test="tagTitle != null">
+            and tagTitle like concat('%',#{tagTitle},'%')
+        </if>
+        order by tagStatus asc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="serverQueryTotal" resultType="int">
+        select count(*) from symphony_tag where 0=0
+
+        <if test="tagTitle != null">
+            and tagTitle like concat('%',#{tagTitle},'%')
+        </if>
+        order by tagStatus asc
+    </select>
 
 </mapper>

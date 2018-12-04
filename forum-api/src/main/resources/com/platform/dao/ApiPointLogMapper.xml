@@ -18,7 +18,7 @@
         select count(*) from symphony_point_log
     </select>
 
-    <select id="querySum" resultType="int">
+    <select id="querySum" resultType="Integer">
         select sum(pointLogPoint) from symphony_point_log where pointLogPoint>0
         <if test="pointLogArticleAuthorId != null">
             and pointLogArticleAuthorId = #{pointLogArticleAuthorId}

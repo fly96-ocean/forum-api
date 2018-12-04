@@ -12,7 +12,7 @@ public class DomainVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //主键
-    private Integer oId;
+    private Long oId;
     //领域标题
     private String domainTitle;
     //领域访问路径     （可以暂时不考虑）
@@ -43,11 +43,11 @@ public class DomainVo implements Serializable {
     private List<ArticleVo> articles = new ArrayList<>();
 
 
-    public Integer getoId() {
+    public Long getoId() {
         return oId;
     }
 
-    public void setoId(Integer oId) {
+    public void setoId(Long oId) {
         this.oId = oId;
     }
 

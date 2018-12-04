@@ -75,7 +75,7 @@ public class SysUserEntity implements Serializable {
     private String deptName;
 
     /**
-     * 员工编号
+     * 员工编号 和 论坛用户的userNo 有对应关系
      */
     private String employeeCode;
 

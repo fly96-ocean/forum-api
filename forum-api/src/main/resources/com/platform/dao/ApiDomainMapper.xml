@@ -4,7 +4,7 @@
 <mapper namespace="com.platform.dao.ApiDomainMapper">
 
     <select id="queryObject" resultType="com.platform.entity.DomainVo">
-        select * from symphony_domain where id = #{value}
+        select * from symphony_domain where oId = #{value}
     </select>
 
     <select id="queryList" resultType="com.platform.entity.DomainVo">
@@ -12,10 +12,80 @@
         <if test="domainType != null">
             and a.domainType = #{domainType}
         </if>
-        order by a.domainSort desc
+        and <![CDATA[ domainStatus <> 1 ]]>
+        order by a.domainSort desc, a.domainStatus desc
     </select>
 
     <select id="queryTotal" resultType="int">
-        select count(*) from symphony_domain
+        select count(*) from symphony_domain where <![CDATA[ domainStatus <> 1 ]]>
+        <if test="domainType != null">
+          and a.domainType = #{domainType}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.DomainVo" useGeneratedKeys="true" keyProperty="oId">
+        insert into symphony_domain
+        (`domainTitle`,
+        `domainURI`,
+        `domainDescription`,
+        `domainType`,
+        `domainSort`,
+        `domainNav`,
+        `domainTagCnt`,
+        `domainIconPath`,
+        `domainCSS`,
+        `domainStatus`,
+        `domainSeoTitle`,
+        `domainSeoKeywords`,
+        `domainSeoDesc`
+        ) values (
+         #{domainTitle}
+        ,#{domainURI}
+        ,#{domainDescription}
+        ,#{domainType}
+        ,#{domainSort}
+        ,#{domainNav}
+        ,#{domainTagCnt}
+        ,#{domainIconPath}
+        ,#{domainCSS}
+        ,#{domainStatus}
+        ,#{domainSeoTitle}
+        ,#{domainSeoKeywords}
+        ,#{domainSeoDesc}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.platform.entity.DomainVo">
+        update symphony_domain
+        <set>
+            <if test="domainTitle != null">`domainTitle` = #{domainTitle},</if>
+            <if test="domainDescription != null">`domainDescription` = #{domainDescription},</if>
+            <if test="domainType != null">`domainType` = #{domainType},</if>
+            <if test="domainSort != null">`domainSort` = #{domainSort},</if>
+            <if test="domainStatus != null">`domainStatus` = #{domainStatus},</if>
+        </set>
+        where oId = #{oId}
+    </update>
+
+    <select id="serverQueryList" resultType="com.platform.entity.DomainVo">
+        select * from symphony_domain where 0=0
+        <if test="domainType != null">
+            and domainType = #{domainType}
+        </if>
+        <if test="domainTitle != null">
+            and domainTitle like concat('%',#{domainTitle},'%')
+        </if>
+        order by domainSort desc, domainStatus asc
+    </select>
+
+    <select id="serverQueryTotal" resultType="int">
+        select count(*) from symphony_domain where 0=0
+        <if test="domainType != null">
+            and domainType = #{domainType}
+        </if>
+        <if test="domainTitle != null">
+            and domainTitle like concat('%',#{domainTitle},'%')
+        </if>
+        order by domainSort desc, domainStatus asc
     </select>
 </mapper>

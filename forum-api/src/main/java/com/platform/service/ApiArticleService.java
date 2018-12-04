@@ -337,4 +337,52 @@ public class ApiArticleService {
         pointLogDao.save(pointLogVo);
     }
 
+
+
+
+    /****服务器端接口 ****/
+    public List<ArticleVo> serverQueryList(Map<String, Object> map){
+        return articleDao.serverQueryList(map);
+    }
+
+    @Transactional
+    public void deleteOrNot(Long[] ids, Integer status){
+        for(int i = 0; i<ids.length; i++){
+            if(ids[i]!=null){
+                ArticleVo articleVo = articleDao.queryObject(ids[i]);
+                articleVo.setArticleStatus(status);
+                articleDao.update(articleVo);
+            }
+
+        }
+    }
+
+    public int serverQueryTotal(Map<String, Object> map){
+        return articleDao.serverQueryTotal(map);
+    }
+
+    @Transactional
+    public void setPerfectOrNot(Long[] ids, Integer isPerfect){
+        for(int i = 0; i<ids.length; i++){
+            if(ids[i]!=null){
+                ArticleVo articleVo = articleDao.queryObject(ids[i]);
+                articleVo.setArticlePerfect(isPerfect);
+                articleDao.update(articleVo);
+            }
+
+        }
+    }
+
+    @Transactional
+    public void stickOrNot(Long[] ids, Integer isStick){
+        for(int i = 0; i<ids.length; i++){
+            if(ids[i]!=null){
+                ArticleVo articleVo = articleDao.queryObject(ids[i]);
+                articleVo.setIsStick(isStick);
+                articleDao.update(articleVo);
+            }
+
+        }
+    }
+
 }

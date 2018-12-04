@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ArticleVo implements Serializable {
+public class BizArticleEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //主键

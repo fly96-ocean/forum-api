@@ -49,9 +49,6 @@ public class ApiArticleController extends ApiBaseAction {
     String pointSwitch = ResourceUtil.getConfigByName("point.switch");
     String resourceUrl = ResourceUtil.getConfigByName("resource.url");
     String articleDetailUrl = ResourceUtil.getConfigByName("article.detail.url");
-    private static final Pattern p_html = Pattern.compile("<[a-zA-z]{1,9}((?!>).)*>", Pattern.CASE_INSENSITIVE);
-
-    private static final Pattern t_html = Pattern.compile("</[a-zA-z]{1,9}>", Pattern.CASE_INSENSITIVE);
 
 
     @RequestMapping("/newList")
