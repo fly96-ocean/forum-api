@@ -92,7 +92,7 @@ public class ApiCommentController extends ApiBaseAction {
                 commentVo.setCommentOriginalCommentId(0L);
             }
 
-            commentVo.setCommentStatus(1);
+            commentVo.setCommentStatus(0);
             commentVo.setCommentIP(this.getClientIp());
             commentVo.setCommentUA(this.getClientUA());
             if(jsonObject.getInteger("commentAnonymous") == null){

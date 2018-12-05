@@ -60,6 +60,8 @@ public class ArticleVo implements Serializable {
     private Integer articleCollectCnt;
     //帖子关注计数
     private Integer articleWatchCnt;
+    //帖子被举报次数
+    private Integer articleReportCnt;
     //帖子 Reddit 算法评分    （可以暂时不考虑）
     private Double redditScore;
     //发帖 IP 所在城市
@@ -82,6 +84,8 @@ public class ArticleVo implements Serializable {
     private String articleAudioURL;
     //问答悬赏积分（仅作用于问答帖）
     private Integer articleQnAOfferPoint;
+    //问答贴 是否已解决问题  0：已解决  1：待处理
+    private Integer articleAskIsSolved;
     //周/月邮件推送优先级    （可以暂时不考虑）
     private Integer articlePushOrder;
     //帖子1图地址    （视频帖子只有一个封面）
@@ -112,6 +116,8 @@ public class ArticleVo implements Serializable {
     private Integer hasCollect;
     //帖子封面图
     private List<String> articleImgs;
+
+
 
 
     public Long getoId() {
@@ -538,5 +544,21 @@ public class ArticleVo implements Serializable {
             articleImgs.add(this.getArticleImg6URL());
         }
         return articleImgs;
+    }
+
+    public Integer getArticleReportCnt() {
+        return articleReportCnt;
+    }
+
+    public void setArticleReportCnt(Integer articleReportCnt) {
+        this.articleReportCnt = articleReportCnt;
+    }
+
+    public Integer getArticleAskIsSolved() {
+        return articleAskIsSolved;
+    }
+
+    public void setArticleAskIsSolved(Integer articleAskIsSolved) {
+        this.articleAskIsSolved = articleAskIsSolved;
     }
 }

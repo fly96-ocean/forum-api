@@ -41,6 +41,9 @@
         <if test="articleTitle != null">
             and a.articleTitle like concat('%',#{articleTitle},'%')
         </if>
+        <if test="articleAskIsSolved != null">
+            and a.articleAskIsSolved = #{articleAskIsSolved}
+        </if>
         and <![CDATA[ a.articleStatus <> 1 ]]>
 
         order by a.articleCreateTime desc
@@ -197,8 +200,7 @@
             <if test="articleContent != null">`articleContent` = #{articleContent},</if>
             <if test="articlePerfect != null">`articlePerfect` = #{articlePerfect},</if>
             <if test="isStick != null">`isStick` = #{isStick},</if>
-
-
+            <if test="articleAskIsSolved != null">`articleAskIsSolved` = #{articleAskIsSolved},</if>
         </set>
         where oId = #{oId}
     </update>

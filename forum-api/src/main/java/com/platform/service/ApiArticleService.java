@@ -153,6 +153,15 @@ public class ApiArticleService {
     }
 
     @Transactional
+    public void solved(Long articleId){
+
+        ArticleVo articleVo = articleDao.queryObject(articleId);
+        articleVo.setArticleAskIsSolved(0);
+        articleDao.update(articleVo);
+
+    }
+
+    @Transactional
     public void zan(Long articleId, Long userId){
         Date currentDate = new Date();
         ArticleVo articleVo = articleDao.queryObject(articleId);

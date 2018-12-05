@@ -51,6 +51,11 @@ public class ApiArticleController extends ApiBaseAction {
     String articleDetailUrl = ResourceUtil.getConfigByName("article.detail.url");
 
 
+    /***
+     * 获取最新帖子
+     * @param articleType
+     * @return
+     */
     @RequestMapping("/newList")
     public R newList(Long articleType) {
         Assert.isNull(articleType, "帖子类型不能为空");
@@ -64,6 +69,10 @@ public class ApiArticleController extends ApiBaseAction {
         return R.ok().put("msg", articleVoList);
     }
 
+    /***
+     * 平台接口
+     * @return
+     */
     @IgnoreAuth
     @RequestMapping("/perfectList")
     public R perfectList() {
@@ -79,6 +88,7 @@ public class ApiArticleController extends ApiBaseAction {
             jsonObject.put("userAvatarURL", articleVo.getUserAvatarURL());
             jsonObject.put("articleTags", articleVo.getArticleTagsList());
             jsonObject.put("articleCreateTime", articleVo.getArticleCreateTime());
+            jsonObject.put("articleType", articleVo.getArticleType());
             String articleContent = articleVo.getArticleContent();
 
             if(articleContent!=null){
@@ -113,6 +123,11 @@ public class ApiArticleController extends ApiBaseAction {
         return R.ok().put("msg", list);
     }
 
+    /**
+     * 我的帖子
+     * @param articleType
+     * @return
+     */
     @RequestMapping("/myNewList")
     public R myNewList(Long articleType) {
         Assert.isNull(articleType, "帖子类型不能为空");
@@ -174,6 +189,12 @@ public class ApiArticleController extends ApiBaseAction {
     }
 
 
+    /***
+     * 获取频道下的帖子
+     * @param articleType
+     * @param domainId
+     * @return
+     */
     @RequestMapping("/domainArticleList")
     public R domainArticleList(Long articleType, Long domainId) {
         Assert.isNull(articleType, "帖子类型不能为空");
@@ -187,6 +208,33 @@ public class ApiArticleController extends ApiBaseAction {
         List<ArticleVo> articleVoList = articleService.queryList(map);
 
         return R.ok().put("msg", articleVoList);
+    }
+
+    @RequestMapping("/askArticleList")
+    public R domainArticleList(Long articleAskIsSolved) {
+        Assert.isNull(articleAskIsSolved, "问答是否被解决不能为空");
+        Map<String, Object> map = new HashMap<>();
+        map.put("articleType", 2);
+        map.put("articleAskIsSolved", articleAskIsSolved);
+        if(getUserId() != null){
+            map.put("currentUserId", getUserId());
+        }
+        List<ArticleVo> articleVoList = articleService.queryList(map);
+
+        return R.ok().put("msg", articleVoList);
+    }
+
+    /**
+     * 问题解决
+     * @param articleId
+     * @return
+     */
+    @RequestMapping("/solved")
+    public R solved(Long articleId) {
+        Assert.isNull(articleId, "ID不能为空");
+
+        articleService.solved(articleId);
+        return R.ok().put("msg", "问题状态已变更为已解决");
     }
 
     /**
