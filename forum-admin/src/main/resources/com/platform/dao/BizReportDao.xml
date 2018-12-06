@@ -7,6 +7,94 @@
 		select * from symphony_report where oId = #{value}
 	</select>
 
+    <resultMap id="reportArticleEntity" type="com.platform.entity.BizReportEntity">
+        <id column="oId" property="oId"/>
+        <result column="reportUserId" property="reportUserId"/>
+        <result column="reportDataId" property="reportDataId"/>
+        <result column="reportDataType" property="reportDataType"/>
+        <result column="reportType" property="reportType"/>
+        <result column="reportMemo" property="reportMemo"/>
+        <result column="reportHandled" property="reportHandled"/>
+        <result column="reportCreateTime" property="reportCreateTime"/>
+        <result column="reportHandleTime" property="reportHandleTime"/>
+
+        <association property="reportedArticle" javaType="com.platform.entity.BizArticleEntity">
+            <id column="oId" property="oId"/>
+            <result column="articleTitle" property="articleTitle"/>
+            <result column="articleAuthorId" property="articleAuthorId"/>
+            <result column="userNickName" property="userNickName"/>
+            <result column="articleReportCnt" property="articleReportCnt"/>
+            <result column="articleStatus" property="articleStatus"/>
+            <result column="articleCreateTime" property="articleCreateTime"/>
+
+        </association>
+        <association property="reportUser" javaType="com.platform.entity.BizForumUserEntity">
+            <id column="oId" property="oId"/>
+            <result column="userEmail" property="userEmail"/>
+            <result column="userName" property="userName"/>
+            <result column="userNickname" property="userNickname"/>
+            <result column="level" property="level"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="reportCommentEntity" type="com.platform.entity.BizReportEntity">
+        <id column="oId" property="oId"/>
+        <result column="reportUserId" property="reportUserId"/>
+        <result column="reportDataId" property="reportDataId"/>
+        <result column="reportDataType" property="reportDataType"/>
+        <result column="reportType" property="reportType"/>
+        <result column="reportMemo" property="reportMemo"/>
+        <result column="reportHandled" property="reportHandled"/>
+        <result column="reportCreateTime" property="reportCreateTime"/>
+        <result column="reportHandleTime" property="reportHandleTime"/>
+
+        <association property="reportedComment" javaType="com.platform.entity.BizCommentEntity">
+            <id column="oId" property="oId"/>
+            <result column="commentContent" property="commentContent"/>
+            <result column="commentAuthorId" property="commentAuthorId"/>
+            <result column="userNickName" property="userNickName"/>
+            <result column="commentReportCnt" property="commentReportCnt"/>
+            <result column="commentStatus" property="commentStatus"/>
+            <result column="commentCreateTime" property="commentCreateTime"/>
+
+        </association>
+        <association property="reportUser" javaType="com.platform.entity.BizForumUserEntity">
+            <id column="oId" property="oId"/>
+            <result column="userEmail" property="userEmail"/>
+            <result column="userName" property="userName"/>
+            <result column="userNickname" property="userNickname"/>
+            <result column="level" property="level"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="reportUserEntity" type="com.platform.entity.BizReportEntity">
+        <id column="oId" property="oId"/>
+        <result column="reportUserId" property="reportUserId"/>
+        <result column="reportDataId" property="reportDataId"/>
+        <result column="reportDataType" property="reportDataType"/>
+        <result column="reportType" property="reportType"/>
+        <result column="reportMemo" property="reportMemo"/>
+        <result column="reportHandled" property="reportHandled"/>
+        <result column="reportCreateTime" property="reportCreateTime"/>
+        <result column="reportHandleTime" property="reportHandleTime"/>
+
+        <association property="reportedUser" javaType="com.platform.entity.BizForumUserEntity">
+            <id column="oId" property="oId"/>
+            <result column="userName" property="userName"/>
+            <result column="userNickname" property="userNickname"/>
+            <result column="userEmail" property="userEmail"/>
+            <result column="userStatus" property="userStatus"/>
+            <result column="level" property="level"/>
+        </association>
+        <association property="reportUser" javaType="com.platform.entity.BizForumUserEntity">
+            <id column="oId" property="oId"/>
+            <result column="userEmail" property="userEmail"/>
+            <result column="userName" property="userName"/>
+            <result column="userNickname" property="userNickname"/>
+            <result column="level" property="level"/>
+        </association>
+    </resultMap>
+
 	<select id="queryReportArticleObject" resultMap="reportArticleEntity">
 		 select symphony_report.*, symphony_article.*, symphony_user.*  from symphony_report
 		 left join symphony_article  on symphony_article.oId = symphony_report.reportDataId
@@ -15,39 +103,16 @@
 	</select>
 
 
-	<resultMap id="reportArticleEntity" type="com.platform.entity.BizReportEntity">
 
-		<id column="oId" property="oId"/>
-		<result column="reportUserId" property="reportUserId"/>
-		<result column="reportDataId" property="reportDataId"/>
-		<result column="reportDataType" property="reportDataType"/>
-		<result column="reportType" property="reportType"/>
-		<result column="reportMemo" property="reportMemo"/>
-		<result column="reportHandled" property="reportHandled"/>
-		<result column="reportCreateTime" property="reportCreateTime"/>
-		<result column="reportHandleTime" property="reportHandleTime"/>
 
-		<association property="reportedArticle" javaType="com.platform.entity.BizArticleEntity">
-			<id column="oId" property="oId"/>
-			<result column="articleTitle" property="articleTitle"/>
-			<result column="articleAuthorId" property="articleAuthorId"/>
-		</association>
-		<association property="reportUser" javaType="com.platform.entity.BizUserEntity">
-			<id column="oId" property="oId"/>
-			<result column="userEmail" property="userEmail"/>
-			<result column="userName" property="userName"/>
-			<result column="userNickname" property="userNickname"/>
-		</association>
-	</resultMap>
-
-	<select id="queryReportCommentObject" resultType="com.platform.entity.BizReportEntity">
+	<select id="queryReportCommentObject" resultMap="reportCommentEntity">
 		select report.*, comment.*, reportUser.* from symphony_report as report
 		left join symphony_comment as comment on comment.oId = report.reportDataId
 		left join symphony_user as reportUser on reportUser.oId = report.reportUserId
 		where report.oId = #{value}
 	</select>
 
-	<select id="queryReportUserObject" resultType="com.platform.entity.BizReportEntity">
+	<select id="queryReportUserObject" resultMap="reportUserEntity">
 		select report.*, reportedUser.*, reportUser.* from symphony_report as report
 		left join symphony_user as reportedUser on reportedUser.oId = report.reportDataId
 		left join symphony_user as reportUser on reportUser.oId = report.reportUserId
@@ -67,26 +132,30 @@
 		select report.*, article.*, reportUser.* from symphony_report as report
 		left join symphony_article as article on article.oId = report.reportDataId
 		left join symphony_user as reportUser on reportUser.oId = report.reportUserId
+        where report.reportDataType = 0
 		order by reportCreateTime desc, reportHandleTime desc
 		<if test="offset != null and limit != null">
 			limit #{offset}, #{limit}
 		</if>
 	</select>
 
-	<select id="queryReportCommentList" resultType="com.platform.entity.BizReportEntity">
+	<select id="queryReportCommentList" resultMap="reportCommentEntity">
 		select report.*, comment.*, reportUser.* from symphony_report as report
 		left join symphony_comment as comment on comment.oId = report.reportDataId
 		left join symphony_user as reportUser on reportUser.oId = report.reportUserId
+        where report.reportDataType = 1
 		order by reportCreateTime desc, reportHandleTime desc
+
 		<if test="offset != null and limit != null">
 			limit #{offset}, #{limit}
 		</if>
 	</select>
 
-	<select id="queryReportUserList" resultType="com.platform.entity.BizReportEntity">
+	<select id="queryReportUserList" resultMap="reportUserEntity">
 		select report.*, reportedUser.*, reportUser.* from symphony_report as report
 		left join symphony_user as reportedUser on reportedUser.oId = report.reportDataId
 		left join symphony_user as reportUser on reportUser.oId = report.reportUserId
+        where report.reportDataType = 2
 		order by reportCreateTime desc, reportHandleTime desc
 		<if test="offset != null and limit != null">
 			limit #{offset}, #{limit}
@@ -101,10 +170,10 @@
 	<update id="update" parameterType="com.platform.entity.BizReportEntity">
 		update symphony_report
 		<set>
-			<if test="reportHandled != reportHandled">`reportHandled` = #{reportHandled}, </if>
+			<if test="reportHandled != null">`reportHandled` = #{reportHandled}, </if>
 			<if test="reportHandleTime != null">`reportHandleTime` = #{reportHandleTime}</if>
 		</set>
-		where id = #{id}
+		where oId = #{oId}
 	</update>
 
 </mapper>

@@ -1,6 +1,7 @@
 package com.platform.dao;
 
 import com.platform.entity.ArticleVo;
+import com.platform.entity.BizArticleEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,7 @@ import java.util.Map;
  * @email 939961241@qq.com
  * @date 2017-08-11 09:14:25
  */
-public interface BizArticleDao extends BaseDao<ArticleVo> {
+public interface BizArticleDao extends BaseDao<BizArticleEntity> {
     List<ArticleVo> queryMyCommentArticle(Map<String, Object> map);
     List<ArticleVo> queryMyCollectArticle(Map<String, Object> map);
     List<ArticleVo> queryMyZanArticle(Map<String, Object> map);

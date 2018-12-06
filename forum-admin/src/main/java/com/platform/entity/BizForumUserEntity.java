@@ -3,7 +3,7 @@ package com.platform.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class BizUserEntity implements Serializable {
+public class BizForumUserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //主键
@@ -46,6 +46,8 @@ public class BizUserEntity implements Serializable {
     private Integer userGoodCount;
     //我收藏帖子数
     private Integer userCollectCount;
+    //被举报次数
+    private Integer userReportCnt;
 
     //0：正常，1：封禁
     private Integer userStatus;
@@ -784,5 +786,13 @@ public class BizUserEntity implements Serializable {
 
     public void setUserPlatformScore(Integer userPlatformScore) {
         this.userPlatformScore = userPlatformScore;
+    }
+
+    public Integer getUserReportCnt() {
+        return userReportCnt;
+    }
+
+    public void setUserReportCnt(Integer userReportCnt) {
+        this.userReportCnt = userReportCnt;
     }
 }

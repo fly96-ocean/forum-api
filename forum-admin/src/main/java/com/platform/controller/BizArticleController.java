@@ -10,6 +10,7 @@ import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
 import com.platform.utils.ShiroUtils;
+import com.platform.validator.Assert;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.aspectj.weaver.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,8 @@ public class BizArticleController {
     @RequestMapping("/list")
     @RequiresPermissions("article:list")
     public R list(@RequestParam Map<String, Object> params) {
+        Object reportType = params.get("articleType");
+        Assert.isNull(reportType, "类型不能为空");
         //查询列表数据
         Query query = new Query(params);
 

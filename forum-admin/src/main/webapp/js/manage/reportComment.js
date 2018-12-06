@@ -1,11 +1,11 @@
 $(function () {
     $("#jqGrid").Grid({
-        url: '../report/list?reportDataType=0',
+        url: '../report/list?reportDataType=1',
         colModel: [
             {label: '主键', name: 'oId', key: true, hidden: true},
-            {label: '帖子标题', name: 'reportedArticle.articleTitle', width: 200},
-            {label: '发帖人', name: 'reportedArticle.userNickName'},
-            {label: '发帖时间', name: 'reportedArticle.articleCreateTime', formatter:
+            {label: '评论内容', name: 'reportedComment.commentContent', width: 200},
+            {label: '评论人', name: 'reportedComment.userNickName'},
+            {label: '评论时间', name: 'reportedComment.commentCreateTime', formatter:
                     function (value) {
                         return transDate(value);
                     }},
@@ -25,14 +25,14 @@ $(function () {
                     }
                 }
             },
-            {label: '被举报次数', name: 'reportedArticle.articleReportCnt'},
+            {label: '被举报次数', name: 'commentContent.commentReportCnt'},
             {
-                label: '帖子状态', name: 'reportedArticle.articleStatus',
+                label: '帖子状态', name: 'commentContent.commentStatus',
                 formatter: function (item) {
                     if (item === 0) {
                         return '<span class="label label-primary">正常</span>';
                     }else if (item === 1) {
-                        return '<span class="label label-danger">删除</span>';
+                        return '<span class="label label-danger">封禁</span>';
                     }else{
                         return '<span class="label label-danger">未知</span>';
                     }

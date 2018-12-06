@@ -35,18 +35,18 @@ public class BizReportController {
      * 查看列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("article:list")
+    @RequiresPermissions("report:list")
     public R list(@RequestParam Map<String, Object> params) {
-        Object reportType = params.get("reportType");
+        Object reportType = params.get("reportDataType");
         Assert.isNull(reportType, "举报类型不能为空");
 
         //查询列表数据
         Query query = new Query(params);
 
-        List<BizReportEntity> articles = reportService.queryList(query);
+        List<BizReportEntity> reports = reportService.queryList(query);
         int total = reportService.queryTotal(query);
 
-        PageUtils pageUtil = new PageUtils(articles, total, query.getLimit(), query.getPage());
+        PageUtils pageUtil = new PageUtils(reports, total, query.getLimit(), query.getPage());
 
         return R.ok().put("page", pageUtil);
     }
@@ -56,7 +56,7 @@ public class BizReportController {
      */
     @RequestMapping("/queryAll")
     public R queryAll(@RequestParam Map<String, Object> params) {
-        Object reportType = params.get("reportType");
+        Object reportType = params.get("reportDataType");
         Assert.isNull(reportType, "举报类型不能为空");
 
         List<BizReportEntity> list = reportService.queryList(params);
@@ -86,20 +86,21 @@ public class BizReportController {
     }
 
     /**
-     * 设置处理封贴
+     * 处理举报帖
      */
     @RequestMapping("/handle")
     @RequiresPermissions("report:handle")
-    public R setPerfect(@RequestBody Long[] ids) {
-
+    public R handle(@RequestBody Long[] ids) {
+        reportService.handleOrIgnore(ids,1);
         return R.ok();
     }
     /**
-     * 设置精华帖
+     * 忽略举报帖
      */
     @RequestMapping("/ignore")
-    @RequiresPermissions("article:handle")
-    public R cancelPerfect(@RequestBody Long[] ids) {
+    @RequiresPermissions("report:handle")
+    public R ignore(@RequestBody Long[] ids) {
+        reportService.handleOrIgnore(ids,2);
         return R.ok();
     }
 

@@ -1,38 +1,32 @@
 $(function () {
     $("#jqGrid").Grid({
-        url: '../report/list?reportDataType=0',
+        url: '../report/list?reportDataType=2',
         colModel: [
             {label: '主键', name: 'oId', key: true, hidden: true},
-            {label: '帖子标题', name: 'reportedArticle.articleTitle', width: 200},
-            {label: '发帖人', name: 'reportedArticle.userNickName'},
-            {label: '发帖时间', name: 'reportedArticle.articleCreateTime', formatter:
-                    function (value) {
-                        return transDate(value);
-                    }},
+            {label: '被举报姓名', name: 'reportedUser.userNickName', width: 200},
+            {label: '被举报账号', name: 'reportedUser.userName'},
             {
-                label: '举报内容', name: 'reportType',
+                label: '类型', name: 'reportedUser.reportType',
                 formatter: function (item) {
-                    if (item === 0) {
-                        return '<span class="label label-warning-light">垃圾广告</span>';
-                    }else if (item === 1) {
-                        return '<span class="label label-primary">色情低俗</span>';
-                    }else if (item === 2) {
-                        return '<span class="label label-primary">违法违规</span>';
-                    }else if (item === 3) {
-                        return '<span class="label label-primary">涉嫌侵权</span>';
-                    }else if (item === 4) {
-                        return '<span class="label label-primary">人身攻击</span>';
+                    if (item === 5) {
+                        return '<span class="label label-warning-light">冒充账号</span>';
+                    }else if (item === 6) {
+                        return '<span class="label label-primary">垃圾广告账号</span>';
+                    }else if (item === 7) {
+                        return '<span class="label label-primary">个人信息违规</span>';
+                    }else {
+                        return '<span class="label label-primary">其他</span>';
                     }
                 }
             },
-            {label: '被举报次数', name: 'reportedArticle.articleReportCnt'},
+            {label: '被举报次数', name: 'reportedUser.userReportCnt'},
             {
-                label: '帖子状态', name: 'reportedArticle.articleStatus',
+                label: '被举报人状态', name: 'reportedUser.userStatus',
                 formatter: function (item) {
                     if (item === 0) {
                         return '<span class="label label-primary">正常</span>';
                     }else if (item === 1) {
-                        return '<span class="label label-danger">删除</span>';
+                        return '<span class="label label-danger">封禁</span>';
                     }else{
                         return '<span class="label label-danger">未知</span>';
                     }

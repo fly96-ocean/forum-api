@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.BizArticleDao">
+
+    <select id="queryObject" resultType="com.platform.entity.BizArticleEntity">
+        select a.*, u.userNickName, u.userAvatarUrl
+        from symphony_article a
+        left join forum.symphony_user u on a.articleAuthorId=u.oId
+        where a.oId = #{value}
+    </select>
+
+    <select id="queryList" resultType="com.platform.entity.BizArticleEntity">
+        select a.*, u.userNickName, u.userAvatarUrl
+        <if test="currentUserId != null">
+            , exists(select oId from symphony_follow f where f.followerId = #{currentUserId} and f.followingId = a.oId and f.followingType = 4) as hasGood
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 3) as hasWatchedArticle
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.articleAuthorId and ff.followingType = 0) as hasWatchedAuthor
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 2) as hasCollect
+        </if>
+
+        from forum.symphony_article a
+        left join forum.symphony_user u on a.articleAuthorId=u.oId
+        where 1=1
+
+        <if test="articleType != null">
+            and a.articleType = #{articleType}
+        </if>
+        <if test="domainId != null">
+            and a.articleDomainId = #{domainId}
+        </if>
+        <if test="userId != null">
+        and a.articleAuthorId = #{userId}
+        </if>
+        <if test="articleId != null">
+            and a.oId = #{articleId}
+        </if>
+        <if test="articleAuthorId != null">
+            and a.articleAuthorId = #{articleAuthorId}
+        </if>
+        <if test="articleTitle != null">
+            and a.articleTitle like concat('%',#{articleTitle},'%')
+        </if>
+        <if test="articleAskIsSolved != null">
+            and a.articleAskIsSolved = #{articleAskIsSolved}
+        </if>
+        and <![CDATA[ a.articleStatus <> 1 ]]>
+
+        order by a.articleCreateTime desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryMyCommentArticle" resultType="com.platform.entity.BizArticleEntity">
+        select a.*, u.userNickName, u.userAvatarUrl
+        <if test="currentUserId != null">
+            , exists(select oId from symphony_follow f where f.followerId = #{currentUserId} and f.followingId = a.oId and f.followingType = 4) as hasGood
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 3) as hasWatchedArticle
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.articleAuthorId and ff.followingType = 0) as hasWatchedAuthor
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 2) as hasCollect
+        </if>
+
+        from forum.symphony_article a
+        left join forum.symphony_comment as comment on a.oId = comment.commentOnArticleId
+        left join forum.symphony_user u on a.articleAuthorId=u.oId
+        where 1=1
+        <if test="articleType != null">
+            and a.articleType = #{articleType}
+        </if>
+        <if test="commentAuthorId != null">
+            and comment.commentAuthorId = #{commentAuthorId}
+        </if>
+        and <![CDATA[ a.articleStatus <> 1 ]]>
+
+        group by a.oId
+        order by a.articleCreateTime desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+
+    <select id="queryMyCollectArticle" resultType="com.platform.entity.BizArticleEntity">
+        select a.*, u.userNickName, u.userAvatarUrl
+        <if test="currentUserId != null">
+            , exists(select oId from symphony_follow f where f.followerId = #{currentUserId} and f.followingId = a.oId and f.followingType = 4) as hasGood
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 3) as hasWatchedArticle
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.articleAuthorId and ff.followingType = 0) as hasWatchedAuthor
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 2) as hasCollect
+        </if>
+
+        from forum.symphony_article a
+        left join forum.symphony_follow as follow on a.oId = follow.followingId
+        left join forum.symphony_user u on a.articleAuthorId=u.oId
+        where 1=1
+        <if test="articleType != null">
+            and a.articleType = #{articleType}
+        </if>
+        <if test="commentAuthorId != null">
+            and follow.followerId = #{followerId}
+        </if>
+            and follow.followingType = 2
+        and <![CDATA[ a.articleStatus <> 1 ]]>
+        group by a.oId
+        order by a.articleCreateTime desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryMyZanArticle" resultType="com.platform.entity.BizArticleEntity">
+        select a.*, u.userNickName, u.userAvatarUrl
+        <if test="currentUserId != null">
+            , exists(select oId from symphony_follow f where f.followerId = #{currentUserId} and f.followingId = a.oId and f.followingType = 4) as hasGood
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 3) as hasWatchedArticle
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.articleAuthorId and ff.followingType = 0) as hasWatchedAuthor
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 2) as hasCollect
+        </if>
+
+        from forum.symphony_article a
+        left join forum.symphony_follow as follow on a.oId = follow.followingId
+        left join forum.symphony_user u on a.articleAuthorId=u.oId
+        where 1=1
+        <if test="articleType != null">
+            and a.articleType = #{articleType}
+        </if>
+        <if test="commentAuthorId != null">
+            and follow.followerId = #{followerId}
+        </if>
+        and follow.followingType = 4
+        and <![CDATA[ a.articleStatus <> 1 ]]>
+        group by a.oId
+        order by a.articleCreateTime desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryMyVisitArticle" resultType="com.platform.entity.BizArticleEntity">
+        select a.*, u.userNickName, u.userAvatarUrl
+        <if test="currentUserId != null">
+            , exists(select oId from symphony_follow f where f.followerId = #{currentUserId} and f.followingId = a.oId and f.followingType = 4) as hasGood
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 3) as hasWatchedArticle
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.articleAuthorId and ff.followingType = 0) as hasWatchedAuthor
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 2) as hasCollect
+        </if>
+
+        from forum.symphony_article a
+        left join forum.symphony_visit as visit on a.oId = visit.visitUserId
+        left join forum.symphony_user u on a.articleAuthorId=u.oId
+        where 1=1
+        <if test="articleType != null">
+            and a.articleType = #{articleType}
+        </if>
+        <if test="visitUserId != null">
+            and visit.visitUserId = #{visitUserId}
+        </if>
+        and <![CDATA[ a.articleStatus <> 1 ]]>
+
+        group by a.oId
+        order by a.articleCreateTime desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryPerfectArticle" resultType="com.platform.entity.BizArticleEntity">
+        select a.*, u.userNickName, u.userAvatarUrl
+        from forum.symphony_article a
+        left join forum.symphony_user u on a.articleAuthorId=u.oId
+        where 1=1 and a.articlePerfect = 1
+        and <![CDATA[ a.articleStatus <> 1 ]]>
+        order by a.articleUpdateTime desc
+        limit 2;
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from symphony_article where <![CDATA[ articleStatus <> 1 ]]>
+    </select>
+    
+    <update id="update" parameterType="com.platform.entity.BizArticleEntity">
+        update symphony_article
+        <set>
+            <if test="articleGoodCnt != null">`articleGoodCnt` = #{articleGoodCnt},</if>
+            <if test="articleBadCnt != null">`articleBadCnt` = #{articleBadCnt},</if>
+            <if test="articleCollectCnt != null">`articleCollectCnt` = #{articleCollectCnt},</if>
+            <if test="articleWatchCnt != null">`articleWatchCnt` = #{articleWatchCnt},</if>
+            <if test="articleCommentCount != null">`articleCommentCount` = #{articleCommentCount},</if>
+            <if test="articleViewCount != null">`articleViewCount` = #{articleViewCount},</if>
+            <if test="articleLatestCmtTime != null">`articleLatestCmtTime` = #{articleLatestCmtTime},</if>
+            <if test="articleDomainId != null">`articleDomainId` = #{articleDomainId},</if>
+            <if test="articleAnonymous != null">`articleAnonymous` = #{articleAnonymous},</if>
+            <if test="articleCommentable != null">`articleCommentable` = #{articleCommentable},</if>
+            <if test="articleQnAOfferPoint != null">`articleQnAOfferPoint` = #{articleQnAOfferPoint},</if>
+            <if test="articleRewardPoint != null">`articleRewardPoint` = #{articleRewardPoint},</if>
+            <if test="articleRewardContent != null">`articleRewardContent` = #{articleRewardContent},</if>
+            <if test="articleStatus != null">`articleStatus` = #{articleStatus},</if>
+            <if test="articleTitle != null">`articleTitle` = #{articleTitle},</if>
+            <if test="articleContent != null">`articleContent` = #{articleContent},</if>
+            <if test="articlePerfect != null">`articlePerfect` = #{articlePerfect},</if>
+            <if test="isStick != null">`isStick` = #{isStick},</if>
+            <if test="articleAskIsSolved != null">`articleAskIsSolved` = #{articleAskIsSolved},</if>
+        </set>
+        where oId = #{oId}
+    </update>
+    
+    <insert id="save" parameterType="com.platform.entity.BizArticleEntity" useGeneratedKeys="true" keyProperty="oId">
+        insert into symphony_article
+        (`articleTitle`,
+          `articleContent`,
+          `articleTags`,
+          `articleAuthorId`,
+          `articleCreateTime`,
+          `articleCommentable`,
+          `articleEditorType`,
+          `articleType`,
+          `articleAnonymous`,
+          `articleAudioURL`,
+          `articlePushOrder`,
+          `articleImg1URL`,
+          `articleImg2URL`,
+          `articleImg3URL`,
+          `articleImg4URL`,
+          `articleImg5URL`,
+          `articleImg6URL`,
+          `articleDomainId`,
+          `articleQnAOfferPoint`,
+          `articleRewardPoint`,
+          `articleRewardContent`
+        ) values (
+        #{articleTitle}
+         ,#{articleContent}
+         ,#{articleTags}
+         ,#{articleAuthorId}
+         ,#{articleCreateTime}
+         ,#{articleCommentable}
+         ,#{articleEditorType}
+         ,#{articleType}
+         ,#{articleAnonymous}
+         ,#{articleAudioURL}
+         ,#{articlePushOrder}
+         ,#{articleImg1URL}
+         ,#{articleImg2URL}
+         ,#{articleImg3URL}
+         ,#{articleImg4URL}
+         ,#{articleImg5URL}
+         ,#{articleImg6URL}
+         ,#{articleDomainId}
+         ,#{articleQnAOfferPoint}
+         ,#{articleRewardPoint}
+         ,#{articleRewardContent}
+        )
+    </insert>
+
+
+    <select id="serverQueryList" resultType="com.platform.entity.BizArticleEntity">
+        select a.*, u.userNickName, u.userAvatarUrl
+        <if test="currentUserId != null">
+            , exists(select oId from symphony_follow f where f.followerId = #{currentUserId} and f.followingId = a.oId and f.followingType = 4) as hasGood
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 3) as hasWatchedArticle
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.articleAuthorId and ff.followingType = 0) as hasWatchedAuthor
+            , exists(select oId from symphony_follow ff where ff.followerId = #{currentUserId} and ff.followingId = a.oId and ff.followingType = 2) as hasCollect
+        </if>
+
+        from forum.symphony_article a
+        left join forum.symphony_user u on a.articleAuthorId=u.oId
+        where 1=1
+
+        <if test="articleType != null">
+            and a.articleType = #{articleType}
+        </if>
+        <if test="domainId != null">
+            and a.articleDomainId = #{domainId}
+        </if>
+        <if test="userId != null">
+            and a.articleAuthorId = #{userId}
+        </if>
+        <if test="articleId != null">
+            and a.oId = #{articleId}
+        </if>
+        <if test="articleAuthorId != null">
+            and a.articleAuthorId = #{articleAuthorId}
+        </if>
+        <if test="articleTitle != null">
+            and a.articleTitle like concat('%',#{articleTitle},'%')
+        </if>
+        order by a.articleCreateTime desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="serverQueryTotal" resultType="int">
+        select count(*) from symphony_article
+    </select>
+</mapper>

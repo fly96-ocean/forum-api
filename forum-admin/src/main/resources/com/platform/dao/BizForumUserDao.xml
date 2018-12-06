@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.BizForumUserDao">
+
+    <select id="queryObject" resultType="com.platform.entity.BizForumUserEntity">
+        select * from symphony_user where oId = #{value}
+    </select>
+
+    <select id="queryList" resultType="com.platform.entity.BizForumUserEntity">
+        select * from symphony_user where 0=0
+        <if test="userName != null">
+            and userName like concat('%',#{userName},'%')
+        </if>
+        <if test="userNickname != null">
+            and userNickname like concat('%',#{userNickname},'%')
+        </if>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from symphony_user where 0 = 0
+        <if test="userName != null">
+            and userName like concat('%',#{userName},'%')
+        </if>
+        <if test="userNickname != null">
+            and userNickname like concat('%',#{userNickname},'%')
+        </if>
+    </select>
+
+    <select id="queryListByUserFriends" resultType="com.platform.entity.BizForumUserEntity">
+        select user.*
+        from forum.symphony_user user
+        join forum.symphony_follow follow
+        on user.oId = follow.followerId
+        where exists(select t1.oId from forum.symphony_follow t1
+        where follow.followerId = t1.followingId
+        and follow.followingId = t1.followerId
+        and t1.followingType = 0)
+        and follow.followingId = #{userId}
+        and follow.followingType = 0
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryListByUserFans" resultType="com.platform.entity.BizForumUserEntity">
+        select user.*
+        from forum.symphony_user user
+        join forum.symphony_follow follow
+        on user.oId = follow.followerId
+        where follow.followingId = #{userId}
+        and follow.followingType = 0
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryListUserFollow" resultType="com.platform.entity.BizForumUserEntity">
+        select user.*
+        from forum.symphony_user user
+        join forum.symphony_follow follow
+        on user.oId = follow.followingId
+        where follow.followerId = #{userId}
+        and follow.followingType = 0
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryByUsername" resultType="com.platform.entity.BizForumUserEntity">
+        select * from symphony_user where userName = #{userName}
+    </select>
+
+    <select id="queryByUserNameAndPass" resultType="com.platform.entity.BizForumUserEntity">
+        select * from symphony_user where userName = #{userName} and userPassword = #{userPassword}
+    </select>
+
+    <select id="queryByUserLoginId" resultType="com.platform.entity.BizForumUserEntity">
+        select * from symphony_user where userLoginId = #{userLoginId}
+    </select>
+
+    <select id="queryByUserNo" resultType="com.platform.entity.BizForumUserEntity">
+        select * from symphony_user where userNo = #{userNo}
+    </select>
+
+    <update id="update" parameterType="com.platform.entity.BizForumUserEntity">
+        update symphony_user
+        <set>
+            <if test="userArticleCount != null">`userArticleCount` = #{userArticleCount},</if>
+            <if test="userCommentCount != null">`userCommentCount` = #{userCommentCount},</if>
+            <if test="userFansCount != null">`userFansCount` = #{userFansCount},</if>
+            <if test="userCollectCount != null">`userCollectCount` = #{userCollectCount},</if>
+            <if test="userGoodCount != null">`userGoodCount` = #{userGoodCount},</if>
+
+            <if test="userPoint != null">`userPoint` = #{userPoint},</if>
+            <if test="userUsedPoint != null">`userUsedPoint` = #{userUsedPoint},</if>
+            <if test="userLatestArticleTime != null">`userLatestArticleTime` = #{userLatestArticleTime},</if>
+            <if test="userLatestCmtTime != null">`userLatestCmtTime` = #{userLatestCmtTime},</if>
+            <if test="userName != null">`userName` = #{userName},</if>
+            <if test="userEmail != null">`userEmail` = #{userEmail},</if>
+            <if test="userNickname != null">`userNickname` = #{userNickname},</if>
+            <if test="userShopId != null">`userShopId` = #{userShopId},</if>
+            <if test="userShopName != null">`userShopName` = #{userShopName},</if>
+            <if test="userDistributorId != null">`userDistributorId` = #{userDistributorId},</if>
+            <if test="userDistributorName != null">`userDistributorName` = #{userDistributorName},</if>
+            <if test="userLoginId != null">`userLoginId` = #{userLoginId},</if>
+            <if test="userLatestLoginTime != null">`userLatestLoginTime` = #{userLatestLoginTime},</if>
+            <if test="userLatestLoginIP != null">`userLatestLoginIP` = #{userLatestLoginIP},</if>
+            <if test="userPlatformScore != null">`userPlatformScore` = #{userPlatformScore},</if>
+            <if test="userUpdateTime != null">`userUpdateTime` = #{userUpdateTime},</if>
+            <if test="userStatus != null">`userStatus` = #{userStatus}</if>
+
+        </set>
+        where oId = #{oId}
+    </update>
+
+    <insert id="save" parameterType="com.platform.entity.BizForumUserEntity" useGeneratedKeys="true" keyProperty="oId">
+        INSERT INTO `symphony_user`
+        (`userName`,
+        `userEmail`,
+        `userNickname`,
+        `userAvatarType`,
+        `userAvatarURL`,
+        `userLatestLoginTime`,
+        `userLatestLoginIP`,
+        `userPoint`,
+        `userShopId`,
+        `userShopName`,
+        `userDistributorId`,
+        `userDistributorName`,
+        `userLoginId`) VALUES (
+        #{userName},
+        #{userEmail},
+        #{userNickname},
+        #{userAvatarType},
+        #{userAvatarURL},
+        #{userLatestLoginTime},
+        #{userLatestLoginIP},
+        #{userPoint},
+        #{userShopId},
+        #{userShopName},
+        #{userDistributorId},
+        #{userDistributorName},
+        #{userLoginId}
+        )
+
+    </insert>
+
+</mapper>

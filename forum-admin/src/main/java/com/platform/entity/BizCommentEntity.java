@@ -36,6 +36,8 @@ public class BizCommentEntity implements Serializable {
     private Double commentScore;
     //回复计数
     private Integer commentReplyCnt;
+    //被举报次数
+    private Integer commentReportCnt;
     //回帖语音文件 URL
     private String commentAudioURL;
     //0：回帖未被采纳，1：回帖已被采纳（仅作用于问答帖）
@@ -225,5 +227,13 @@ public class BizCommentEntity implements Serializable {
 
     public void setCurrentUserId(Long currentUserId) {
         this.currentUserId = currentUserId;
+    }
+
+    public Integer getCommentReportCnt() {
+        return commentReportCnt;
+    }
+
+    public void setCommentReportCnt(Integer commentReportCnt) {
+        this.commentReportCnt = commentReportCnt;
     }
 }

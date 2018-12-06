@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").Grid({
-        url: '../article/list?articleType=0',
+        url: '../article/list?articleType=1',
         colModel: [
             {label: '主键', name: 'oId', key: true, hidden: true},
             {label: '帖子标题', name: 'articleTitle', width: 200},

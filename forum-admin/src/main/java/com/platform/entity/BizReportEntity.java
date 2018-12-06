@@ -26,13 +26,14 @@ public class BizReportEntity implements Serializable {
     private Date reportHandleTime;
 
     //举报人信息
-    private BizUserEntity reportUser;
+    private BizForumUserEntity reportUser;
+
     //举报帖数据
     private BizArticleEntity reportedArticle;
     //举报回帖数据
     private BizCommentEntity reportedComment;
     //举报会员数据
-    private BizUserEntity reportedUser;
+    private BizForumUserEntity reportedUser;
 
     public Long getoId() {
         return oId;
@@ -106,11 +107,11 @@ public class BizReportEntity implements Serializable {
         this.reportHandleTime = reportHandleTime;
     }
 
-    public BizUserEntity getReportUser() {
+    public BizForumUserEntity getReportUser() {
         return reportUser;
     }
 
-    public void setReportUser(BizUserEntity reportUser) {
+    public void setReportUser(BizForumUserEntity reportUser) {
         this.reportUser = reportUser;
     }
 
@@ -130,11 +131,13 @@ public class BizReportEntity implements Serializable {
         this.reportedComment = reportedComment;
     }
 
-    public BizUserEntity getReportedUser() {
+    public BizForumUserEntity getReportedUser() {
         return reportedUser;
     }
 
-    public void setReportedUser(BizUserEntity reportedUser) {
+    public void setReportedUser(BizForumUserEntity reportedUser) {
         this.reportedUser = reportedUser;
     }
+
+
 }
