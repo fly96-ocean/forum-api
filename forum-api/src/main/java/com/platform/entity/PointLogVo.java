@@ -13,7 +13,7 @@ public class PointLogVo implements Serializable {
     private Long pointLogArticleId;
     //建帖或者回帖用户 id
     private Long pointLogArticleAuthorId;
-    //0：建帖积分，1：回帖积分   2: 问答消费
+    //0：建帖积分，1：回帖积分   2: 问答消费  3：管理员设置或取消精华帖
     private Integer pointLogType;
 
     //积分类型描述

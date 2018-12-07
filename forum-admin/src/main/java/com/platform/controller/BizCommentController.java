@@ -126,24 +126,6 @@ public class BizCommentController {
     }
 
     /**
-     * 设置精华帖
-     */
-    @RequestMapping("/setPerfect")
-    @RequiresPermissions("article:update")
-    public R setPerfect(@RequestBody Long[] ids) {
-        articleService.setPerfectOrNot(ids, 1);
-        return R.ok();
-    }
-    /**
-     * 设置精华帖
-     */
-    @RequestMapping("/cancelPerfect")
-    @RequiresPermissions("article:update")
-    public R cancelPerfect(@RequestBody Long[] ids) {
-        articleService.setPerfectOrNot(ids, 0);
-        return R.ok();
-    }
-    /**
      * 设置置顶
      */
     @RequestMapping("/stick")

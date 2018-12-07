@@ -285,13 +285,34 @@
         <if test="articleTitle != null">
             and a.articleTitle like concat('%',#{articleTitle},'%')
         </if>
-        order by a.articleCreateTime desc
+        order by a.articleStatus asc, a.articleCreateTime desc
         <if test="offset != null and limit != null">
             limit #{offset}, #{limit}
         </if>
     </select>
 
     <select id="serverQueryTotal" resultType="int">
-        select count(*) from symphony_article
+        select count(*) from symphony_article a
+
+        where 1=1
+
+        <if test="articleType != null">
+            and a.articleType = #{articleType}
+        </if>
+        <if test="domainId != null">
+            and a.articleDomainId = #{domainId}
+        </if>
+        <if test="userId != null">
+            and a.articleAuthorId = #{userId}
+        </if>
+        <if test="articleId != null">
+            and a.oId = #{articleId}
+        </if>
+        <if test="articleAuthorId != null">
+            and a.articleAuthorId = #{articleAuthorId}
+        </if>
+        <if test="articleTitle != null">
+            and a.articleTitle like concat('%',#{articleTitle},'%')
+        </if>
     </select>
 </mapper>

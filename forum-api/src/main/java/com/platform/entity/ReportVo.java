@@ -1,6 +1,7 @@
 package com.platform.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class ReportVo implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -19,6 +20,10 @@ public class ReportVo implements Serializable {
     private String reportMemo;
     //0：未处理，1：已处理
     private Integer reportHandled;
+    //举报创建时间
+    private Date reportCreateTime;
+    //处理时间
+    private Date reportHandleTime;
 
     public Long getoId() {
         return oId;
@@ -74,5 +79,21 @@ public class ReportVo implements Serializable {
 
     public void setReportHandled(Integer reportHandled) {
         this.reportHandled = reportHandled;
+    }
+
+    public Date getReportCreateTime() {
+        return reportCreateTime;
+    }
+
+    public void setReportCreateTime(Date reportCreateTime) {
+        this.reportCreateTime = reportCreateTime;
+    }
+
+    public Date getReportHandleTime() {
+        return reportHandleTime;
+    }
+
+    public void setReportHandleTime(Date reportHandleTime) {
+        this.reportHandleTime = reportHandleTime;
     }
 }

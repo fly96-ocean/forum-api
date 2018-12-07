@@ -172,26 +172,27 @@ public class ApiCommentController extends ApiBaseAction {
         reportVo.setReportUserId(getUserId());
         reportVo.setReportDataId(commentId);
         if(StringUtils.equals(reportTypes, "垃圾广告")){
-            reportVo.setReportDataType(0);
+            reportVo.setReportType(0);
         } else if(StringUtils.equals(reportTypes, "色情低俗")){
-            reportVo.setReportDataType(1);
+            reportVo.setReportType(1);
         } else if(StringUtils.equals(reportTypes, "违法违规")){
-            reportVo.setReportDataType(2);
+            reportVo.setReportType(2);
         } else if(StringUtils.equals(reportTypes, "涉嫌侵权")){
-            reportVo.setReportDataType(3);
+            reportVo.setReportType(3);
         } else if(StringUtils.equals(reportTypes, "人身攻击")){
-            reportVo.setReportDataType(4);
+            reportVo.setReportType(4);
         } else if(StringUtils.equals(reportTypes, "冒充账号")){
-            reportVo.setReportDataType(5);
+            reportVo.setReportType(5);
         } else if(StringUtils.equals(reportTypes, "垃圾广告账号")){
-            reportVo.setReportDataType(6);
+            reportVo.setReportType(6);
         } else if(StringUtils.equals(reportTypes, "个人信息违规")){
-            reportVo.setReportDataType(7);
+            reportVo.setReportType(7);
         }
 
-        reportVo.setReportType(1);
+        reportVo.setReportDataType(1);
         reportVo.setReportMemo(reportMemo);
         reportVo.setReportHandled(0);
+        reportVo.setReportCreateTime(new Date());
 
         commentService.saveReportComment(reportVo);
         return R.ok().put("msg", "");

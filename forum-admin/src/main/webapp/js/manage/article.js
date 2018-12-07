@@ -111,7 +111,8 @@ var vm = new Vue({
             //     {required: true, message: '请选择投放频道', trigger: 'change'}
             // ]
         },
-        domains: []
+        domains: [],
+        point: 0
     },
     methods: {
         query: function () {
@@ -193,20 +194,42 @@ var vm = new Vue({
             if (ids == null) {
                 return;
             }
-
-            confirm('确定要将选中的记录设置为精华？', function () {
-                Ajax.request({
-                    type: "POST",
-                    url: "../article/setPerfect",
-                    contentType: "application/json",
-                    params: JSON.stringify(ids),
-                    successCallback: function () {
-                        alert('操作成功', function (index) {
-                            vm.reload();
+            this.$Modal.confirm({
+                title:'赠送积分',
+                render: (h) => {
+                    return h('Input', {
+                        props: {
+                            value: this.value,
+                            autofocus: true,
+                            placeholder: '请输入赠送的积分数'
+                        },
+                        on: {
+                            input: (val) => {
+                                this.point = val;
+                            }
+                        }
+                    })
+                },
+                onOk: () => {
+                    if(this.point!=null && this.point!=undefined){
+                        Ajax.request({
+                            type: "POST",
+                            url: "../article/setPerfect?ids="+ids+"&point="+this.point,
+                            contentType: "application/json",
+                            // params: JSON.stringify(ids),
+                            successCallback: function () {
+                                alert('操作成功', function (index) {
+                                    vm.reload();
+                                });
+                            }
                         });
+                    }else{
+                        alert('赠送积分不能为空');
+                        return;
                     }
-                });
-            });
+
+                }
+            })
         },
         cancelPerfect: function (event) {
             var ids = getSelectedRows("#jqGrid");
@@ -214,19 +237,42 @@ var vm = new Vue({
                 return;
             }
 
-            confirm('确定要将选中的记录取消精华？', function () {
-                Ajax.request({
-                    type: "POST",
-                    url: "../article/cancelPerfect",
-                    contentType: "application/json",
-                    params: JSON.stringify(ids),
-                    successCallback: function () {
-                        alert('操作成功', function (index) {
-                            vm.reload();
-                        });
-                    }
-                });
-            });
+            this.$Modal.confirm({
+                title:'取消精华帖并收回赠送积分',
+                render: (h) => {
+                return h('Input', {
+                    props: {
+                        value: this.value,
+                        autofocus: true,
+                        placeholder: '请输入取消赠送的积分数'
+                    },
+                    on: {
+                        input: (val) => {
+                        this.point = val;
+        }
+        }
+        })
+        },
+            onOk: () => {
+                if(this.point!=null && this.point!=undefined){
+                    Ajax.request({
+                        type: "POST",
+                        url: "../article/cancelPerfect?ids="+ids+"&point="+this.point,
+                        contentType: "application/json",
+                        // params: JSON.stringify(ids),
+                        successCallback: function () {
+                            alert('操作成功', function (index) {
+                                vm.reload();
+                            });
+                        }
+                    });
+                }else{
+                    alert('取消赠送积分不能为空');
+                    return;
+                }
+
+            }
+        })
         },
         stick: function (event) {
             var ids = getSelectedRows("#jqGrid");

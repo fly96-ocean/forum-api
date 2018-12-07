@@ -37,10 +37,10 @@ public class BizForumUserController {
         //查询列表数据
         Query query = new Query(params);
 
-        List<BizForumUserEntity> reports = forumUserService.queryList(query);
+        List<BizForumUserEntity> forumUsers = forumUserService.queryList(query);
         int total = forumUserService.queryTotal(query);
 
-        PageUtils pageUtil = new PageUtils(reports, total, query.getLimit(), query.getPage());
+        PageUtils pageUtil = new PageUtils(forumUsers, total, query.getLimit(), query.getPage());
 
         return R.ok().put("page", pageUtil);
     }

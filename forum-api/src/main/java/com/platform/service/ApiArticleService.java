@@ -2,12 +2,14 @@ package com.platform.service;
 
 import com.platform.dao.*;
 import com.platform.entity.*;
+import com.platform.utils.R;
 import com.platform.utils.ResourceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -339,7 +341,11 @@ public class ApiArticleService {
     @Transactional
     public void saveAndUpdate(ArticleVo articleVo, UserVo userVo, PointLogVo pointLogVo){
 
-        articleDao.save(articleVo);
+        if(articleVo.getoId() != null){
+            articleDao.update(articleVo);
+        }else{
+            articleDao.save(articleVo);
+        }
         userDao.update(userVo);
 
         pointLogVo.setPointLogArticleId(articleVo.getoId());
@@ -371,12 +377,41 @@ public class ApiArticleService {
     }
 
     @Transactional
-    public void setPerfectOrNot(Long[] ids, Integer isPerfect){
+    public void setPerfectOrNot(Long[] ids, Integer isPerfect, Integer point){
         for(int i = 0; i<ids.length; i++){
             if(ids[i]!=null){
                 ArticleVo articleVo = articleDao.queryObject(ids[i]);
                 articleVo.setArticlePerfect(isPerfect);
-                articleDao.update(articleVo);
+                articleVo.setArticleUpdateTime(new Date());
+//                articleDao.update(articleVo);
+
+                UserVo userVo = userDao.queryObject(articleVo.getArticleAuthorId());
+                Integer userPoint = userVo.getUserPoint();
+
+                userVo.setUserLatestArticleTime(articleVo.getArticleCreateTime());
+                userVo.setUserUpdateTime(new Date());
+                userVo.setUserPoint(userPoint+point);
+
+                /*
+                 * 积分日志
+                 * */
+
+                //当天用户的发帖积分
+                Map<String, Object> map = new HashMap<>();
+                map.put("pointLogArticleAuthorId", articleVo.getArticleAuthorId());
+                map.put("pointLogType", 0);
+                map.put("pointLogCreateTime", articleVo.getArticleCreateTime());
+
+                PointLogVo pointLogVo = new PointLogVo();
+                pointLogVo.setPointLogArticleAuthorId(articleVo.getArticleAuthorId());
+                pointLogVo.setPointLogType(3);
+                pointLogVo.setPointLogTypeDesc("管理员设置或取消精华帖");
+                pointLogVo.setPointLogPoint(point);
+
+                pointLogVo.setPointLogCreateTime(articleVo.getArticleCreateTime());
+
+                this.saveAndUpdate(articleVo, userVo, pointLogVo);
+
             }
 
         }

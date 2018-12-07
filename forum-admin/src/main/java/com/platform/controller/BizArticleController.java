@@ -1,11 +1,14 @@
 package com.platform.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.platform.entity.ArticleVo;
 import com.platform.entity.PointLogVo;
 import com.platform.entity.SysUserEntity;
 import com.platform.entity.UserVo;
 import com.platform.service.ApiArticleService;
 import com.platform.service.ApiUserService;
+import com.platform.util.ApiBaseAction;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Controller
@@ -29,7 +33,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("article")
-public class BizArticleController {
+public class BizArticleController extends ApiBaseAction {
     @Autowired
     private ApiArticleService articleService;
     @Autowired
@@ -134,8 +138,23 @@ public class BizArticleController {
      */
     @RequestMapping("/setPerfect")
     @RequiresPermissions("article:update")
-    public R setPerfect(@RequestBody Long[] ids) {
-        articleService.setPerfectOrNot(ids, 1);
+    public R setPerfect(@RequestParam Map<String, Object> params) {
+        Assert.isNull(params.get("ids"), "ID不能为空");
+        String[] idsStr = ((String) params.get("ids")).split(",");
+        Long[] ids = new Long[idsStr.length];
+        for(int i = 0; i<idsStr.length; i++){
+            ids[i] = Long.parseLong(idsStr[i]);
+        }
+        String pointStr = (String)params.get("point");
+        Integer point = Integer.parseInt(pointStr);
+        articleService.setPerfectOrNot(ids, 1, point);
+
+        for(int i = 0; i<ids.length; i++) {
+            if (ids[i] != null) {
+                ArticleVo articleVo = articleService.queryObject(ids[i]);
+                this.updateUserScore(articleVo.getArticleAuthorId()+"", point, "管理员设置或取消精华帖");
+            }
+        }
         return R.ok();
     }
     /**
@@ -143,8 +162,22 @@ public class BizArticleController {
      */
     @RequestMapping("/cancelPerfect")
     @RequiresPermissions("article:update")
-    public R cancelPerfect(@RequestBody Long[] ids) {
-        articleService.setPerfectOrNot(ids, 0);
+    public R cancelPerfect(@RequestParam Map<String, Object> params) {
+        Assert.isNull(params.get("ids"), "ID不能为空");
+        String[] idsStr = ((String) params.get("ids")).split(",");
+        Long[] ids = new Long[idsStr.length];
+        for(int i = 0; i<idsStr.length; i++){
+            ids[i] = Long.parseLong(idsStr[i]);
+        }
+        String pointStr = (String)params.get("point");
+        Integer point = Integer.parseInt(pointStr);
+        if(point>0){
+            point = -point;
+        }
+
+        articleService.setPerfectOrNot(ids, 0, point);
+
+
         return R.ok();
     }
     /**
@@ -166,4 +199,5 @@ public class BizArticleController {
         articleService.stickOrNot(ids, 0);
         return R.ok();
     }
+
 }

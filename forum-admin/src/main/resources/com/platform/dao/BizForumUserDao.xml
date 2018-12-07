@@ -9,9 +9,6 @@
 
     <select id="queryList" resultType="com.platform.entity.BizForumUserEntity">
         select * from symphony_user where 0=0
-        <if test="userName != null">
-            and userName like concat('%',#{userName},'%')
-        </if>
         <if test="userNickname != null">
             and userNickname like concat('%',#{userNickname},'%')
         </if>
@@ -22,9 +19,7 @@
 
     <select id="queryTotal" resultType="int">
         select count(*) from symphony_user where 0 = 0
-        <if test="userName != null">
-            and userName like concat('%',#{userName},'%')
-        </if>
+
         <if test="userNickname != null">
             and userNickname like concat('%',#{userNickname},'%')
         </if>
