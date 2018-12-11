@@ -8,6 +8,7 @@ import com.platform.entity.*;
 import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import com.platform.utils.Html2Text;
+import com.platform.utils.Query;
 import com.platform.utils.R;
 import com.platform.utils.ResourceUtil;
 import com.platform.validator.Assert;
@@ -57,20 +58,47 @@ public class ApiArticleController extends ApiBaseAction {
      * @return
      */
     @RequestMapping("/newList")
-    public R newList(Long articleType) {
+    public R newList(Long articleType, Integer page) {
         Assert.isNull(articleType, "帖子类型不能为空");
         Map<String, Object> map = new HashMap<>();
+        if(page != null){
+            map.put("page", page);
+        }
         map.put("articleType", articleType);
         if(getUserId() != null){
             map.put("currentUserId", getUserId());
         }
-        List<ArticleVo> articleVoList = articleService.queryList(map);
+        Query query = new Query(map);
+        List<ArticleVo> articleVoList = articleService.queryList(query);
 
         return R.ok().put("msg", articleVoList);
     }
 
     /***
-     * 平台接口
+     * 获取精华帖子（论坛使用）
+     * @param articleType
+     * @return
+     */
+    @RequestMapping("/innerPerfectList")
+    public R innerPerfectList(Long articleType, Integer page) {
+        Assert.isNull(articleType, "帖子类型不能为空");
+        Map<String, Object> map = new HashMap<>();
+        if(page != null){
+            map.put("page", page);
+        }
+        map.put("articleType", articleType);
+        if(getUserId() != null){
+            map.put("currentUserId", getUserId());
+        }
+        map.put("articlePerfect", 1);
+        Query query = new Query(map);
+        List<ArticleVo> articleVoList = articleService.queryList(query);
+
+        return R.ok().put("msg", articleVoList);
+    }
+
+    /***
+     * 获取精华帖子（平台使用）
      * @return
      */
     @IgnoreAuth
@@ -196,7 +224,7 @@ public class ApiArticleController extends ApiBaseAction {
      * @return
      */
     @RequestMapping("/domainArticleList")
-    public R domainArticleList(Long articleType, Long domainId) {
+    public R domainArticleList(Long articleType, Long domainId,  Integer page) {
         Assert.isNull(articleType, "帖子类型不能为空");
         Assert.isNull(domainId, "帖子分类类型不能为空");
         Map<String, Object> map = new HashMap<>();
@@ -205,7 +233,11 @@ public class ApiArticleController extends ApiBaseAction {
         if(getUserId() != null){
             map.put("currentUserId", getUserId());
         }
-        List<ArticleVo> articleVoList = articleService.queryList(map);
+        if(page != null){
+            map.put("page", page);
+        }
+        Query query = new Query(map);
+        List<ArticleVo> articleVoList = articleService.queryList(query);
 
         return R.ok().put("msg", articleVoList);
     }
