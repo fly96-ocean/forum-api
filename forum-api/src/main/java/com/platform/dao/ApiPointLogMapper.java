@@ -2,6 +2,8 @@ package com.platform.dao;
 
 import com.platform.entity.PointLogVo;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,4 +13,8 @@ import java.util.Map;
  */
 public interface ApiPointLogMapper extends BaseDao<PointLogVo> {
     Integer querySum(Map<String, Object> map);
+
+    /*** 服务器端接口 ****/
+    List<Map<Date, Integer>> pointTotal(Map<String, Object> map);
+
 }

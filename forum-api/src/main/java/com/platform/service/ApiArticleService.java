@@ -429,4 +429,8 @@ public class ApiArticleService {
         }
     }
 
+    public List<Map<Date,Integer>> publishArticleTotal(Map<String, Object> map){
+        return articleDao.publishArticleTotal(map);
+    }
+
 }

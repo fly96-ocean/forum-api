@@ -13,20 +13,156 @@
 		.osc_git_info{color: #666;}
 		.osc_git_main a{color: #9B9B9B;}
 	</style>
+    <script src="../../../js/echarts.min.js"></script>
+    <script src="../../../js/lodash.min.js"></script>
 </head>
 <body>
 <div class="wrapper wrapper-content  animated fadeInRight">
-    <div class="ibox ">
+    <div  class="ibox ">
         <div class="ibox-title">
             <h1>精英俱乐部论坛平台</h1>
         </div>
-        <div class="ibox-content">
-            <div class="signin-info">
+        <div class="ibox-content" >
+            <div class="signin-info" >
+                <div class="col-xs-12">
+                    <div id="publishArticleStatistics" class="col-xs-6" style="display: flex!important;align-items: center;justify-content: center;height:500px;"></div>
+                    <div id="pointStatistics" class="col-xs-6" style="display: flex!important;align-items: center;justify-content: center;height:500px;"></div>
+                </div>
 
             </div>
 
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+
+    function getJsonData(url,titleText,seriesText,elementById) {
+        $.ajax({
+            type: "get",
+            url: url,
+            dataType: "json",
+            contentType: "application/json",
+            async: true,
+            success: function(data) {
+                console.log('data===============>');
+                console.log(data);
+                var dateArray = [];
+                var totalArray = [];
+                dateArray = _.map(data.publishArticleTotal, 'createDate');
+                totalArray = _.map(data.publishArticleTotal, 'total');
+
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById(elementById));
+
+                // 指定图表的配置项和数据
+                var option = {
+                    title: {
+                        text: titleText
+                    },
+                    tooltip: {},
+                    legend: {
+                        data:[seriesText]
+                    },
+                    xAxis: {
+                        data: dateArray,
+                        axisLabel:{
+                            interval:0,
+                            rotate:"45"
+                        }
+                    },
+                    yAxis: {},
+                    series: [{
+                        name: seriesText,
+                        type: 'line',
+                        data: totalArray
+                    }]
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            }
+        });
+    };
+
+    getJsonData("../article/publishArticleTotal","最近7天用户发帖统计","发帖数","publishArticleStatistics");
+    getJsonData("../article/pointTotal","最近7天积分统计","积分","pointStatistics");
+
+//    $.ajax({
+//        type: "get",
+//        url: "../article/publishArticleTotal",
+//        dataType: "json",
+//        contentType: "application/json",
+//        async: true,
+//        success: function(data) {
+//            var createDate = [];
+//            var publishArticleTotal = [];
+//            createDate = _.map(data.publishArticleTotal, 'createDate');
+//            publishArticleTotal = _.map(data.publishArticleTotal, 'total');
+//
+//            // 基于准备好的dom，初始化echarts实例
+//            var myChart1 = echarts.init(document.getElementById('publishArticleStatistics'));
+//
+//            // 指定图表的配置项和数据
+//            var option1 = {
+//                title: {
+//                    text: '最近7天用户发帖统计'
+//                },
+//                tooltip: {},
+//                legend: {
+//                    data:['发帖数']
+//                },
+//                xAxis: {
+//                    data: createDate,
+//                    axisLabel:{
+//                        interval:0,
+//                        rotate:"45"
+//                    }
+//                },
+//                yAxis: {},
+//                series: [{
+//                    name: '发帖数',
+//                    type: 'line',
+//                    data: publishArticleTotal
+//                }]
+//            };
+//
+//            // 使用刚指定的配置项和数据显示图表。
+//            myChart1.setOption(option1);
+//        }
+//    });
+//
+//
+//
+//    // 基于准备好的dom，初始化echarts实例
+//    var myChart2 = echarts.init(document.getElementById('pointStatistics'));
+//
+//    // 指定图表的配置项和数据
+//    var option2 = {
+//        title: {
+//            text: '最近7天积分统计'
+//        },
+//        tooltip: {},
+//        legend: {
+//            data:['积分']
+//        },
+//        xAxis: {
+//            data: ["2018-11-30","2018-12-01","2018-12-02","2018-12-03","2018-12-04","2018-12-05","2018-12-06"],
+//            axisLabel:{
+//                interval:0,
+//                rotate:"45"
+//            }
+//        },
+//        yAxis: {},
+//        series: [{
+//            name: '积分',
+//            type: 'line',
+//            data: [500, 2000, 3600, 1000, 1000, 2000, 3900]
+//        }]
+//    };
+//
+//    // 使用刚指定的配置项和数据显示图表。
+//    myChart2.setOption(option2);
+</script>
 </body>
 </html>

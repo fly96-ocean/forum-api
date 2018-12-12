@@ -7,6 +7,7 @@ import com.platform.entity.PointLogVo;
 import com.platform.entity.SysUserEntity;
 import com.platform.entity.UserVo;
 import com.platform.service.ApiArticleService;
+import com.platform.service.ApiPointLogService;
 import com.platform.service.ApiUserService;
 import com.platform.util.ApiBaseAction;
 import com.platform.utils.PageUtils;
@@ -14,6 +15,7 @@ import com.platform.utils.Query;
 import com.platform.utils.R;
 import com.platform.utils.ShiroUtils;
 import com.platform.validator.Assert;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.aspectj.weaver.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,7 @@ import java.util.UUID;
  * @email 939961241@qq.com
  * @date 2017-08-19 09:37:35
  */
+@Ignore
 @RestController
 @RequestMapping("article")
 public class BizArticleController extends ApiBaseAction {
@@ -38,6 +41,8 @@ public class BizArticleController extends ApiBaseAction {
     private ApiArticleService articleService;
     @Autowired
     private ApiUserService userService;
+    @Autowired
+    private ApiPointLogService pointLogService;
 
     /**
      * 查看列表
@@ -200,4 +205,25 @@ public class BizArticleController extends ApiBaseAction {
         return R.ok();
     }
 
+    /*
+    * 最近7天发帖数
+    * */
+    @RequestMapping("/publishArticleTotal")
+    public R publishArticleTotal(@RequestParam Map<String, Object> params) {
+
+        List total = articleService.publishArticleTotal(params);
+
+        return R.ok().put("publishArticleTotal", total);
+    }
+
+    /*
+    * 最近7天积分
+    * */
+    @RequestMapping("/pointTotal")
+    public R pointTotal(@RequestParam Map<String, Object> params) {
+
+        List total = pointLogService.pointTotal(params);
+
+        return R.ok().put("pointTotal", total);
+    }
 }

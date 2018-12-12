@@ -2,6 +2,7 @@ package com.platform.dao;
 
 import com.platform.entity.ArticleVo;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -20,4 +21,5 @@ public interface ApiArticleMapper extends BaseDao<ArticleVo> {
     /*** 服务器端接口 ****/
     List<ArticleVo> serverQueryList(Map<String, Object> map);
     int serverQueryTotal(Map<String, Object> map);
+    List<Map<Date, Integer>> publishArticleTotal(Map<String, Object> map);
 }

@@ -47,4 +47,12 @@
     )
     </insert>
 
+    <select id="pointTotal" resultType="map">
+        select DATE_FORMAT(pointLogCreateTime,'%Y-%m-%d') createDate, sum(pointLogPoint) total
+        from symphony_point_log
+        where pointLogCreateTime >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        group by createDate
+        order by createDate
+    </select>
+
 </mapper>

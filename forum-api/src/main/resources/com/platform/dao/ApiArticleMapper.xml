@@ -318,4 +318,12 @@
             and a.articleTitle like concat('%',#{articleTitle},'%')
         </if>
     </select>
+
+    <select id="publishArticleTotal" resultType="map">
+        select DATE_FORMAT(articleCreateTime,'%Y-%m-%d') createDate,count(*) total
+        from symphony_article
+        where articleCreateTime >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        group by createDate
+        order by createDate
+    </select>
 </mapper>
