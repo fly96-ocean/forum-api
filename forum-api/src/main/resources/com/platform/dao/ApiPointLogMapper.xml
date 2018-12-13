@@ -24,7 +24,7 @@
             and pointLogArticleAuthorId = #{pointLogArticleAuthorId}
         </if>
         <if test="pointLogType != null">
-            and pointLogType = #{userId}
+            and pointLogType = #{pointLogType}
         </if>
         <if test="pointLogCreateTime != null">
             and to_days(pointLogCreateTime) = to_days(#{pointLogCreateTime})
