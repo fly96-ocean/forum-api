@@ -45,7 +45,7 @@
             contentType: "application/json",
             async: true,
             success: function(data) {
-                console.log('data===============>');
+                console.log('data===============>'+elementById);
                 console.log(data);
                 var dateArray = [];
                 var totalArray = [];
@@ -85,8 +85,56 @@
         });
     };
 
+    function getJsonPointData(url,titleText,seriesText,elementById) {
+        $.ajax({
+            type: "get",
+            url: url,
+            dataType: "json",
+            contentType: "application/json",
+            async: true,
+            success: function(data) {
+                console.log('data===============>'+elementById);
+                console.log(data);
+                var dateArray = [];
+                var totalArray = [];
+                dateArray = _.map(data.pointTotal, 'createDate');
+                totalArray = _.map(data.pointTotal, 'total');
+
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById(elementById));
+
+                // 指定图表的配置项和数据
+                var option = {
+                    title: {
+                        text: titleText
+                    },
+                    tooltip: {},
+                    legend: {
+                        data:[seriesText]
+                    },
+                    xAxis: {
+                        data: dateArray,
+                        axisLabel:{
+                            interval:0,
+                            rotate:"45"
+                        }
+                    },
+                    yAxis: {},
+                    series: [{
+                        name: seriesText,
+                        type: 'line',
+                        data: totalArray
+                    }]
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            }
+        });
+    };
+
     getJsonData("../article/publishArticleTotal","最近7天用户发帖统计","发帖数","publishArticleStatistics");
-    getJsonData("../article/pointTotal","最近7天积分统计","积分","pointStatistics");
+    getJsonPointData("../article/pointTotal","最近7天积分统计","积分","pointStatistics");
 
 //    $.ajax({
 //        type: "get",
